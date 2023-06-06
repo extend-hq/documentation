@@ -1,0 +1,115 @@
+---
+title: "Get WorkfowRun"
+api: "GET https://api-prod.extend.app/v1/workflow_runs/:workflowRunId"
+description: "Once a workflow has been run, take the workflowRunId to check the status and output of a specific WorkflowRun."
+---
+
+### Body
+
+<ParamField body="workflowRunId" type="string">
+  The ID of the WorkflowRun that was outputted after a Workflow was run through the API.
+</ParamField>
+
+### Response
+
+<ResponseField name="fileExtractions" type="FileExtraction[]">
+  An array of FileExtraction objects, with each FileExtraction corresponding to a single File that was passed in.
+</ResponseField>
+
+
+<ResponseField name="FileExtraction" type="object">
+  <Expandable title="properties">
+    <ResponseField name="fileExtractionId" type="string">
+      An ID corresponding to a specific File x Workflow combination representing the specific extraction from a File.
+    </ResponseField>
+
+    <ResponseField name="fileName" type="string">
+      The name of the file.
+    </ResponseField>
+
+    <ResponseField name="fileUrl" type="string">
+      A publically accessible URL for the file.
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      The status of an extraction. The options are "PENDING" (if the file extraction has not been fully processed), "FAILED" (if the file extraction failed), "MANUAL_REVIEW" (if the file extraction needs to be reviewed manually in the UI), "CORRECTED" (if the file extraction has been manually reviewed and corrected), "PROCESSED" (if the file extraction is fully processed.)
+    </ResponseField>
+
+    <ResponseField name="fileExtractionOutput" type="object">
+      The JSON output of a specific extraction from a File.
+    </ResponseField>
+
+    <ResponseField name="initialRunBy" type="string">
+      The email of the person who initially ran the workflow.
+    </ResponseField>
+
+    <ResponseField name="initialRunAt" type="string">
+      The time (in UTC) at which the person initially ran the workflow.
+    </ResponseField>
+
+    <ResponseField name="reviewedOutput" type="object">
+      The JSON output of a specific extraction from a File after it was manually reviewed.
+    </ResponseField>
+
+    <ResponseField name="reviewedBy" type="string | null">
+      The email of the person who reviewed the file extraction, if applicable.
+    </ResponseField>
+
+    <ResponseField name="reviewedAt" type="string | null">
+      The time (in UTC) at which the person reviewed the file extraction, if applicable.
+    </ResponseField>
+
+    <ResponseField name="startTime" type="string">
+      The start time (in UTC) of the extraction.
+    </ResponseField>
+
+    <ResponseField name="endTime" type="string">
+      The end time (in UTC) of the extraction.
+    </ResponseField>
+
+    <ResponseField name="totalRunTime" type="object">
+      The run time of how long the extraction took.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:workflowRunId' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <API_TOKEN>'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "fileExtractions": [
+    {
+      "fileExtractionId": "extraction_attempt_id",
+      "fileName": "example_file_name",
+      "fileUrl": "https://test.s3.amazonaws.com/example_file_name.pdf",
+      "status": "PROCESSED",
+      "fileExtractionOutput": {
+        "name": "John Smith",
+        "birthday": "January 1, 1970",
+        "favoriteColor": "blue"
+      },
+      "initialRunBy": "test@test.com",
+      "initialRunAt": "2023-01-01T09:41:00.000Z",
+      "reviewedOutput": null,
+      "reviewedAt": null,
+      "startTime": "2023-01-01T09:41:00.000Z",
+      "endTime": "2023-01-01T09:43:00.000Z",
+      "totalRunTime": "PT120.000S"
+    }
+  ]
+}
+```
+
+</ResponseExample>
+

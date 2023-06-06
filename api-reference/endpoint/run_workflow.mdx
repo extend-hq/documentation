@@ -1,0 +1,74 @@
+---
+title: "Run Workflow"
+api: "POST https://api-prod.extend.app/v1/workflow/run"
+description: "Once a workflow has been created in the Sandbox UI, this endpoint can be used to send file(s) to be run."
+---
+
+### Body
+
+<ParamField body="workflowId" type="string">
+  The ID of the workflow that files will be run through. This ID can be fetched from the Sandbox URL.
+</ParamField>
+
+<ParamField body="files" type="File[]">
+  An array of Files.
+</ParamField>
+
+<ResponseField name="File" type="object">
+  <Expandable title="properties">
+    <ResponseField name="fileName" type="string">
+      The name of the file.
+    </ResponseField>
+
+    <ResponseField name="fileUrl" type="string">
+      A publically accessible URL for the file.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Response
+
+<ResponseField name="workflowRunId" type="string">
+  An ID representing the specific WorkflowRun that was generated for the files uploaded.
+</ResponseField>
+
+<ResponseField name="files" type="File[]">
+  The array of Files that were passed in.
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  The status of the WorkflowRun. Normally, this will be set to QUEUED.
+</ResponseField>
+
+<RequestExample>
+
+```bash Example Request
+curl --location --request POST 'https://api-prod.extend.app/v1/workflow/run' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <API_TOKEN>' \
+--data-raw '{
+    "workflowId": "workflow_example",
+    "files": [{
+      "fileName":"example_file_name",
+      "fileUrl":"https://test.s3.amazonaws.com/example+file+name.pdf",
+    }]
+}'
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "workflowRunId": "workflow_run_example",
+  "files": [{
+    "fileName":"example_file_name",
+    "fileUrl":"https://test.s3.amazonaws.com/example+file+name.pdf",
+  }],
+  "status": "QUEUED"
+}
+```
+
+</ResponseExample>
+

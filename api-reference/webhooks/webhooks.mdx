@@ -1,0 +1,31 @@
+---
+title: "Webhooks"
+description: ""
+---
+
+The Extend Sandbox has support for webhooks in a limited way. For each File that is sent through a Workflow, the resulting output (corresponding to a FileExtraction object) can be sent to a webhook.
+Furthermore, this can be configured to either send all outputs to the webhook or only outputs that were not sent to manual review.
+
+Example Output:
+```json Response
+{
+  "fileExtractionId": "extraction_attempt_id",
+  "fileName": "example_file_name",
+  "fileUrl": "https://test.s3.amazonaws.com/example_file_name.pdf",
+  "status": "PROCESSED",
+  "fileExtractionOutput": {
+    "name": "John Smith",
+    "birthday": "January 1, 1970",
+    "favoriteColor": "blue"
+  },
+  "initialRunBy": "test@test.com",
+  "initialRunAt": "2023-01-01T09:41:00.000Z",
+  "reviewedOutput": null,
+  "reviewedAt": null,
+  "startTime": "2023-01-01T09:41:00.000Z",
+  "endTime": "2023-01-01T09:43:00.000Z",
+  "totalRunTime": "PT120.000S"
+}
+```
+
+To set up a webhook, please reach out to an Extend team member with the URL of the webhook where you'd like the output to be sent. In the Sandbox environment, only one webhook URL is allowed per team.
