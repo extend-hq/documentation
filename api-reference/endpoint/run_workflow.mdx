@@ -68,7 +68,7 @@ description: "Once a workflow has been created on the Extend Platform, this endp
     </ResponseField>
 
     <ResponseField name="extractionOutput" type="object">
-      The JSON output of a specific extracted data from a File.
+      The JSON output of the extracted data from a File.
     </ResponseField>
 
     <ResponseField name="initialRunBy" type="string">
@@ -80,23 +80,23 @@ description: "Once a workflow has been created on the Extend Platform, this endp
     </ResponseField>
 
     <ResponseField name="reviewedOutput" type="object">
-      The JSON output of a specific extraction from a File after it was manually reviewed.
+      The JSON output of a specific WorkflowRun from a File after it was manually reviewed.
     </ResponseField>
 
     <ResponseField name="reviewedBy" type="string | null">
-      The email of the person who reviewed the file extraction, if applicable.
+      The email of the person who reviewed the WorkflowRun, if applicable.
     </ResponseField>
 
     <ResponseField name="reviewedAt" type="string | null">
-      The time (in UTC) at which the person reviewed the file extraction, if applicable.
+      The time (in UTC) at which the person reviewed the WorkflowRun, if applicable.
     </ResponseField>
 
     <ResponseField name="startTime" type="string">
-      The start time (in UTC) of the extraction.
+      The start time (in UTC) of the WorkflowRun.
     </ResponseField>
 
     <ResponseField name="endTime" type="string">
-      The end time (in UTC) of the extraction.
+      The end time (in UTC) of the WorkflowRun.
     </ResponseField>
 
     <ResponseField name="workflow" type="Workflow">
