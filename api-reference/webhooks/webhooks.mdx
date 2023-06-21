@@ -3,29 +3,38 @@ title: "Webhooks"
 description: ""
 ---
 
-The Extend Sandbox has support for webhooks in a limited way. For each File that is sent through a Workflow, the resulting output (corresponding to a FileExtraction object) can be sent to a webhook.
-Furthermore, this can be configured to either send all outputs to the webhook or only outputs that were not sent to manual review.
+The Extend Platform has support for webhooks. Once a WorkflowRun has been "PROCESSED", the output will be sent to the Webhook URL that has been configured.
 
 Example Output:
 ```json Response
 {
-  "fileExtractionId": "extraction_attempt_id",
-  "fileName": "example_file_name",
-  "fileUrl": "https://test.s3.amazonaws.com/example_file_name.pdf",
-  "status": "PROCESSED",
-  "fileExtractionOutput": {
-    "name": "John Smith",
-    "birthday": "January 1, 1970",
-    "favoriteColor": "blue"
-  },
-  "initialRunBy": "test@test.com",
-  "initialRunAt": "2023-01-01T09:41:00.000Z",
-  "reviewedOutput": null,
-  "reviewedAt": null,
-  "startTime": "2023-01-01T09:41:00.000Z",
-  "endTime": "2023-01-01T09:43:00.000Z",
-  "totalRunTime": "PT120.000S"
+  "eventId": "event_1234",
+  "eventType": "workflow_run.completed",
+  "payload": {
+    "object": "workflow_run",
+    "id": "workflow_run_1234",
+    "status": "PROCESSED",
+    "metadata": {
+      "is_important": true,
+    },
+    "fileName": "example_file_name",
+    "extractionOutput": {
+      "name": "John Smith",
+      "birthday": "January 1, 1970",
+      "favoriteColor": "blue"
+    },
+    "initialRunBy": "test@test.com",
+    "initialRunAt": "2023-01-01T09:41:00.000Z",
+    "reviewedOutput": null,
+    "reviewedAt": null,
+    "startTime": "2023-01-01T09:41:00.000Z",
+    "endTime": "2023-01-01T09:43:00.000Z",
+    "workflow": {
+      "id": "workflow_1234",
+      "name": "employees",
+    }
+  }
 }
 ```
 
-To set up a webhook, please reach out to an Extend team member with the URL of the webhook where you'd like the output to be sent. In the Sandbox environment, only one webhook URL is allowed per team.
+To set up a webhook, please reach out to an Extend team member with the URL of the webhook where you'd like the output to be sent and the Workflow this should be applied to.

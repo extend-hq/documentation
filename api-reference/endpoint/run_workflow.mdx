@@ -1,17 +1,25 @@
 ---
 title: "Run Workflow"
-api: "POST https://api-prod.extend.app/v1/workflow/run"
-description: "Once a workflow has been created in the Sandbox UI, this endpoint can be used to send file(s) to be run."
+api: "POST https://api-prod.extend.app/workflow_runs"
+description: "Once a workflow has been created on the Extend Platform, this endpoint can be used to send file(s) to be run."
 ---
 
 ### Body
 
-<ParamField body="workflowId" type="string">
-  The ID of the workflow that files will be run through. This ID can be fetched from the Sandbox URL.
+<ParamField body="workflow_id" type="string">
+  The ID of the workflow that files will be run through. This ID can be fetched from viewing the workflow on the Extend platform.
 </ParamField>
 
 <ParamField body="files" type="File[]">
   An array of Files.
+</ParamField>
+
+<ParamField body="name" type="string">
+  An optional name that can be assigned to a specific WorkflowRun.
+</ParamField>
+
+<ParamField body="metadata" type="any">
+  An optional object that can be passed in to identify the WorkflowRun.
 </ParamField>
 
 <ResponseField name="File" type="object">
@@ -28,30 +36,105 @@ description: "Once a workflow has been created in the Sandbox UI, this endpoint 
 
 ### Response
 
-<ResponseField name="workflowRunId" type="string">
-  An ID representing the specific WorkflowRun that was generated for the files uploaded.
+<ResponseField name="status" type="boolean">
+  A true or false value for the status of the API call.
 </ResponseField>
 
-<ResponseField name="files" type="File[]">
-  The array of Files that were passed in.
+<ResponseField name="workflow_runs" type="WorkflowRun[]">
+  An array of WorkflowRun objects, with each WorkflowRun corresponding to a single File that was passed in.
 </ResponseField>
 
-<ResponseField name="status" type="string">
-  The status of the WorkflowRun. Normally, this will be set to QUEUED.
+
+<ResponseField name="WorkflowRun" type="object">
+  <Expandable title="properties">
+    <ResponseField name="object" type="string">
+      The type of response, in this case it will always be "workflow_run".
+    </ResponseField>
+
+    <ResponseField name="id" type="string">
+      An ID corresponding to a specific File x Workflow combination representing the specific WorkflowRun for a File.
+    </ResponseField>
+
+    <ResponseField name="status" type="string">
+      The status of a WorkflowRun. The options are "PENDING" (if the WorkflowRun is still running), "FAILED" (if the WorkflowRun failed), "NEEDS_REVIEW" (if the WorkflowRun needs to be reviewed manually in the UI), "REVIEWED" (if the WorkflowRun has been manually reviewed and corrected), "PROCESSED" (if the WorkflowRun is fully processed.)
+    </ResponseField>
+
+    <ResponseField name="metadata" type="any">
+      The metadata that was passed in when running the Workflow. This will only exist if the Workflow was run through the API.
+    </ResponseField>
+
+    <ResponseField name="fileName" type="string">
+      The name of the File associated with this WorkflowRun.
+    </ResponseField>
+
+    <ResponseField name="extractionOutput" type="object">
+      The JSON output of a specific extracted data from a File.
+    </ResponseField>
+
+    <ResponseField name="initialRunBy" type="string">
+      The email of the person who initially ran the workflow.
+    </ResponseField>
+
+    <ResponseField name="initialRunAt" type="string">
+      The time (in UTC) at which the person initially ran the workflow.
+    </ResponseField>
+
+    <ResponseField name="reviewedOutput" type="object">
+      The JSON output of a specific extraction from a File after it was manually reviewed.
+    </ResponseField>
+
+    <ResponseField name="reviewedBy" type="string | null">
+      The email of the person who reviewed the file extraction, if applicable.
+    </ResponseField>
+
+    <ResponseField name="reviewedAt" type="string | null">
+      The time (in UTC) at which the person reviewed the file extraction, if applicable.
+    </ResponseField>
+
+    <ResponseField name="startTime" type="string">
+      The start time (in UTC) of the extraction.
+    </ResponseField>
+
+    <ResponseField name="endTime" type="string">
+      The end time (in UTC) of the extraction.
+    </ResponseField>
+
+    <ResponseField name="workflow" type="Workflow">
+      The details about the Workflow that was used in this WorkflowRun.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="Workflow" type="object">
+  <Expandable title="properties">
+    <ResponseField name="id" type="string">
+      The Workflow ID that can be fetched from the Extend Platform.
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      The name of the Workflow.
+    </ResponseField>
+
+  </Expandable>
 </ResponseField>
 
 <RequestExample>
 
 ```bash Example Request
-curl --location --request POST 'https://api-prod.extend.app/v1/workflow/run' \
+curl --location --request POST 'https://api-prod.extend.app/workflow_runs' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <API_TOKEN>' \
 --data-raw '{
-    "workflowId": "workflow_example",
+    "workflow_id": "workflow_1234",
     "files": [{
       "fileName":"example_file_name",
       "fileUrl":"https://test.s3.amazonaws.com/example+file+name.pdf",
-    }]
+    }],
+    "name": "test_workflow",
+    "metadata": {
+      "is_important": false,
+    }
 }'
 ```
 
@@ -61,14 +144,32 @@ curl --location --request POST 'https://api-prod.extend.app/v1/workflow/run' \
 
 ```json Response
 {
-  "workflowRunId": "workflow_run_example",
-  "files": [{
-    "fileName":"example_file_name",
-    "fileUrl":"https://test.s3.amazonaws.com/example+file+name.pdf",
-  }],
-  "status": "QUEUED"
+  "status": true,
+  "workflow_runs": [
+    {
+      "object": "workflow_run",
+      "id": "workflow_run_1234",
+      "status": "PENDING",
+      "metadata": {
+        "is_important": false,
+      },
+      "fileName": "example_file_name",
+      "extractionOutput": null,
+      "initialRunBy": "test@test.com",
+      "initialRunAt": "2023-01-01T09:41:00.000Z",
+      "reviewedOutput": null,
+      "reviewedAt": null,
+      "startTime": "2023-01-01T09:41:00.000Z",
+      "endTime": "2023-01-01T09:43:00.000Z",
+      "workflow": {
+        "id": "workflow_1234",
+        "name": "test_workflow",
+      }
+    }
+  ]
 }
 ```
 
 </ResponseExample>
+
 

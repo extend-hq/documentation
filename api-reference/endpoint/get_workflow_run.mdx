@@ -1,6 +1,6 @@
 ---
 title: "Get WorkfowRun"
-api: "GET https://api-prod.extend.app/v1/workflow_runs/:workflowRunId"
+api: "GET https://api-prod.extend.app/workflow_runs/:workflowRunId"
 description: "Once a workflow has been run, take the workflowRunId to check the status and output of a specific WorkflowRun."
 ---
 
@@ -12,31 +12,39 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
 
 ### Response
 
-<ResponseField name="fileExtractions" type="FileExtraction[]">
-  An array of FileExtraction objects, with each FileExtraction corresponding to a single File that was passed in.
+<ResponseField name="status" type="boolean">
+  A true or false value for the status of the API call.
+</ResponseField>
+
+<ResponseField name="workflow_runs" type="WorkflowRun[]">
+  An array of WorkflowRun objects, with each WorkflowRun corresponding to a single File that was passed in.
 </ResponseField>
 
 
-<ResponseField name="FileExtraction" type="object">
+<ResponseField name="WorkflowRun" type="object">
   <Expandable title="properties">
-    <ResponseField name="fileExtractionId" type="string">
-      An ID corresponding to a specific File x Workflow combination representing the specific extraction from a File.
+    <ResponseField name="object" type="string">
+      The type of response, in this case it will always be "workflow_run".
     </ResponseField>
 
-    <ResponseField name="fileName" type="string">
-      The name of the file.
-    </ResponseField>
-
-    <ResponseField name="fileUrl" type="string">
-      A publically accessible URL for the file.
+    <ResponseField name="id" type="string">
+      An ID corresponding to a specific File x Workflow combination representing the specific WorkflowRun for a File.
     </ResponseField>
 
     <ResponseField name="status" type="string">
-      The status of an extraction. The options are "PENDING" (if the file extraction has not been fully processed), "FAILED" (if the file extraction failed), "MANUAL_REVIEW" (if the file extraction needs to be reviewed manually in the UI), "CORRECTED" (if the file extraction has been manually reviewed and corrected), "PROCESSED" (if the file extraction is fully processed.)
+      The status of a WorkflowRun. The options are "PENDING" (if the WorkflowRun is still running), "FAILED" (if the WorkflowRun failed), "NEEDS_REVIEW" (if the WorkflowRun needs to be reviewed manually in the UI), "REVIEWED" (if the WorkflowRun has been manually reviewed and corrected), "PROCESSED" (if the WorkflowRun is fully processed.)
     </ResponseField>
 
-    <ResponseField name="fileExtractionOutput" type="object">
-      The JSON output of a specific extraction from a File.
+    <ResponseField name="metadata" type="any">
+      The metadata that was passed in when running the Workflow. This will only exist if the Workflow was run through the API.
+    </ResponseField>
+
+    <ResponseField name="fileName" type="string">
+      The name of the File associated with this WorkflowRun.
+    </ResponseField>
+
+    <ResponseField name="extractionOutput" type="object">
+      The JSON output of a specific extracted data from a File.
     </ResponseField>
 
     <ResponseField name="initialRunBy" type="string">
@@ -67,8 +75,21 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The end time (in UTC) of the extraction.
     </ResponseField>
 
-    <ResponseField name="totalRunTime" type="object">
-      The run time of how long the extraction took.
+    <ResponseField name="workflow" type="Workflow">
+      The details about the Workflow that was used in this WorkflowRun.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="Workflow" type="object">
+  <Expandable title="properties">
+    <ResponseField name="id" type="string">
+      The Workflow ID that can be fetched from the Extend Platform.
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      The name of the Workflow.
     </ResponseField>
 
   </Expandable>
@@ -77,7 +98,7 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
 <RequestExample>
 
 ```bash Example Request
-curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:workflowRunId' \
+curl --location --request GET 'https://api-prod.extend.app/workflow_runs/:workflowRunId' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <API_TOKEN>'
 ```
@@ -88,13 +109,17 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
 
 ```json Response
 {
-  "fileExtractions": [
+  "status": true,
+  "workflow_runs": [
     {
-      "fileExtractionId": "extraction_attempt_id",
-      "fileName": "example_file_name",
-      "fileUrl": "https://test.s3.amazonaws.com/example_file_name.pdf",
+      "object": "workflow_run",
+      "id": "workflow_run_1234",
       "status": "PROCESSED",
-      "fileExtractionOutput": {
+      "metadata": {
+        "is_important": true,
+      },
+      "fileName": "example_file_name",
+      "extractionOutput": {
         "name": "John Smith",
         "birthday": "January 1, 1970",
         "favoriteColor": "blue"
@@ -105,7 +130,10 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
       "reviewedAt": null,
       "startTime": "2023-01-01T09:41:00.000Z",
       "endTime": "2023-01-01T09:43:00.000Z",
-      "totalRunTime": "PT120.000S"
+      "workflow": {
+        "id": "workflow_1234",
+        "name": "employees",
+      }
     }
   ]
 }
