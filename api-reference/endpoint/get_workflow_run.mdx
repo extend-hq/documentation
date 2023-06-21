@@ -1,6 +1,6 @@
 ---
 title: "Get WorkfowRun"
-api: "GET https://api-prod.extend.app/workflow_runs/:workflowRunId"
+api: "GET https://api-prod.extend.app/v1/workflow_runs/:workflowRunId"
 description: "Once a workflow has been run, take the workflowRunId to check the status and output of a specific WorkflowRun."
 ---
 
@@ -68,11 +68,11 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
     </ResponseField>
 
     <ResponseField name="startTime" type="string">
-      The start time (in UTC) of the extraction.
+      The start time (in UTC) of the WorkflowRun.
     </ResponseField>
 
     <ResponseField name="endTime" type="string">
-      The end time (in UTC) of the extraction.
+      The end time (in UTC) of the WorkflowRun.
     </ResponseField>
 
     <ResponseField name="workflow" type="Workflow">
@@ -98,7 +98,7 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
 <RequestExample>
 
 ```bash Example Request
-curl --location --request GET 'https://api-prod.extend.app/workflow_runs/:workflowRunId' \
+curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:workflowRunId' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <API_TOKEN>'
 ```
