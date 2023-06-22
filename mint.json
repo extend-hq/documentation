@@ -30,7 +30,7 @@
       "group": "Endpoint Examples",
       "pages": [
         "api-reference/endpoint/run_workflow",
-        "api-reference/endpoint/get_workflow_run",
+        "api-reference/endpoint/get_workflow_run"
       ]
     },
     {
