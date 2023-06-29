@@ -55,6 +55,10 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The time (in UTC) at which the person initially ran the workflow.
     </ResponseField>
 
+    <ResponseField name="output" type="object">
+      The final JSON output of a WorkflowRun from a File whether it was reviewed or left unedited and auto processed.
+    </ResponseField>
+
     <ResponseField name="reviewedOutput" type="object">
       The JSON output of a specific WorkflowRun from a File after it was manually reviewed.
     </ResponseField>
@@ -109,33 +113,114 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
 
 ```json Response
 {
-  "status": true,
-  "workflow_runs": [
-    {
-      "object": "workflow_run",
-      "id": "workflow_run_1234",
-      "status": "PROCESSED",
-      "metadata": {
-        "is_important": true,
+  "eventId": "event_1234",
+  "eventType": "workflow_run.completed",
+  "payload": {
+    "object": "workflow_run",
+    "id": "workflow_run_1234",
+    "status": "PROCESSED",
+    "metadata": {
+      "is_important": true,
+      "some_id": "id_fjdsfkld"
+      // any other metadata fields you attach when creating the run
+    },
+    "fileName": "example_file_name",
+    "extractionOutput": {
+      "field_1": {
+        "value": "example string",
+        "confidence": 0.98,
+        "type": "string"
       },
-      "fileName": "example_file_name",
-      "extractionOutput": {
-        "name": "John Smith",
-        "birthday": "January 1, 1970",
-        "favoriteColor": "blue"
+      "field_2": {
+        "value": 1234,
+        "confidence": 0.99,
+        "type": "number"
       },
-      "initialRunBy": "test@test.com",
-      "initialRunAt": "2023-01-01T09:41:00.000Z",
-      "reviewedOutput": null,
-      "reviewedAt": null,
-      "startTime": "2023-01-01T09:41:00.000Z",
-      "endTime": "2023-01-01T09:43:00.000Z",
-      "workflow": {
-        "id": "workflow_1234",
-        "name": "employees",
+      "field_3": {
+        "value": {
+          "amount": 100,
+          "iso_4217_currency_code": "USD"
+        },
+        "confidence": 0.95,
+        "type": "currency"
+      },
+      "field_4": {
+        "value": [
+          {
+            "sub_field_1": "example string",
+            "sub_field_2": 123
+          }
+        ],
+        "confidence": 0.9,
+        "type": "array",
+        "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
       }
+    },
+    "output": {
+      "field_1": {
+        "value": "another example string",
+        "confidence": 0.97,
+        "type": "string"
+      },
+      "field_2": {
+        "value": 5678,
+        "confidence": 1,
+        "type": "number"
+      },
+      "field_3": {
+        "value": {
+          "amount": 200,
+          "iso_4217_currency_code": "EUR"
+        },
+        "confidence": 0.96,
+        "type": "currency"
+      },
+      "field_4": {
+        "value": [
+          {
+            "sub_field_1": "another example string",
+            "sub_field_2": 456
+          }
+        ],
+        "confidence": 0.93,
+        "type": "array",
+        "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
+      }
+    },
+    "initialRunBy": "test@test.com",
+    "initialRunAt": "2023-01-01T09:41:00.000Z",
+    "reviewedBy": null,
+    "reviewedOutput": null,
+    "reviewedAt": null,
+    "startTime": "2023-01-01T09:41:00.000Z",
+    "endTime": "2023-01-01T09:43:00.000Z",
+    "workflow": {
+      "id": "workflow_1234",
+      "name": "employees"
     }
-  ]
+  }
+}
+```
+
+
+**Note**: The extraction output fields shown in the payload above will conform to the following schema, and the field keys are defined when configuring the extractor 
+in your worklfow builder:
+```typescript Output types
+export interface FieldResult {
+  value: string;
+  confidence: number;
+  type: 
+    | "string"
+    | "number"
+    | "currency"
+    | "boolean"
+    | "date"
+    | "array"
+    | "null";
+  arrayJSONSchema?: string
+}
+export interface FieldResultObject {
+  [key: string]: FieldResult;
 }
 ```
 

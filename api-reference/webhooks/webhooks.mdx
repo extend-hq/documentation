@@ -3,7 +3,50 @@ title: "Webhooks"
 description: ""
 ---
 
-The Extend Platform has support for webhooks. Once a WorkflowRun has been "PROCESSED", the output will be sent to the Webhook URL that has been configured.
+## Authenticating webhooks
+
+To authenticate an incoming webhook event you can check the `Extend-Signature` header on the request and match it against the webhook secret
+available in your Extend dashboard settings. If the `Extend-Signature` header value does not match your secret, you should toss out the incoming event.
+
+## The webhook event
+
+### Fields
+
+| Field | Description |
+|-----------|-------------|
+| eventId | **string** - Unique identifier for the event |
+| eventType | **string** - Type of the event that occurred (workflow_run.completed) |
+| payload | **object** - Contains the data related to the event. In this case, it includes the properties of a completed workflow run from the IPublicWorkflowRun interface |
+
+Here is what you can expect for a given incoming event:
+
+```json Event
+{
+  "eventId": "event_jfdkfjsek",
+  "eventType": "e.g. workflow.created, workflow_run.completed",
+  "payload": {
+    "object": "workflow_run",
+    "id": "wr_fhdsjkfd"
+    // etc.
+  }
+}
+```
+
+
+## List of all event types
+
+The following table outlines the various event types you can receive via webhooks:
+
+| Event Type | Description |
+|-----------------------|-------------|
+| workflow_run.completed| Triggered whenever a WorkflowRun is completed |
+| workflow.created | Triggered whenever a new Workflow is created |
+
+## Example: `workflow_run.completed`
+
+Once a workflow run is completed, if your workflow is configured to send a webhook, a `workflow_run.completed` event
+will be pushed to your system, assuming you have defined a webhook url in your dashboard. Please reach out if you require any help 
+getting set up.
 
 Example Output:
 ```json Response
@@ -16,25 +59,106 @@ Example Output:
     "status": "PROCESSED",
     "metadata": {
       "is_important": true,
+      "some_id": "id_fjdsfkld"
+      // any other metadata fields you attach when creating the run
     },
     "fileName": "example_file_name",
     "extractionOutput": {
-      "name": "John Smith",
-      "birthday": "January 1, 1970",
-      "favoriteColor": "blue"
+      "field_1": {
+        "value": "example string",
+        "confidence": 0.98,
+        "type": "string"
+      },
+      "field_2": {
+        "value": 1234,
+        "confidence": 0.99,
+        "type": "number"
+      },
+      "field_3": {
+        "value": {
+          "amount": 100,
+          "iso_4217_currency_code": "USD"
+        },
+        "confidence": 0.95,
+        "type": "currency"
+      },
+      "field_4": {
+        "value": [
+          {
+            "sub_field_1": "example string",
+            "sub_field_2": 123
+          }
+        ],
+        "confidence": 0.9,
+        "type": "array",
+        "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
+      }
+    },
+    "output": {
+      "field_1": {
+        "value": "another example string",
+        "confidence": 0.97,
+        "type": "string"
+      },
+      "field_2": {
+        "value": 5678,
+        "confidence": 1,
+        "type": "number"
+      },
+      "field_3": {
+        "value": {
+          "amount": 200,
+          "iso_4217_currency_code": "EUR"
+        },
+        "confidence": 0.96,
+        "type": "currency"
+      },
+      "field_4": {
+        "value": [
+          {
+            "sub_field_1": "another example string",
+            "sub_field_2": 456
+          }
+        ],
+        "confidence": 0.93,
+        "type": "array",
+        "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
+      }
     },
     "initialRunBy": "test@test.com",
     "initialRunAt": "2023-01-01T09:41:00.000Z",
+    "reviewedBy": null,
     "reviewedOutput": null,
     "reviewedAt": null,
     "startTime": "2023-01-01T09:41:00.000Z",
     "endTime": "2023-01-01T09:43:00.000Z",
     "workflow": {
       "id": "workflow_1234",
-      "name": "employees",
+      "name": "employees"
     }
   }
 }
 ```
 
 To set up a webhook, please reach out to an Extend team member with the URL of the webhook where you'd like the output to be sent and the Workflow this should be applied to.
+
+**Note**: The extraction output fields shown in the payload above will conform to the following schema, and the field keys are defined when configuring the extractor 
+in your worklfow builder:
+```typescript Output
+export interface FieldResult {
+  value: string;
+  confidence: number;
+  type: 
+    | "string"
+    | "number"
+    | "currency"
+    | "boolean"
+    | "date"
+    | "array"
+    | "null";
+  arrayJSONSchema?: string
+}
+export interface FieldResultObject {
+  [key: string]: FieldResult;
+}
+```
