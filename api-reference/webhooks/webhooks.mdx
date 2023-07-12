@@ -63,7 +63,7 @@ Example Output:
       // any other metadata fields you attach when creating the run
     },
     "fileName": "example_file_name",
-    "extractionOutput": {
+    "extractionOutput": { // DEPRECATED
       "field_1": {
         "value": "example string",
         "confidence": 0.98,
@@ -94,7 +94,7 @@ Example Output:
         "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
       }
     },
-    "output": {
+    "output": { // DEPRECATED
       "field_1": {
         "value": "another example string",
         "confidence": 0.97,
@@ -125,6 +125,44 @@ Example Output:
         "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
       }
     },
+    "outputs": [
+      {
+        "object": "document_processor_run",
+        "id": "dpr_ER67I84cIbOYtbReCTLZD",
+        "edited": true,
+        "type": "EXTRACT",
+        "config": {
+          "fieldsToExtract": [
+            {
+              "type": "number",
+              "fieldName": "invoice_number",
+              "description": "The invoice number for this invoice"
+            }
+          ]
+        },
+        "initialOutput": {
+          "invoice_number": {
+            "type": "number",
+            "value": null,
+            "confidence": 0
+          }
+        },
+        "reviewedOutput": {
+          "invoice_number": {
+            "type": "number",
+            "value": 155,
+            "confidence": 1
+          }
+        },
+        "output": {
+          "invoice_number": {
+            "type": "number",
+            "value": 155,
+            "confidence": 1
+          }
+        }
+      }
+    ],
     "initialRunBy": "test@test.com",
     "initialRunAt": "2023-01-01T09:41:00.000Z",
     "reviewedBy": null,
@@ -142,10 +180,23 @@ Example Output:
 
 To set up a webhook, please reach out to an Extend team member with the URL of the webhook where you'd like the output to be sent and the Workflow this should be applied to.
 
-**Note**: The extraction output fields shown in the payload above will conform to the following schema, and the field keys are defined when configuring the extractor 
+
+<br />
+<br />
+
+# Output Types
+
+**Note**: The output objects shown in the payload above will conform to the following schema, and the field keys are defined when configuring the extractor/classifer
 in your worklfow builder:
-```typescript Output
-export interface FieldResult {
+
+```typescript Output types
+
+/* The output type when type=EXTRACT */
+export interface ExtractionOutput {
+  [key: string]: ExtractFieldResult;
+}
+
+export interface ExtractionFieldResult {
   value: string;
   confidence: number;
   type: 
@@ -156,9 +207,18 @@ export interface FieldResult {
     | "date"
     | "array"
     | "null";
-  arrayJSONSchema?: string
+  arrayJSONSchema?: string // Only set when type=array
 }
-export interface FieldResultObject {
-  [key: string]: FieldResult;
-}
+
+/* The output type when type=CLASSIFY */
+export type ClassificationOutput = {
+  type: string;
+  confidence: number;
+};
+
+export type Classification = {
+  type: string;
+  description: string;
+};
+
 ```

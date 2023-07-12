@@ -43,8 +43,9 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The name of the File associated with this WorkflowRun.
     </ResponseField>
 
-    <ResponseField name="extractionOutput" type="object">
-      The JSON output of the extracted data from a File.
+    <ResponseField name="extractionOutput (DEPRECATED)" type="object">
+      The JSON output of the extracted data from a File. 
+      DEPRECATED in favor of `outputs`. Field will no longer be supported after 2023-10-01.
     </ResponseField>
 
     <ResponseField name="initialRunBy" type="string">
@@ -55,12 +56,56 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The time (in UTC) at which the person initially ran the workflow.
     </ResponseField>
 
-    <ResponseField name="output" type="object">
+    <ResponseField name="output (DEPRECATED)" type="object">
       The final JSON output of a WorkflowRun from a File whether it was reviewed or left unedited and auto processed.
+      DEPRECATED in favor of `outputs`. Field will no longer be supported after 2023-10-01.
     </ResponseField>
 
-    <ResponseField name="reviewedOutput" type="object">
+    <ResponseField name="outputs" type="array">
+      <Expandable title="properties" defaultOpen>
+        <ResponseField name="object" type="string">
+          Type of the object, always 'document_processor_run'
+        </ResponseField>
+
+        <ResponseField name="id" type="string">
+          The unique identifier for the document processor run
+        </ResponseField>
+
+        <ResponseField name="edited" type="boolean">
+          Whether the document processor run has been edited
+        </ResponseField>
+
+        <ResponseField name="type" type="string">
+          The type of the document processor run. 
+          Either `EXTRACT` or `CLASSIFY`.
+        </ResponseField>
+
+        <ResponseField name="config" type="object">
+          The configuration used for the document processor.
+          This can help you programatically parse the output.
+          It will be either`ExtractionConfig` or `ClassificationConfig`.
+        </ResponseField>
+
+        <ResponseField name="initialOutput" type="object">
+          The initial raw output from the document processor.
+          It will be either [`ExtractionOutput`](#output-types) or [`ClassificationOutput`](#output-types) depending on the `type`.
+        </ResponseField>
+
+        <ResponseField name="reviewedOutput" type="object" optional>
+          The output after review, if any.
+          It will be either `ExtractionOutput` or `ClassificationOutput` or null.
+        </ResponseField>
+
+        <ResponseField name="output" type="object">
+          The final output, either reviewed or initial. You can rely on this to be always set.
+          It will be either `ExtractionOutput` or `ClassificationOutput` depending on the `type`.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="reviewedOutput (DEPRECATED)" type="object">
       The JSON output of a specific WorkflowRun from a File after it was manually reviewed.
+      DEPRECATED in favor of `outputs`. Field will no longer be supported after 2023-10-01.
     </ResponseField>
 
     <ResponseField name="reviewedBy" type="string | null">
@@ -113,9 +158,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
 
 ```json Response
 {
-  "eventId": "event_1234",
-  "eventType": "workflow_run.completed",
-  "payload": {
+  "workflow_run": {
     "object": "workflow_run",
     "id": "workflow_run_1234",
     "status": "PROCESSED",
@@ -125,7 +168,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
       // any other metadata fields you attach when creating the run
     },
     "fileName": "example_file_name",
-    "extractionOutput": {
+    "extractionOutput": { // DEPRECATED
       "field_1": {
         "value": "example string",
         "confidence": 0.98,
@@ -156,7 +199,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
       }
     },
-    "output": {
+    "output": { // DEPRECATED
       "field_1": {
         "value": "another example string",
         "confidence": 0.97,
@@ -187,6 +230,44 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
       }
     },
+    "outputs": [
+      {
+        "object": "document_processor_run",
+        "id": "dpr_ER67I84cIbOYtbReCTLZD",
+        "edited": true,
+        "type": "EXTRACT",
+        "config": {
+          "fieldsToExtract": [
+            {
+              "type": "number",
+              "fieldName": "invoice_number",
+              "description": "The invoice number for this invoice"
+            }
+          ]
+        },
+        "initialOutput": {
+          "invoice_number": {
+            "type": "number",
+            "value": null,
+            "confidence": 0
+          }
+        },
+        "reviewedOutput": {
+          "invoice_number": {
+            "type": "number",
+            "value": 155,
+            "confidence": 1
+          }
+        },
+        "output": {
+          "invoice_number": {
+            "type": "number",
+            "value": 155,
+            "confidence": 1
+          }
+        }
+      }
+    ],
     "initialRunBy": "test@test.com",
     "initialRunAt": "2023-01-01T09:41:00.000Z",
     "reviewedBy": null,
@@ -202,11 +283,24 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
 }
 ```
 
+</ResponseExample>
 
-**Note**: The extraction output fields shown in the payload above will conform to the following schema, and the field keys are defined when configuring the extractor 
+<br />
+<br />
+
+# Output Types
+
+**Note**: The output objects shown in the payload above will conform to the following schema, and the field keys are defined when configuring the extractor/classifer
 in your worklfow builder:
+
 ```typescript Output types
-export interface FieldResult {
+
+/* The output type when type=EXTRACT */
+export interface ExtractionOutput {
+  [key: string]: ExtractFieldResult;
+}
+
+export interface ExtractionFieldResult {
   value: string;
   confidence: number;
   type: 
@@ -217,12 +311,19 @@ export interface FieldResult {
     | "date"
     | "array"
     | "null";
-  arrayJSONSchema?: string
+  arrayJSONSchema?: string // Only set when type=array
 }
-export interface FieldResultObject {
-  [key: string]: FieldResult;
-}
-```
 
-</ResponseExample>
+/* The output type when type=CLASSIFY */
+export type ClassificationOutput = {
+  type: string;
+  confidence: number;
+};
+
+export type Classification = {
+  type: string;
+  description: string;
+};
+
+```
 
