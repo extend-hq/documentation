@@ -6,12 +6,18 @@ description: "Once a workflow has been created on the Extend Platform, this endp
 
 ### Body
 
-<ParamField body="workflow_id" type="string">
+<ParamField body="workflow_id" type="string" required>
   The ID of the workflow that files will be run through. This ID can be fetched from viewing the workflow on the Extend platform.
 </ParamField>
 
 <ParamField body="files" type="File[]">
   An array of Files.
+</ParamField>
+
+<ParamField body="raw_texts" type="string[]">
+  An array of raw strings. Can be used in place of files when passing raw data. 
+  The raw data will be converted to .txt files and run through the workflow. 
+  If the data follows a specific format, it is recommended to use the files parameter instead.
 </ParamField>
 
 <ParamField body="name" type="string">
