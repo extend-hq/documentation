@@ -12,11 +12,11 @@ available in your Extend dashboard settings. If the `Extend-Signature` header va
 
 ### Fields
 
-| Field | Description |
-|-----------|-------------|
-| eventId | **string** - Unique identifier for the event |
-| eventType | **string** - Type of the event that occurred (workflow_run.completed) |
-| payload | **object** - Contains the data related to the event. In this case, it includes the properties of a completed workflow run from the IPublicWorkflowRun interface |
+| Field     | Description                                                                                                                                                     |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| eventId   | **string** - Unique identifier for the event                                                                                                                    |
+| eventType | **string** - Type of the event that occurred (workflow_run.completed)                                                                                           |
+| payload   | **object** - Contains the data related to the event. In this case, it includes the properties of a completed workflow run from the IPublicWorkflowRun interface |
 
 Here is what you can expect for a given incoming event:
 
@@ -32,23 +32,23 @@ Here is what you can expect for a given incoming event:
 }
 ```
 
-
 ## List of all event types
 
 The following table outlines the various event types you can receive via webhooks:
 
-| Event Type | Description |
-|-----------------------|-------------|
-| workflow_run.completed| Triggered whenever a WorkflowRun is completed |
-| workflow.created | Triggered whenever a new Workflow is created |
+| Event Type             | Description                                   |
+| ---------------------- | --------------------------------------------- |
+| workflow_run.completed | Triggered whenever a WorkflowRun is completed |
+| workflow.created       | Triggered whenever a new Workflow is created  |
 
 ## Example: `workflow_run.completed`
 
 Once a workflow run is completed, if your workflow is configured to send a webhook, a `workflow_run.completed` event
-will be pushed to your system, assuming you have defined a webhook url in your dashboard. Please reach out if you require any help 
+will be pushed to your system, assuming you have defined a webhook url in your dashboard. Please reach out if you require any help
 getting set up.
 
 Example Output:
+
 ```json Response
 {
   "eventId": "event_1234",
@@ -63,18 +63,22 @@ Example Output:
       // any other metadata fields you attach when creating the run
     },
     "fileName": "example_file_name",
-    "extractionOutput": { // DEPRECATED
+    "extractionOutput": {
+      // DEPRECATED
       "field_1": {
+        "id": "example_id_1",
         "value": "example string",
         "confidence": 0.98,
         "type": "string"
       },
       "field_2": {
+        "id": "example_id_2",
         "value": 1234,
         "confidence": 0.99,
         "type": "number"
       },
       "field_3": {
+        "id": "example_id_3",
         "value": {
           "amount": 100,
           "iso_4217_currency_code": "USD"
@@ -83,6 +87,7 @@ Example Output:
         "type": "currency"
       },
       "field_4": {
+        "id": "example_id_4",
         "value": [
           {
             "sub_field_1": "example string",
@@ -91,21 +96,39 @@ Example Output:
         ],
         "confidence": 0.9,
         "type": "array",
+        "schema": [
+          {
+            "id": "example_id_1",
+            "fieldName": "sub_field_1",
+            "type": "string",
+            "description": "example description"
+          },
+          {
+            "id": "example_id_2",
+            "fieldName": "sub_field_2",
+            "type": "number",
+            "description": "example description"
+          }
+        ],
         "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
       }
     },
-    "output": { // DEPRECATED
+    "output": {
+      // DEPRECATED
       "field_1": {
+        "id": "example_id_1",
         "value": "another example string",
         "confidence": 0.97,
         "type": "string"
       },
       "field_2": {
+        "id": "example_id_2",
         "value": 5678,
         "confidence": 1,
         "type": "number"
       },
       "field_3": {
+        "id": "example_id_3",
         "value": {
           "amount": 200,
           "iso_4217_currency_code": "EUR"
@@ -114,6 +137,7 @@ Example Output:
         "type": "currency"
       },
       "field_4": {
+        "id": "example_id_4",
         "value": [
           {
             "sub_field_1": "another example string",
@@ -122,6 +146,20 @@ Example Output:
         ],
         "confidence": 0.93,
         "type": "array",
+        "schema": [
+          {
+            "id": "subfield_1",
+            "fieldName": "sub_field_1",
+            "type": "string",
+            "description": "The description for subfield_1"
+          },
+          {
+            "id": "subfield_2",
+            "fieldName": "sub_field_2",
+            "type": "number",
+            "description": "The description for subfield_2"
+          }
+        ],
         "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
       }
     },
@@ -134,6 +172,7 @@ Example Output:
         "config": {
           "fieldsToExtract": [
             {
+              "id": "example_id_1",
               "type": "number",
               "fieldName": "invoice_number",
               "description": "The invoice number for this invoice"
@@ -142,6 +181,7 @@ Example Output:
         },
         "initialOutput": {
           "invoice_number": {
+            "id": "example_id_1",
             "type": "number",
             "value": null,
             "confidence": 0
@@ -149,6 +189,7 @@ Example Output:
         },
         "reviewedOutput": {
           "invoice_number": {
+            "id": "example_id_1",
             "type": "number",
             "value": 155,
             "confidence": 1
@@ -156,6 +197,7 @@ Example Output:
         },
         "output": {
           "invoice_number": {
+            "id": "example_id_1",
             "type": "number",
             "value": 155,
             "confidence": 1
@@ -180,7 +222,6 @@ Example Output:
 
 To set up a webhook, please reach out to an Extend team member with the URL of the webhook where you'd like the output to be sent and the Workflow this should be applied to.
 
-
 <br />
 <br />
 
@@ -190,24 +231,39 @@ To set up a webhook, please reach out to an Extend team member with the URL of t
 in your worklfow builder:
 
 ```typescript Output types
-
 /* The output type when type=EXTRACT */
 export interface ExtractionOutput {
   [key: string]: ExtractFieldResult;
 }
 
+export interface ExtractorFieldInput {
+  fieldName: string;
+  description: string;
+  type:
+    | "string"
+    | "number"
+    | "currency"
+    | "boolean"
+    | "date"
+    | "any[]"
+    | "object";
+  schema?: ExtractorFieldInput[];
+}
+
 export interface ExtractionFieldResult {
   value: string;
   confidence: number;
-  type: 
+  type:
     | "string"
     | "number"
     | "currency"
     | "boolean"
     | "date"
     | "array"
+    | "object"
     | "null";
-  arrayJSONSchema?: string // Only set when type=array
+  schema?: ExtractorFieldInput[]; // Only set when type=array or type=object
+  arrayJSONSchema?: string; // DEPRECATED: Only set when type=array
 }
 
 /* The output type when type=CLASSIFY */
@@ -220,5 +276,4 @@ export type Classification = {
   type: string;
   description: string;
 };
-
 ```

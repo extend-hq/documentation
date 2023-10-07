@@ -7,7 +7,8 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
 ### Body
 
 <ParamField body="workflowRunId" type="string">
-  The ID of the WorkflowRun that was outputted after a Workflow was run through the API.
+  The ID of the WorkflowRun that was outputted after a Workflow was run through
+  the API.
 </ParamField>
 
 ### Response
@@ -17,9 +18,9 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
 </ResponseField>
 
 <ResponseField name="workflow_runs" type="WorkflowRun[]">
-  An array of WorkflowRun objects, with each WorkflowRun corresponding to a single File that was passed in.
+  An array of WorkflowRun objects, with each WorkflowRun corresponding to a
+  single File that was passed in.
 </ResponseField>
-
 
 <ResponseField name="WorkflowRun" type="object">
   <Expandable title="properties">
@@ -44,7 +45,7 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
     </ResponseField>
 
     <ResponseField name="extractionOutput (DEPRECATED)" type="object">
-      The JSON output of the extracted data from a File. 
+      The JSON output of the extracted data from a File.
       DEPRECATED in favor of `outputs`. Field will no longer be supported after 2023-10-01.
     </ResponseField>
 
@@ -76,7 +77,7 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
         </ResponseField>
 
         <ResponseField name="type" type="string">
-          The type of the document processor run. 
+          The type of the document processor run.
           Either `EXTRACT` or `CLASSIFY`.
         </ResponseField>
 
@@ -168,18 +169,22 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
       // any other metadata fields you attach when creating the run
     },
     "fileName": "example_file_name",
-    "extractionOutput": { // DEPRECATED
+    "extractionOutput": {
+      // DEPRECATED
       "field_1": {
+        "id": "example_id_1",
         "value": "example string",
         "confidence": 0.98,
         "type": "string"
       },
       "field_2": {
+        "id": "example_id_2",
         "value": 1234,
         "confidence": 0.99,
         "type": "number"
       },
       "field_3": {
+        "id": "example_id_3",
         "value": {
           "amount": 100,
           "iso_4217_currency_code": "USD"
@@ -188,6 +193,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         "type": "currency"
       },
       "field_4": {
+        "id": "example_id_4",
         "value": [
           {
             "sub_field_1": "example string",
@@ -196,21 +202,39 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         ],
         "confidence": 0.9,
         "type": "array",
+        "schema": [
+          {
+            "id": "example_id_1",
+            "fieldName": "sub_field_1",
+            "type": "string",
+            "description": "example description"
+          },
+          {
+            "id": "example_id_2",
+            "fieldName": "sub_field_2",
+            "type": "number",
+            "description": "example description"
+          }
+        ],
         "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
       }
     },
-    "output": { // DEPRECATED
+    "output": {
+      // DEPRECATED
       "field_1": {
+        "id": "example_id_1",
         "value": "another example string",
         "confidence": 0.97,
         "type": "string"
       },
       "field_2": {
+        "id": "example_id_2",
         "value": 5678,
         "confidence": 1,
         "type": "number"
       },
       "field_3": {
+        "id": "example_id_3",
         "value": {
           "amount": 200,
           "iso_4217_currency_code": "EUR"
@@ -219,6 +243,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         "type": "currency"
       },
       "field_4": {
+        "id": "example_id_4",
         "value": [
           {
             "sub_field_1": "another example string",
@@ -227,6 +252,20 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         ],
         "confidence": 0.93,
         "type": "array",
+        "schema": [
+          {
+            "id": "example_id_1",
+            "fieldName": "sub_field_1",
+            "type": "string",
+            "description": "example description"
+          },
+          {
+            "id": "example_id_2",
+            "fieldName": "sub_field_2",
+            "type": "number",
+            "description": "example description"
+          }
+        ],
         "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
       }
     },
@@ -239,6 +278,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         "config": {
           "fieldsToExtract": [
             {
+              "id": "example_id_1",
               "type": "number",
               "fieldName": "invoice_number",
               "description": "The invoice number for this invoice"
@@ -247,6 +287,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         },
         "initialOutput": {
           "invoice_number": {
+            "id": "example_id_1",
             "type": "number",
             "value": null,
             "confidence": 0
@@ -254,6 +295,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         },
         "reviewedOutput": {
           "invoice_number": {
+            "id": "example_id_1",
             "type": "number",
             "value": 155,
             "confidence": 1
@@ -261,6 +303,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
         },
         "output": {
           "invoice_number": {
+            "id": "example_id_1",
             "type": "number",
             "value": 155,
             "confidence": 1
@@ -294,24 +337,40 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
 in your worklfow builder:
 
 ```typescript Output types
-
 /* The output type when type=EXTRACT */
 export interface ExtractionOutput {
   [key: string]: ExtractFieldResult;
 }
 
+export interface ExtractorFieldInput {
+  fieldName: string;
+  description: string;
+  type:
+    | "string"
+    | "number"
+    | "currency"
+    | "boolean"
+    | "date"
+    | "any[]"
+    | "object";
+  schema?: ExtractorFieldInput[];
+}
+
 export interface ExtractionFieldResult {
+  id: string;
   value: string;
   confidence: number;
-  type: 
+  type:
     | "string"
     | "number"
     | "currency"
     | "boolean"
     | "date"
     | "array"
+    | "object"
     | "null";
-  arrayJSONSchema?: string // Only set when type=array
+  schema?: ExtractorFieldInput[]; // Only set when type=array or type=object
+  arrayJSONSchema?: string; // DEPRECATED: Only set when type=array
 }
 
 /* The output type when type=CLASSIFY */
@@ -324,6 +383,4 @@ export type Classification = {
   type: string;
   description: string;
 };
-
 ```
-
