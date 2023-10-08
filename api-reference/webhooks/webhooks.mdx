@@ -5,8 +5,8 @@ description: ""
 
 ## Authenticating webhooks
 
-To authenticate an incoming webhook event you can check the `Extend-Signature` header on the request and match it against the webhook secret
-available in your Extend dashboard settings. If the `Extend-Signature` header value does not match your secret, you should toss out the incoming event.
+To authenticate an incoming webhook event you can check the `extend-signature` header on the request and match it against the webhook secret
+available in your Extend dashboard settings. If the `extend-signature` header value does not match your secret, you should toss out the incoming event.
 
 ## The webhook event
 
