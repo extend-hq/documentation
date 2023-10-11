@@ -44,22 +44,12 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The name of the File associated with this WorkflowRun.
     </ResponseField>
 
-    <ResponseField name="extractionOutput (DEPRECATED)" type="object">
-      The JSON output of the extracted data from a File.
-      DEPRECATED in favor of `outputs`. Field will no longer be supported after 2023-10-01.
-    </ResponseField>
-
     <ResponseField name="initialRunBy" type="string">
       The email of the person who initially ran the workflow.
     </ResponseField>
 
     <ResponseField name="initialRunAt" type="string">
       The time (in UTC) at which the person initially ran the workflow.
-    </ResponseField>
-
-    <ResponseField name="output (DEPRECATED)" type="object">
-      The final JSON output of a WorkflowRun from a File whether it was reviewed or left unedited and auto processed.
-      DEPRECATED in favor of `outputs`. Field will no longer be supported after 2023-10-01.
     </ResponseField>
 
     <ResponseField name="outputs" type="array">
@@ -103,12 +93,6 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
         </ResponseField>
       </Expandable>
     </ResponseField>
-
-    <ResponseField name="reviewedOutput (DEPRECATED)" type="object">
-      The JSON output of a specific WorkflowRun from a File after it was manually reviewed.
-      DEPRECATED in favor of `outputs`. Field will no longer be supported after 2023-10-01.
-    </ResponseField>
-
     <ResponseField name="reviewedBy" type="string | null">
       The email of the person who reviewed the WorkflowRun, if applicable.
     </ResponseField>
@@ -169,106 +153,6 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
       // any other metadata fields you attach when creating the run
     },
     "fileName": "example_file_name",
-    "extractionOutput": {
-      // DEPRECATED
-      "field_1": {
-        "id": "example_id_1",
-        "value": "example string",
-        "confidence": 0.98,
-        "type": "string"
-      },
-      "field_2": {
-        "id": "example_id_2",
-        "value": 1234,
-        "confidence": 0.99,
-        "type": "number"
-      },
-      "field_3": {
-        "id": "example_id_3",
-        "value": {
-          "amount": 100,
-          "iso_4217_currency_code": "USD"
-        },
-        "confidence": 0.95,
-        "type": "currency"
-      },
-      "field_4": {
-        "id": "example_id_4",
-        "value": [
-          {
-            "sub_field_1": "example string",
-            "sub_field_2": 123
-          }
-        ],
-        "confidence": 0.9,
-        "type": "array",
-        "schema": [
-          {
-            "id": "example_id_1",
-            "fieldName": "sub_field_1",
-            "type": "string",
-            "description": "example description"
-          },
-          {
-            "id": "example_id_2",
-            "fieldName": "sub_field_2",
-            "type": "number",
-            "description": "example description"
-          }
-        ],
-        "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
-      }
-    },
-    "output": {
-      // DEPRECATED
-      "field_1": {
-        "id": "example_id_1",
-        "value": "another example string",
-        "confidence": 0.97,
-        "type": "string"
-      },
-      "field_2": {
-        "id": "example_id_2",
-        "value": 5678,
-        "confidence": 1,
-        "type": "number"
-      },
-      "field_3": {
-        "id": "example_id_3",
-        "value": {
-          "amount": 200,
-          "iso_4217_currency_code": "EUR"
-        },
-        "confidence": 0.96,
-        "type": "currency"
-      },
-      "field_4": {
-        "id": "example_id_4",
-        "value": [
-          {
-            "sub_field_1": "another example string",
-            "sub_field_2": 456
-          }
-        ],
-        "confidence": 0.93,
-        "type": "array",
-        "schema": [
-          {
-            "id": "example_id_1",
-            "fieldName": "sub_field_1",
-            "type": "string",
-            "description": "example description"
-          },
-          {
-            "id": "example_id_2",
-            "fieldName": "sub_field_2",
-            "type": "number",
-            "description": "example description"
-          }
-        ],
-        "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
-      }
-    },
     "outputs": [
       {
         "object": "document_processor_run",
@@ -314,7 +198,6 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
     "initialRunBy": "test@test.com",
     "initialRunAt": "2023-01-01T09:41:00.000Z",
     "reviewedBy": null,
-    "reviewedOutput": null,
     "reviewedAt": null,
     "startTime": "2023-01-01T09:41:00.000Z",
     "endTime": "2023-01-01T09:43:00.000Z",
@@ -369,8 +252,7 @@ export interface ExtractionFieldResult {
     | "array"
     | "object"
     | "null";
-  schema?: ExtractorFieldInput[]; // Only set when type=array or type=object
-  arrayJSONSchema?: string; // DEPRECATED: Only set when type=array
+  schema?: ExtractorFieldInput[]; // Only set when type=array or type=object to provide structure of sub fields
 }
 
 /* The output type when type=CLASSIFY */

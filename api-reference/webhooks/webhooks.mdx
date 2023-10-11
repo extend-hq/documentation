@@ -63,106 +63,6 @@ Example Output:
       // any other metadata fields you attach when creating the run
     },
     "fileName": "example_file_name",
-    "extractionOutput": {
-      // DEPRECATED
-      "field_1": {
-        "id": "example_id_1",
-        "value": "example string",
-        "confidence": 0.98,
-        "type": "string"
-      },
-      "field_2": {
-        "id": "example_id_2",
-        "value": 1234,
-        "confidence": 0.99,
-        "type": "number"
-      },
-      "field_3": {
-        "id": "example_id_3",
-        "value": {
-          "amount": 100,
-          "iso_4217_currency_code": "USD"
-        },
-        "confidence": 0.95,
-        "type": "currency"
-      },
-      "field_4": {
-        "id": "example_id_4",
-        "value": [
-          {
-            "sub_field_1": "example string",
-            "sub_field_2": 123
-          }
-        ],
-        "confidence": 0.9,
-        "type": "array",
-        "schema": [
-          {
-            "id": "example_id_1",
-            "fieldName": "sub_field_1",
-            "type": "string",
-            "description": "example description"
-          },
-          {
-            "id": "example_id_2",
-            "fieldName": "sub_field_2",
-            "type": "number",
-            "description": "example description"
-          }
-        ],
-        "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
-      }
-    },
-    "output": {
-      // DEPRECATED
-      "field_1": {
-        "id": "example_id_1",
-        "value": "another example string",
-        "confidence": 0.97,
-        "type": "string"
-      },
-      "field_2": {
-        "id": "example_id_2",
-        "value": 5678,
-        "confidence": 1,
-        "type": "number"
-      },
-      "field_3": {
-        "id": "example_id_3",
-        "value": {
-          "amount": 200,
-          "iso_4217_currency_code": "EUR"
-        },
-        "confidence": 0.96,
-        "type": "currency"
-      },
-      "field_4": {
-        "id": "example_id_4",
-        "value": [
-          {
-            "sub_field_1": "another example string",
-            "sub_field_2": 456
-          }
-        ],
-        "confidence": 0.93,
-        "type": "array",
-        "schema": [
-          {
-            "id": "subfield_1",
-            "fieldName": "sub_field_1",
-            "type": "string",
-            "description": "The description for subfield_1"
-          },
-          {
-            "id": "subfield_2",
-            "fieldName": "sub_field_2",
-            "type": "number",
-            "description": "The description for subfield_2"
-          }
-        ],
-        "arrayJSONSchema": "{\"type\":\"object\",\"properties\":{\"sub_field_1\":{\"type\":\"string\"},\"sub_field_2\":{\"type\":\"number\"}}}"
-      }
-    },
     "outputs": [
       {
         "object": "document_processor_run",
@@ -187,6 +87,7 @@ Example Output:
             "confidence": 0
           }
         },
+        // Only set when a workflow run was explicitly reviewed by a human
         "reviewedOutput": {
           "invoice_number": {
             "id": "example_id_1",
@@ -208,7 +109,6 @@ Example Output:
     "initialRunBy": "test@test.com",
     "initialRunAt": "2023-01-01T09:41:00.000Z",
     "reviewedBy": null,
-    "reviewedOutput": null,
     "reviewedAt": null,
     "startTime": "2023-01-01T09:41:00.000Z",
     "endTime": "2023-01-01T09:43:00.000Z",
@@ -262,8 +162,7 @@ export interface ExtractionFieldResult {
     | "array"
     | "object"
     | "null";
-  schema?: ExtractorFieldInput[]; // Only set when type=array or type=object
-  arrayJSONSchema?: string; // DEPRECATED: Only set when type=array
+  schema?: ExtractorFieldInput[]; // Only set when type=array or type=object to provide structure of sub fields
 }
 
 /* The output type when type=CLASSIFY */
