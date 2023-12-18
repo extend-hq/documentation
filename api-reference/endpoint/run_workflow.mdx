@@ -7,7 +7,8 @@ description: "Once a workflow has been created on the Extend Platform, this endp
 ### Body
 
 <ParamField body="workflow_id" type="string" required>
-  The ID of the workflow that files will be run through. This ID can be fetched from viewing the workflow on the Extend platform.
+  The ID of the workflow that files will be run through. This ID can be fetched
+  from viewing the workflow on the Extend platform.
 </ParamField>
 
 <ParamField body="files" type="File[]">
@@ -15,13 +16,21 @@ description: "Once a workflow has been created on the Extend Platform, this endp
 </ParamField>
 
 <ParamField body="raw_texts" type="string[]">
-  An array of raw strings. Can be used in place of files when passing raw data. 
-  The raw data will be converted to .txt files and run through the workflow. 
-  If the data follows a specific format, it is recommended to use the files parameter instead.
+  An array of raw strings. Can be used in place of files when passing raw data.
+  The raw data will be converted to .txt files and run through the workflow. If
+  the data follows a specific format, it is recommended to use the files
+  parameter instead.
 </ParamField>
 
 <ParamField body="name" type="string">
   An optional name that can be assigned to a specific WorkflowRun.
+</ParamField>
+
+<ParamField body="version" type="string">
+  An optional version of the workflow that files will be run through. This
+  number can be fetched from viewing the workflow version on the Extend
+  platform. When a version number is not supplied, the "Draft" version of the
+  workflow will be used.
 </ParamField>
 
 <ParamField body="metadata" type="any">
@@ -37,6 +46,7 @@ description: "Once a workflow has been created on the Extend Platform, this endp
     <ResponseField name="fileUrl" type="string">
       A publically accessible URL for the file.
     </ResponseField>
+
   </Expandable>
 </ResponseField>
 
@@ -47,9 +57,9 @@ description: "Once a workflow has been created on the Extend Platform, this endp
 </ResponseField>
 
 <ResponseField name="workflow_runs" type="WorkflowRun[]">
-  An array of WorkflowRun objects, with each WorkflowRun corresponding to a single File that was passed in.
+  An array of WorkflowRun objects, with each WorkflowRun corresponding to a
+  single File that was passed in.
 </ResponseField>
-
 
 <ResponseField name="WorkflowRun" type="object">
   <Expandable title="properties">
@@ -109,6 +119,10 @@ description: "Once a workflow has been created on the Extend Platform, this endp
       The details about the Workflow that was used in this WorkflowRun.
     </ResponseField>
 
+    <ResponseField name="workflowVersion" type="WorkflowVersion">
+      The details about the WorkflowVersion that was used in this WorkflowRun.
+    </ResponseField>
+
   </Expandable>
 </ResponseField>
 
@@ -121,6 +135,22 @@ description: "Once a workflow has been created on the Extend Platform, this endp
     <ResponseField name="name" type="string">
       The name of the Workflow.
     </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="WorkflowVersion" type="object">
+  <Expandable title="properties">
+    <ResponseField name="version" type="string">
+      The WorkflowVersion number.
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      The name of the WorkflowVersion.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
 
   </Expandable>
 </ResponseField>
@@ -157,7 +187,7 @@ curl --location --request POST 'https://api-prod.extend.app/v1/workflow_runs' \
       "id": "workflow_run_1234",
       "status": "PENDING",
       "metadata": {
-        "is_important": false,
+        "is_important": false
       },
       "fileName": "example_file_name",
       "extractionOutput": null,
@@ -169,7 +199,11 @@ curl --location --request POST 'https://api-prod.extend.app/v1/workflow_runs' \
       "endTime": "2023-01-01T09:43:00.000Z",
       "workflow": {
         "id": "workflow_1234",
-        "name": "test_workflow",
+        "name": "test_workflow"
+      },
+      "workflowVersion": {
+        "version": "1",
+        "name": "test_workflow_version"
       }
     }
   ]
@@ -177,4 +211,3 @@ curl --location --request POST 'https://api-prod.extend.app/v1/workflow_runs' \
 ```
 
 </ResponseExample>
-
