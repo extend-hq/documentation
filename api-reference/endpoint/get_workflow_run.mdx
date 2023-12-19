@@ -113,10 +113,6 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The details about the Workflow that was used in this WorkflowRun.
     </ResponseField>
 
-    <ResponseField name="workflowVersion" type="WorkflowVersion">
-      The details about the WorkflowVersion that was used in this WorkflowRun.
-    </ResponseField>
-
   </Expandable>
 </ResponseField>
 
@@ -130,17 +126,8 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The name of the Workflow.
     </ResponseField>
 
-  </Expandable>
-</ResponseField>
-
-<ResponseField name="WorkflowVersion" type="object">
-  <Expandable title="properties">
     <ResponseField name="version" type="string">
-      The WorkflowVersion number.
-    </ResponseField>
-
-    <ResponseField name="name" type="string">
-      The name of the WorkflowVersion.
+      The version of the Workflow.
     </ResponseField>
 
   </Expandable>
@@ -220,11 +207,8 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
     "endTime": "2023-01-01T09:43:00.000Z",
     "workflow": {
       "id": "workflow_1234",
-      "name": "employees"
-    },
-    "workflowVersion": {
       "version": "1",
-      "name": "workflow_version_name"
+      "name": "employees"
     }
   }
 }
