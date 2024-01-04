@@ -44,6 +44,10 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The name of the File associated with this WorkflowRun.
     </ResponseField>
 
+    <ResponseField name="pageCount" type="number">
+      The page count of the File associated with this WorkflowRun. This field will only be added for PDF and image files.
+    </ResponseField>
+
     <ResponseField name="initialRunBy" type="string">
       The email of the person who initially ran the workflow.
     </ResponseField>
