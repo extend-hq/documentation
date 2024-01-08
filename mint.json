@@ -15,6 +15,10 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Product Reference",
+      "url": "product-reference"
     }
   ],
   "navigation": [
@@ -27,6 +31,10 @@
       "pages": ["api-reference/authentication"]
     },
     {
+      "group": "Workflows",
+      "pages": ["product-reference/reviewing_workflow_run"]
+    },
+    {
       "group": "Endpoint Examples",
       "pages": [
         "api-reference/endpoint/run_workflow",
@@ -35,21 +43,17 @@
     },
     {
       "group": "Webhooks",
-      "pages": [
-        "api-reference/webhooks/webhooks"
-      ]
+      "pages": ["api-reference/webhooks/webhooks"]
     },
     {
       "group": "Slack",
-      "pages": [
-        "api-reference/slack/slack"
-      ]
+      "pages": ["api-reference/slack/slack"]
     }
   ],
   "backgroundImage": "/background.png",
   "api": {
     "auth": {
-        "method": "bearer"
+      "method": "bearer"
     },
     "playground": {
       "mode": "hide"
