@@ -44,8 +44,64 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The name of the File associated with this WorkflowRun.
     </ResponseField>
 
-    <ResponseField name="pageCount" type="number">
-      The page count of the File associated with this WorkflowRun. This field will only be added for PDF and image files.
+    <ResponseField name="fileMetadata" type="oneOf">
+      Metadata about the file.
+      <Expandable title="types">
+        <ResponseField name="PDFFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "PDF".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              <Expandable title="properties">
+                <ResponseField name="pageCount" type="number">
+                  The number of pages in the PDF file.
+                </ResponseField>
+              </Expandable>
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="CSVFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "CSV".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              An empty object, this may have more details in the future.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="IMGFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "IMG".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              An empty object, this may have more details in the future.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="TXTFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "TXT".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              An empty object, this may have more details in the future.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="DOCXFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "DOCX".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              An empty object, this may have more details in the future.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
     </ResponseField>
 
     <ResponseField name="initialRunBy" type="string">
@@ -156,7 +212,14 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
       "some_id": "id_fjdsfkld"
       // any other metadata fields you attach when creating the run
     },
-    "fileName": "example_file_name",
+    "fileName": "example_file_name.pdf",
+    "fileUrl": "https://example.com/example_file_name.pdf",
+    "fileMetadata": {
+      "type": "PDF",
+      "details": {
+        "pageCount": 1
+      }
+    },
     "outputs": [
       {
         "object": "document_processor_run",
