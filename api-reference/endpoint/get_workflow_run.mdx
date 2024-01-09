@@ -45,7 +45,7 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
     </ResponseField>
 
     <ResponseField name="fileMetadata" type="oneOf">
-      Metadata about the file.
+      Metadata about the file. This is an optional field which will only be present once the file has finished processing.
       <Expandable title="types">
         <ResponseField name="PDFFileMetadata" type="object">
           <Expandable title="properties">
@@ -97,7 +97,11 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
               The type of the file, in this case it will always be "DOCX".
             </ResponseField>
             <ResponseField name="details" type="object">
-              An empty object, this may have more details in the future.
+              <Expandable title="properties">
+                <ResponseField name="pageCount" type="number">
+                  The number of pages in the DOCX file.
+                </ResponseField>
+              </Expandable>
             </ResponseField>
           </Expandable>
         </ResponseField>
