@@ -31,6 +31,10 @@
       "pages": ["api-reference/authentication"]
     },
     {
+      "group": "Document Processors",
+      "pages": ["product-reference/configuring_extraction_step"]
+    },
+    {
       "group": "Workflows",
       "pages": ["product-reference/reviewing_workflow_run"]
     },

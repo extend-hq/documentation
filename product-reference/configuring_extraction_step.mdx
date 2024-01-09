@@ -1,0 +1,82 @@
+---
+title: "Configuring an Extraction step"
+description: "How to configure an Extraction step in a workflow"
+---
+
+To begin configuring an Extraction step, click on the "Configure" button on the Extraction step in the workflow diagram.
+
+![](/images/configuring_extraction_step/workflow.png)
+
+This will open the Extraction step configuration window. The Extraction step configuration window is divided into two sections, the document viewer and the Extraction step configuration panel.
+
+![](/images/configuring_extraction_step/configure_blank.png)
+
+Click on the left panel to upload a document to the document viewer.
+
+![](/images/configuring_extraction_step/configure_file_uploaded.png)
+
+Now we want to define the schema for the data we are extracting from the document. To do this, we will use the Extraction step configuration panel.
+
+## Configuring fields to extract
+
+Each field to extract has three components, a name, type, and description. All of these are used in the extraction so it is important to configure them correctly to the best of your ability.
+
+- Name: the field name is the name of the field that will be used to reference the extracted data. This field name is used in the extraction and and will be used to reference this value in future steps of the workflow.
+- Type: the data type is the type of data that will be extracted from the document. There are seven types of data that can be extracted from a document:
+  - text
+  - number
+  - currency
+  - boolean
+  - date
+  - object
+  - array
+- Description: the description describes the data that will be extracted from the document. This description will be used to find and extract the field.
+
+Here's what a fully configured Extraction step might look like:
+![](/images/configuring_extraction_step/configure_fields.png)
+
+Let's go through each type of data and see when to use it.
+
+## Data types
+
+### Text
+
+Use the text data type when you want to extract a string of text from a document. For example, if you want to extract the name of a person from a document, you would use the text data type.
+
+### Number
+
+Use the number data type when you want to extract a number from a document. For example, if you want to extract the age of a person from a document, you would use the number data type.
+
+### Currency
+
+Use the currency data type when you want to extract a currency value from a document. For example, if you want to extract the price of a product from a document, you would use the currency data type.
+
+### Boolean
+
+Use the boolean data type when you want to extract a boolean value from a document. For example, if you want to extract whether a product is in stock from a document, you would use the boolean data type.
+
+### Date
+
+Use the date data type when you want to extract a date from a document. For example, if you want to extract the date of birth of a person from a document, you would use the date data type.
+
+### Object
+
+Use the object data type when you want to extract a set of related fields from a document. For example, if you want to extract the address, name, and birth date of a person from a document you would use the object data type.
+
+### Array
+
+Use the array data type when you want to extract a list of related fields from a document. For example, if you want to extract a list of products that each have a name, price, and quantity from a document you would use the array data type.
+
+## Configuring Custom Settings
+
+In addition to the fields, you can also configure custom settings for each field. These settings allow you to fine-tune the extraction process to better suit your specific needs. However, please note that these settings are experimental and may not work as expected in all cases.
+
+Before using these settings, we recommend consulting with the Extend team to understand their potential impact on the extraction process.
+
+## Running an extraction
+
+Once you have configured the Extraction step, click the "Save and run" button to save the Extraction step configuration and start the extraction.
+
+![](/images/configuring_extraction_step/results.png)
+
+The results of the extraction will be displayed below the Extraction step configuration window. The results will show the extracted data for each field. If the data is incorrect, you can go back and edit the Extraction step configuration and run the extraction again. If it isn't working after a few tries, reach out to the Extend team for help.
