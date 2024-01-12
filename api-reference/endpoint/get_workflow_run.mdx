@@ -190,6 +190,10 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       The name of the Workflow.
     </ResponseField>
 
+    <ResponseField name="version" type="string">
+      The version of the Workflow.
+    </ResponseField>
+
   </Expandable>
 </ResponseField>
 
@@ -274,6 +278,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
     "endTime": "2023-01-01T09:43:00.000Z",
     "workflow": {
       "id": "workflow_1234",
+      "version": "1",
       "name": "employees"
     }
   }

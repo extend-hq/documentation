@@ -26,6 +26,13 @@ description: "Once a workflow has been created on the Extend Platform, this endp
   An optional name that can be assigned to a specific WorkflowRun.
 </ParamField>
 
+<ParamField body="version" type="string">
+  An optional version of the workflow that files will be run through. This
+  number can be found when viewing the workflow on the Extend platform. When a
+  version number is not supplied, the most recent version of the workflow will
+  be used. To run the "draft" version of a workflow, use "draft" as the version.
+</ParamField>
+
 <ParamField body="metadata" type="any">
   An optional object that can be passed in to identify the WorkflowRun.
 </ParamField>
@@ -125,6 +132,13 @@ description: "Once a workflow has been created on the Extend Platform, this endp
       The name of the Workflow.
     </ResponseField>
 
+    <ResponseField name="version" type="string">
+      The version of the Workflow.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
   </Expandable>
 </ResponseField>
 
@@ -172,7 +186,8 @@ curl --location --request POST 'https://api-prod.extend.app/v1/workflow_runs' \
       "endTime": "2023-01-01T09:43:00.000Z",
       "workflow": {
         "id": "workflow_1234",
-        "name": "test_workflow"
+        "name": "test_workflow",
+        "version": "1"
       }
     }
   ]
