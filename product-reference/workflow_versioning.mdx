@@ -1,0 +1,29 @@
+---
+title: "Workflow Versioning"
+---
+
+Workflow versioning allows you to deploy different versions of a workflow and run a specific version of the workflow. This is useful when you want to make changes to a workflow, but don't want to affect the currently deployed versions of the workflow. For details on how to run the different versions of a workflow via API, see the [API docs](/api-reference/endpoint/run_workflow).
+
+To view the workflow versions, click on the "Version history" button in the lower left corner of the workflow editor.
+
+![](/images/workflow_versioning/editor_highlight_version_button.png)
+
+The versions are displayed in a side panel on the left side of the screen. The "Draft" version above the separator is the version where any updates to the workflow will be saved. The versions below the separator are the deployed versions of the workflow.
+
+![](/images/workflow_versioning/versioning_sidepanel.png)
+
+You can view a previously deployed version of the workflow by clicking on the version. This will load the workflow in the editor for viewing, however, you cannot make any changes to a deployed workflow version. The idea being that once a workflow has been deployed, you can count on it not changing and can confidently use it in production environments.
+
+![](/images/workflow_versioning/viewing_v1.png)
+
+To deploy a new version of the workflow, click on the "Deploy" button in the upper right corner of the workflow editor. This will deploy the current draft version of the workflow and create a new version in the version history.
+
+![](/images/workflow_versioning/deploy_modal.png)
+
+When running a workflow, you can choose which version of the workflow to run. By default, the "Draft" version of the workflow will be run, but you can choose a different version from the dropdown.
+
+![](/images/workflow_versioning/workflow_runner.png)
+
+After running a workflow, you can view the version of the workflow that was run in the history tab.
+
+![](/images/workflow_versioning/history.png)

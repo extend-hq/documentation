@@ -36,7 +36,10 @@
     },
     {
       "group": "Workflows",
-      "pages": ["product-reference/reviewing_workflow_run"]
+      "pages": [
+        "product-reference/reviewing_workflow_run",
+        "product-reference/workflow_versioning"
+      ]
     },
     {
       "group": "Endpoint Examples",
