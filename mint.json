@@ -32,7 +32,7 @@
     },
     {
       "group": "Document Processors",
-      "pages": ["product-reference/configuring_extraction_step"]
+      "pages": ["product-reference/configuring_extraction_step", "product-reference/confidence_scores"]
     },
     {
       "group": "Workflows",
