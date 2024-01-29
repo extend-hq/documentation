@@ -37,7 +37,7 @@ For example, if you name a field "company_name" on an extractor designed for inv
 ### Confidence in Arrays
 [Arrays](/product-reference/configuring_extraction_step#array) are one of the data types that can be extracted from a document. They are a collection of values that are related to each other. For example, a table of line items on an invoice could be extracted as an array. Confidence scores for arrays should be treated differently than confidence scores for other data types. 
 
-For arrays, a confidence score is calculated for each individual value in the array. To view these confidences, hover over the cell the value is contained in. The overall confidence score for the array is the minimum of all the individual array values. This means that a low confidence score for an array does not necessarily mean that all of the values in the array are low confidence. It could mean that one or more of the values in the array are low confidence, but the rest are high confidence. For example, if you have an array of line items on an invoice, the confidence score for the array could be low because the model is not confident in the line item quantity, but it is confident in the line item description and price.
+For arrays, a confidence score is calculated for each individual value in the array. To view these confidences, hover over the cell the value is contained in.
 
 ![](/images/confidence_scores/low_confidence_hover.png)
 
