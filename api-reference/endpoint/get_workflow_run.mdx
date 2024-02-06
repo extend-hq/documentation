@@ -135,25 +135,22 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
           Either `EXTRACT` or `CLASSIFY`.
         </ResponseField>
 
-        <ResponseField name="config" type="object">
-          The configuration used for the document processor.
-          This can help you programatically parse the output.
-          It will be either`ExtractionConfig` or `ClassificationConfig`.
-        </ResponseField>
-
         <ResponseField name="initialOutput" type="object">
-          The initial raw output from the document processor.
-          It will be either [`ExtractionOutput`](#output-types) or [`ClassificationOutput`](#output-types) depending on the `type`.
+          The initial raw output from the document processor. This is always set.
+          The shape of output depends on the `type`.
+          Details for each can be found in the [output types page](/api-reference/guides/output_types).
         </ResponseField>
 
         <ResponseField name="reviewedOutput" type="object" optional>
           The output after review, if any.
-          It will be either `ExtractionOutput` or `ClassificationOutput` or null.
+          The shape of output depends on the `type`.
+          Details for each can be found in the [output types page](/api-reference/guides/output_types).
         </ResponseField>
 
         <ResponseField name="output" type="object">
-          The final output, either reviewed or initial. You can rely on this to be always set.
-          It will be either `ExtractionOutput` or `ClassificationOutput` depending on the `type`.
+          The final output, either reviewed or initial. You can rely on this to be always set as the final ouput (initial or post review when reviewed).
+          The shape of output depends on the `type`.
+          Details for each can be found in the [output types page](/api-reference/guides/output_types).
         </ResponseField>
       </Expandable>
     </ResponseField>
@@ -286,59 +283,3 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
 ```
 
 </ResponseExample>
-
-<br />
-<br />
-
-# Output Types
-
-**Note**: The output objects shown in the payload above will conform to the following schema, and the field keys are defined when configuring the extractor/classifer
-in your worklfow builder:
-
-```typescript Output types
-/* The output type when type=EXTRACT */
-export interface ExtractionOutput {
-  [key: string]: ExtractFieldResult;
-}
-
-export interface ExtractorFieldInput {
-  fieldName: string;
-  description: string;
-  type:
-    | "string"
-    | "number"
-    | "currency"
-    | "boolean"
-    | "date"
-    | "any[]"
-    | "object";
-  schema?: ExtractorFieldInput[];
-}
-
-export interface ExtractionFieldResult {
-  id: string;
-  value: string;
-  confidence: number;
-  type:
-    | "string"
-    | "number"
-    | "currency"
-    | "boolean"
-    | "date"
-    | "array"
-    | "object"
-    | "null";
-  schema?: ExtractorFieldInput[]; // Only set when type=array or type=object to provide structure of sub fields
-}
-
-/* The output type when type=CLASSIFY */
-export type ClassificationOutput = {
-  type: string;
-  confidence: number;
-};
-
-export type Classification = {
-  type: string;
-  description: string;
-};
-```

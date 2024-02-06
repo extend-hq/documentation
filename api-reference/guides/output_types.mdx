@@ -1,0 +1,106 @@
+When running workflows, the overall payload output will conform to the shape described in the [webhook documentation](/api-reference/webhooks/webhooks#example-workflow-run-completed),
+however the sub list of `workflow_run.outputs` is dynamic based on the type of AI processor.
+
+The output shape for each AI processor are described in the types below.
+
+```typescript Output types
+/* The output type when type=EXTRACT */
+type ExtractionOutput {
+  [key: string]: ExtractionFieldResult;
+}
+
+type ExtractionFieldResult {
+  id: string;
+  value: string;
+  confidence: number;
+  type:
+    | "string"
+    | "number"
+    | "currency"
+    | "boolean"
+    | "date"
+    | "array"
+    | "object"
+    | "null";
+  /**
+   * Only set when type=array or type=object to provide structure of sub fields.
+   * Useful for dynamically parsing nested data.
+   */
+  schema?: ExtractionFieldInput[];
+}
+
+type ExtractionFieldResultReference = {
+  /*
+   * The field id. When nested for arrays, this is the index of the row number
+   */
+  id: string;
+  /*
+   * The field name
+   */
+  fieldName: string;
+
+  /**
+   * The page number (starting at 1) that this bounding box is from 
+   */
+  page: number;
+
+  /**
+   * Array of bounding box references for this field.
+   * There can be multiple is the extraction result was drawn from multiple distinct sources on the page.
+   */
+  boundingBoxes: BoundingBox[];
+};
+
+/**
+ * See the Bounding Box guide for information on how to use/interpret this data
+ */
+type BoundingBox = {
+  /**
+   * The left most position of the bounding box
+   */
+  left: number;
+  /**
+   * The top most position of the bounding box
+   */
+  top: number;
+  /**
+   * The right most position of the bounding box
+   */
+  right: number;
+  /**
+   * The bottom most position of the bounding box
+   */
+  bottom: number;
+};
+
+/* The output type when type=CLASSIFY */
+type ClassificationOutput = {
+  type: string;
+  confidence: number;
+};
+
+type Classification = {
+  type: string;
+  description: string;
+};
+
+type ClassificationConfig = {
+  classifications: Classification[];
+}
+
+/* The output type when type=INSTRUCT_QA */
+export type InstructionQAOutput = {
+  answer: InstructionQAAnswer;
+  notes: string[];
+  confidence: number;
+  references: PageReference[];
+};
+
+/**
+ * Note: subset of ExtractionReference. Bounding box is not yet supported for INSTRUCT_QA, but will be in the future.
+ */
+type PageReference = {
+  page: number;
+};
+
+```

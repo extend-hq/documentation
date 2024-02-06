@@ -1,0 +1,26 @@
+While traditional OCR products will often include a bounding box reference, Extend uses a mix of large language models and foundation vision models in order to build our AI 
+powered document processing, and because of this including bounding box references is not always possible. However, we are actively iterating on methods to 
+provide bounding box visual aids that to enhance the native review experience.
+
+Though the experience is still in BETA, bounding box references are available both in our product and via API. 
+
+While in beta, the following these field types are most limited:
+- `date` fields - These are currently less reliable than other field types, and may not always be returned.
+- `string` fields - When extracting values that are mostly **interpretation** based, bounding boxes will be less reliable.
+- `boolean` fields - These are currently not supported for bounding box references.
+- `null` fields - If a field is not found or unable to be extracted, no bounding boxes will be returned.
+
+Right now bounding box references are only available for `Extraction` output fields, and are only supported for the following file/document types:
+- `PDF`
+- `IMG` (jpeg, png, etc)
+
+## Demo
+
+When reviewing, as you use your arrow keys to navigate through each review field, our file viewer will automatically scroll
+to the relevant page, and if a bounding box reference was made available in our system, it will be highlighted for you to serve as visual aid
+when review.
+
+
+![](/images/review/bounding_box1.png)
+![](/images/review/bounding_box2.png)
+

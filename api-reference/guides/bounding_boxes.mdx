@@ -1,0 +1,97 @@
+In addition to being offered in product, we include bounding box references (when available) in the API response payload for workflow run outputs.
+
+Importantly, these bounding boxes are not the same as traditional OCR and we do not make a guarantee that 100% of the time our system
+is able to detect and return bounding boxes for all extracted values. However, we are constantly improving our models and will continue to do so.
+
+This experience is still in beta and we are working to improve it. While in beta, the following these field types are most limited:
+- `date` fields - These are currently less reliable than other field types, and may not always be returned.
+- `string` fields - When extracting values that are mostly **interpretation** based, bounding boxes will be less reliable.
+- `boolean` fields - These are currently not supported for bounding box references.
+- `null` fields - If a field is not found or unable to be extracted, no bounding boxes will be returned.
+
+Right now bounding box references are only available for `Extraction` output fields, and are only supported for the following file/document types:
+- `PDF`
+- `IMG` (jpeg, png, etc)
+
+## Schema
+The shape of the bounding box reference is as follows:
+
+```typescript
+type BoundingBox = {
+  /**
+   * The left most position of the bounding box
+   */
+  left: number;
+  /**
+   * The top most position of the bounding box
+   */
+  top: number;
+  /**
+   * The right most position of the bounding box
+   */
+  right: number;
+  /**
+   * The bottom most position of the bounding box
+   */
+  bottom: number;
+};
+```
+
+## How to use
+
+How to use the bounding values in order to place a bounding box on a file, depends heavily on the file type. In general though, you will need to take 
+the bounding box values we return and convert them to whatever coordinate system your rendering library uses or what you define if you are using a native Canvas
+element approach to drawing them over an image for instance.
+
+The values we return in the BoundingBox type represent the pixel coordinates of the bounding box on the image or page. 
+They indicate the top, bottom, left, and right extremities of the box. You may need to convert these values into a format suitable for your rendering library. 
+If your rendering library uses a coordinate system based on percentages of the total image or page size, you would need to perform an additional conversion step.
+
+For PDFs, here is an example of how to apply a transform to the value in order to be rendered using `react-pdf-viewer` or a similar library:
+
+```typescript
+
+export type HighlightArea = {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  pageIndex: number;
+};
+
+function convertBoundingBoxToHighlightArea({
+  boundingBox,
+  pageIndex,
+  pageHeight,
+  pageWidth,
+}: {
+  boundingBox: BoundingBox;
+  pageIndex: number; // The index of the page in the document (0 indexed)
+  pageHeight: number;
+  pageWidth: number;
+}): HighlightArea {
+  // If you are able to access the page height and width of the document, use them to calculate the highlight area
+  if (pageHeight && pageWidth) {
+    const highlightArea: HighlightArea = {
+      height: ((boundingBox.bottom - boundingBox.top) / pageHeight) * 100 + 2,
+      left: (boundingBox.left / pageWidth) * 100 - 1,
+      width: ((boundingBox.right - boundingBox.left) / pageWidth) * 100 + 2,
+      top: (boundingBox.top / pageHeight) * 100 - 1,
+      pageIndex,
+    };
+    return highlightArea;
+  }
+
+  const DPI = 72; // Default DPI - calobrate this based on your product
+
+  // Otherwise you can default to a conversion based on the zoom level of the document
+  const highlightArea: HighlightArea = {
+    left: boundingBox.left * 9,
+    top: boundingBox.top * 9,
+    width: ((boundingBox.right - boundingBox.left) * DPI) / 8,
+    height: ((boundingBox.bottom - boundingBox.top) * DPI) / 8,
+    pageIndex,
+  };
+  return highlightArea;
+}
+```
