@@ -51,6 +51,8 @@ Once a workflow run is completed, if your workflow is configured to send a webho
 will be pushed to your system, assuming you have defined a webhook url in your dashboard. Please reach out if you require any help
 getting set up.
 
+For details on the shape of different run output types (e.g. Extraction, Classification, etc) see
+
 Example Output:
 
 ```json Response
@@ -80,16 +82,6 @@ Example Output:
         "id": "dpr_ER67I84cIbOYtbReCTLZD",
         "edited": true,
         "type": "EXTRACT",
-        "config": {
-          "fieldsToExtract": [
-            {
-              "id": "example_id_1",
-              "type": "number",
-              "fieldName": "invoice_number",
-              "description": "The invoice number for this invoice"
-            }
-          ]
-        },
         "initialOutput": {
           "invoice_number": {
             "id": "example_id_1",
@@ -131,59 +123,4 @@ Example Output:
 }
 ```
 
-To set up a webhook, please reach out to an Extend team member with the URL of the webhook where you'd like the output to be sent and the Workflow this should be applied to.
-
-<br />
-<br />
-
-# Output Types
-
-**Note**: The output objects shown in the payload above will conform to the following schema, and the field keys are defined when configuring the extractor/classifer
-in your worklfow builder:
-
-```typescript Output types
-/* The output type when type=EXTRACT */
-export interface ExtractionOutput {
-  [key: string]: ExtractFieldResult;
-}
-
-export interface ExtractorFieldInput {
-  fieldName: string;
-  description: string;
-  type:
-    | "string"
-    | "number"
-    | "currency"
-    | "boolean"
-    | "date"
-    | "any[]"
-    | "object";
-  schema?: ExtractorFieldInput[];
-}
-
-export interface ExtractionFieldResult {
-  value: string;
-  confidence: number;
-  type:
-    | "string"
-    | "number"
-    | "currency"
-    | "boolean"
-    | "date"
-    | "array"
-    | "object"
-    | "null";
-  schema?: ExtractorFieldInput[]; // Only set when type=array or type=object to provide structure of sub fields
-}
-
-/* The output type when type=CLASSIFY */
-export type ClassificationOutput = {
-  type: string;
-  confidence: number;
-};
-
-export type Classification = {
-  type: string;
-  description: string;
-};
-```
+To set up a webhook, you can add a webhook url in the Extend dashboard settings. Once you have done this, you will start receiving events for workflow runs.

@@ -42,11 +42,21 @@
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Review experience",
+      "pages": [
+        "product-reference/bounding_boxes"
+      ]
+    },
+    {
+      "group": "Endpoints",
       "pages": [
         "api-reference/endpoint/run_workflow",
         "api-reference/endpoint/get_workflow_run"
       ]
+    },
+    {
+      "group": "Guides",
+      "pages": ["api-reference/guides/output_types", "api-reference/guides/bounding_boxes"]
     },
     {
       "group": "Webhooks",

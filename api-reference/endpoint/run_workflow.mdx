@@ -83,8 +83,68 @@ description: "Once a workflow has been created on the Extend Platform, this endp
       The name of the File associated with this WorkflowRun.
     </ResponseField>
 
-    <ResponseField name="extractionOutput" type="object">
-      The JSON output of the extracted data from a File.
+    <ResponseField name="fileMetadata" type="oneOf">
+      Metadata about the file. This is an optional field which will only be present once the file has finished processing.
+      <Expandable title="types">
+        <ResponseField name="PDFFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "PDF".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              <Expandable title="properties">
+                <ResponseField name="pageCount" type="number">
+                  The number of pages in the PDF file.
+                </ResponseField>
+              </Expandable>
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="CSVFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "CSV".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              An empty object, this may have more details in the future.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="IMGFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "IMG".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              An empty object, this may have more details in the future.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="TXTFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "TXT".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              An empty object, this may have more details in the future.
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+        <ResponseField name="DOCXFileMetadata" type="object">
+          <Expandable title="properties">
+            <ResponseField name="type" type="string">
+              The type of the file, in this case it will always be "DOCX".
+            </ResponseField>
+            <ResponseField name="details" type="object">
+              <Expandable title="properties">
+                <ResponseField name="pageCount" type="number">
+                  The number of pages in the DOCX file.
+                </ResponseField>
+              </Expandable>
+            </ResponseField>
+          </Expandable>
+        </ResponseField>
+      </Expandable>
     </ResponseField>
 
     <ResponseField name="initialRunBy" type="string">
@@ -95,10 +155,44 @@ description: "Once a workflow has been created on the Extend Platform, this endp
       The time (in UTC) at which the person initially ran the workflow.
     </ResponseField>
 
-    <ResponseField name="reviewedOutput" type="object">
-      The JSON output of a specific WorkflowRun from a File after it was manually reviewed.
-    </ResponseField>
+    <ResponseField name="outputs" type="array">
+      <Expandable title="properties" defaultOpen>
+        <ResponseField name="object" type="string">
+          Type of the object, always 'document_processor_run'
+        </ResponseField>
 
+        <ResponseField name="id" type="string">
+          The unique identifier for the document processor run
+        </ResponseField>
+
+        <ResponseField name="edited" type="boolean">
+          Whether the document processor run has been edited
+        </ResponseField>
+
+        <ResponseField name="type" type="string">
+          The type of the document processor run.
+          Either `EXTRACT` or `CLASSIFY`.
+        </ResponseField>
+
+        <ResponseField name="initialOutput" type="object">
+          The initial raw output from the document processor. This is always set.
+          The shape of output depends on the `type`.
+          Details for each can be found in the [output types page](/api-reference/guides/output_types).
+        </ResponseField>
+
+        <ResponseField name="reviewedOutput" type="object" optional>
+          The output after review, if any.
+          The shape of output depends on the `type`.
+          Details for each can be found in the [output types page](/api-reference/guides/output_types).
+        </ResponseField>
+
+        <ResponseField name="output" type="object">
+          The final output, either reviewed or initial. You can rely on this to be always set as the final ouput (initial or post review when reviewed).
+          The shape of output depends on the `type`.
+          Details for each can be found in the [output types page](/api-reference/guides/output_types).
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
     <ResponseField name="reviewedBy" type="string | null">
       The email of the person who reviewed the WorkflowRun, if applicable.
     </ResponseField>
