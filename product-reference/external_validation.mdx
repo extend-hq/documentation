@@ -1,0 +1,58 @@
+---
+title: "External Data Validation Step"
+description: "How to leverage the External Data Validation step in a workflow."
+---
+
+The External Data Validation step is a powerful tool that allows you to validate data within a workflow against your own system, provided
+that your system exposes an API for Extend to intract with.
+
+As of now, there are two primary use cases for this step:
+1. **Confidence Validation**: Instead of relying purely on our AI based confidence scoring, you can match document data against your own system to determine if the data is realistic or not, and return a flag(s) accordingly.
+The flag(s) returned can then be used within a Conditional step to control workflow logic, for instance to route documents with low confidence to a human for review.
+2. **Supplementary review data**: You can use the External Data Validation step to pull in additional data from your system to be used in the review process, available to the reviewer in the Review UI.
+
+## Configuration
+
+To configure the External Data Validation step, you can start by adding the "External Data Validation" step to your workflow.
+
+![](/images/external_validation_step/step_builder.png)
+
+Once you drag the step into your workflow, you can configure it by clicking on the step and then clicking on the "Configure" button.
+
+![](/images/external_validation_step/configure_step.png)
+
+**Auth Note:** In addtion to being able to set `Authentication` and other headers. We will automatically include the same `extend-signature` header on the request that is used in our webhook events.
+You can use to match against the webhook secret available in your Extend dashboard settings. If the `extend-signature` header value does not match your secret, you should toss out the incoming event. 
+
+You can also customize the content type of our payload to match your API's requirements:
+
+![](/images/external_validation_step/content_type.png)
+
+## Testing the request
+
+Once you have configured the step, you can test the request by clicking on the "Save and test endpoint" button.
+The window will then display the results. As long as the `data` looks correct and the `status` is `200`, you can proceed to the next step.
+
+![](/images/external_validation_step/test_output.png)
+
+## Using the results
+
+The results of the External Data Validation step can be used in a Conditional step to control workflow logic, 
+for instance to route documents that were flagged by your external system to a human for review after the workflow run is finished.
+
+As shown in the image below you can reference the step's output in the Conditional step using the templated execution variables: `{{externalDataValidation1.output.response.data}}`.
+Depending on the shape of your response data, you will need to variable path after `data.` to access the data you need.
+
+![](/images/external_validation_step/flow.png)
+
+Generally it's easier to configure the variable enabled input after zooming in the workflow view:
+
+![](/images/external_validation_step/zoomed.png)
+
+## Viewing in the Review UI
+
+After a workflow run is completed, and if it was flagged for review (or not), humans can see the output of the external data validation step in the Review UI alongside extaction and other outputs:
+
+![](/images/external_validation_step/review.png)
+
+
