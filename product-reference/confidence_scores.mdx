@@ -25,7 +25,7 @@ In large datasets, you may want to filter out data below a certain confidence le
 While confidence scores are a valuable tool in assessing the reliability of extracted data, it's important to recognize their limitations to use them effectively. Here are some key points to consider:
 
 ### Not a Guarantee of Accuracy
-A high confidence score indicates a high probability of correctness, but it doesn't guarantee accuracy. Even with a high score, there's always a chance of errors, so critical data should always be cross-verified.
+A high confidence score indicates a high probability of correctness, **but it doesn't guarantee accuracy**. Even with a high score, there's always a chance of errors, so critical data should always be cross-verified.
 
 ### Context Matters
 Confidence scores are calculated using models and their understanding of the data. They may not account for nuances or context that a human reviewer who understands your business would recognize. Because of this, it's imperative to supply sufficient context on the value you want extracted so the AI can determine whether it is confident or not.
@@ -41,4 +41,8 @@ For arrays, a confidence score is calculated for each individual value in the ar
 
 ![](/images/confidence_scores/low_confidence_hover.png)
 
-Low confidence values are highlighted yellow. When reviewing an array with highlighted low confidence values, **it is important to check the values around the low confidence value to make sure they are correct in addition to the flagged value**. Low confidence values in arrays might indicate that the model doesn't have enough context to extract the value correctly or that the model is confused by the format of the document. In these cases, it may be helpful to add more context to your extraction field descriptions. If this does not remedy the issue, reach out to the Extend team.
+Low confidence values are highlighted yellow. When reviewing an array with highlighted low confidence values.
+
+<Warning>It is important to check the values around the low confidence value to make sure they are correct in addition to the flagged value.</Warning>
+
+Low confidence values in arrays might indicate that the model doesn't have enough context to extract the value correctly or that the model is confused by the format of the document. In these cases, it may be helpful to add more context to your extraction field descriptions. If this does not remedy the issue, reach out to the Extend team.

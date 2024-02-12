@@ -4,9 +4,9 @@ api: "GET https://api-prod.extend.app/v1/workflow_runs/:workflowRunId"
 description: "Once a workflow has been run, take the workflowRunId to check the status and output of a specific WorkflowRun."
 ---
 
-### Body
+### Path
 
-<ParamField body="workflowRunId" type="string">
+<ParamField path="workflowRunId" type="string">
   The ID of the WorkflowRun that was outputted after a Workflow was run through
   the API.
 </ParamField>
@@ -18,11 +18,8 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
 </ResponseField>
 
 <ResponseField name="workflow_run" type="WorkflowRun">
-  A WorkflowRun object.
-</ResponseField>
-
-<ResponseField name="WorkflowRun" type="object">
-  <Expandable title="properties">
+  An object representing a WorkflowRun.
+  <Expandable title="properties" defaultOpen>
     <ResponseField name="object" type="string">
       The type of response, in this case it will always be "workflow_run".
     </ResponseField>
@@ -36,15 +33,19 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
     </ResponseField>
 
     <ResponseField name="metadata" type="any">
-      The metadata that was passed in when running the Workflow. This will only exist if the Workflow was run through the API.
+      The metadata that was passed in when running the Workflow.
     </ResponseField>
 
     <ResponseField name="fileName" type="string">
       The name of the File associated with this WorkflowRun.
     </ResponseField>
 
+    <ResponseField name="fileUrl" type="string">
+      A URL internal to Extend for the file. This URL is not public and will not be accessible without the proper authentication.
+    </ResponseField>
+
     <ResponseField name="fileMetadata" type="oneOf">
-      Metadata about the file. This is an optional field which will only be present once the file has finished processing.
+      Metadata about the file. This is an optional field which will only be present once the file has finished processing. The shape of the object depends on the type of file that was processed.
       <Expandable title="types">
         <ResponseField name="PDFFileMetadata" type="object">
           <Expandable title="properties">
@@ -107,58 +108,20 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
       </Expandable>
     </ResponseField>
 
-    <ResponseField name="initialRunBy" type="string">
-      The email of the person who initially ran the workflow.
-    </ResponseField>
-
     <ResponseField name="initialRunAt" type="string">
-      The time (in UTC) at which the person initially ran the workflow.
+      The time (in UTC) at which the workflow was initially run.
     </ResponseField>
 
-    <ResponseField name="outputs" type="array">
-      <Expandable title="properties" defaultOpen>
-        <ResponseField name="object" type="string">
-          Type of the object, always 'document_processor_run'
-        </ResponseField>
-
-        <ResponseField name="id" type="string">
-          The unique identifier for the document processor run
-        </ResponseField>
-
-        <ResponseField name="edited" type="boolean">
-          Whether the document processor run has been edited
-        </ResponseField>
-
-        <ResponseField name="type" type="string">
-          The type of the document processor run.
-          Either `EXTRACT` or `CLASSIFY`.
-        </ResponseField>
-
-        <ResponseField name="initialOutput" type="object">
-          The initial raw output from the document processor. This is always set.
-          The shape of output depends on the `type`.
-          Details for each can be found in the [output types page](/api-reference/guides/output_types).
-        </ResponseField>
-
-        <ResponseField name="reviewedOutput" type="object" optional>
-          The output after review, if any.
-          The shape of output depends on the `type`.
-          Details for each can be found in the [output types page](/api-reference/guides/output_types).
-        </ResponseField>
-
-        <ResponseField name="output" type="object">
-          The final output, either reviewed or initial. You can rely on this to be always set as the final ouput (initial or post review when reviewed).
-          The shape of output depends on the `type`.
-          Details for each can be found in the [output types page](/api-reference/guides/output_types).
-        </ResponseField>
-      </Expandable>
-    </ResponseField>
-    <ResponseField name="reviewedBy" type="string | null">
-      The email of the person who reviewed the WorkflowRun, if applicable.
+    <ResponseField name="failureMessage" type="string">
+      An optional field that will only be present if applicable. This will be the error message if the WorkflowRun failed.
     </ResponseField>
 
-    <ResponseField name="reviewedAt" type="string | null">
-      The time (in UTC) at which the person reviewed the WorkflowRun, if applicable.
+    <ResponseField name="reviewedBy" type="string">
+      An optional field that will only be present if applicable. This will be the user ID of the person who reviewed the WorkflowRun.
+    </ResponseField>
+
+    <ResponseField name="reviewedAt" type="string">
+      An optional field that will only be present if applicable. The time (in UTC) at which the WorkflowRun review step was completed.
     </ResponseField>
 
     <ResponseField name="startTime" type="string">
@@ -166,13 +129,76 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
     </ResponseField>
 
     <ResponseField name="endTime" type="string">
-      The end time (in UTC) of the WorkflowRun.
+      An optional field that will only be present if applicable. The end time (in UTC) of the WorkflowRun.
+    </ResponseField>
+
+    <ResponseField name="outputs" type="DocumentProcessorRun[]">
+      An array of DocumentProcessorRun objects. This will contain the initial output, reviewed output, and final output of the WorkflowRun.
+      <ResponseField name="DocumentProcessorRun" type="DocumentProcessorRun">
+        An object representing a DocumentProcessorRun.
+        <Expandable title="properties" defaultOpen>
+          <ResponseField name="object" type="string">
+            Type of the object, always 'document_processor_run'.
+          </ResponseField>
+
+          <ResponseField name="id" type="string">
+            The unique identifier for the document processor run.
+          </ResponseField>
+
+          <ResponseField name="edited" type="boolean">
+            Whether the document processor run has been edited.
+          </ResponseField>
+
+          <ResponseField name="type" type="string">
+            The type of the document processor run. Either `EXTRACT`, `CLASSIFY`, or `INSTRUCT_QA`.
+          </ResponseField>
+
+          <ResponseField name="config" type="object">
+            The config of the document processor run. The shape of output depends on the document processor `type`.
+            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_and_config_types).
+          </ResponseField>
+
+          <ResponseField name="initialOutput" type="object">
+            The initial raw output from the document processor. This is always set.
+            The shape of output depends on the document processor `type`.
+            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_and_config_types).
+          </ResponseField>
+
+          <ResponseField name="reviewedOutput" type="object" optional>
+            An optional field that shows the output after review, if applicable.
+            The shape of output depends on the document processor `type`.
+            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_and_config_types).
+          </ResponseField>
+
+          <ResponseField name="output" type="object">
+            The final output, either reviewed or initial. You can rely on this to be always set as the final ouput (initial or post review when reviewed).
+            The shape of output depends on the document processor `type`.
+            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
+          </ResponseField>
+        </Expandable>
+      </ResponseField>
     </ResponseField>
 
     <ResponseField name="workflow" type="Workflow">
       The details about the Workflow that was used in this WorkflowRun.
-    </ResponseField>
+      <Expandable title="properties">
+        <ResponseField name="object" type="string">
+          The type of response, in this case it will always be "workflow".
+        </ResponseField>
 
+        <ResponseField name="id" type="string">
+          The Workflow ID that can be fetched from the Extend Platform.
+        </ResponseField>
+
+        <ResponseField name="name" type="string">
+          The name of the Workflow.
+        </ResponseField>
+
+        <ResponseField name="version" type="string">
+          The version of the Workflow.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
   </Expandable>
 </ResponseField>
 
@@ -194,91 +220,574 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
 </ResponseField>
 
 <RequestExample>
-
 ```bash Example Request
 curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:workflowRunId' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer <API_TOKEN>'
 ```
-
 </RequestExample>
 
 <ResponseExample>
-
-```json Response
+```json Example Response
 {
+  "success": true,
   "workflow_run": {
     "object": "workflow_run",
     "id": "workflow_run_1234",
     "status": "PROCESSED",
     "metadata": {
-      "is_important": true,
-      "some_id": "id_fjdsfkld"
-      // any other metadata fields you attach when creating the run
+      "internal_id": "id_1234"
     },
     "fileName": "example_file_name.pdf",
-    "fileUrl": "https://example.com/example_file_name.pdf",
+    "fileUrl": "https://extend-files.s3.us-east-2.amazonaws.com/example+file+name.pdf",
     "fileMetadata": {
       "type": "PDF",
       "details": {
-        "pageCount": 1
+        "pageCount": 3
       }
     },
+    "initialRunAt": "2023-01-01T09:41:00.000Z",
+    "reviewedBy": "user_1234",
+    "reviewedAt": "2023-01-10T05:39:14.500Z",
+    "startTime": "2023-01-01T09:41:00.000Z",
+    "endTime": "2023-01-10T05:39:24.500Z",
     "outputs": [
       {
         "object": "document_processor_run",
-        "id": "dpr_ER67I84cIbOYtbReCTLZD",
+        "id": "dpr_1234",
         "edited": true,
         "type": "EXTRACT",
         "config": {
           "fieldsToExtract": [
             {
-              "id": "example_id_1",
+              "id": "field6",
+              "type": "boolean",
+              "fieldName": "is_invoice",
+              "description": "Is this an invoice?"
+            },
+            {
+              "id": "field1",
+              "type": "string",
+              "fieldName": "vendor_name",
+              "description": "the name of the vendor"
+            },
+            {
+              "id": "field2",
+              "type": "date",
+              "fieldName": "delivery_date",
+              "description": "the delivery date"
+            },
+            {
+              "id": "field4",
               "type": "number",
-              "fieldName": "invoice_number",
-              "description": "The invoice number for this invoice"
+              "fieldName": "route_number",
+              "description": "the route number"
+            },
+            {
+              "id": "field5",
+              "type": "currency",
+              "fieldName": "invoice_total",
+              "description": "the invoice total"
+            },
+            {
+              "id": "field3",
+              "type": "any[]",
+              "schema": [
+                {
+                  "id": "subfield1",
+                  "type": "string",
+                  "fieldName": "description",
+                  "description": "the description of the item being sold"
+                },
+                {
+                  "id": "subfield2",
+                  "type": "currency",
+                  "fieldName": "unit_price",
+                  "description": "the unit price of the item being sold"
+                },
+                {
+                  "id": "subfield3",
+                  "type": "number",
+                  "fieldName": "quantity",
+                  "description": "the quantity of the item being sold"
+                }
+              ],
+              "fieldName": "line_items",
+              "description": "the list of items being sold"
             }
           ]
         },
         "initialOutput": {
-          "invoice_number": {
-            "id": "example_id_1",
+          "is_invoice": {
+            "id": "field6",
+            "type": "boolean",
+            "value": true,
+            "confidence": 1,
+            "references": []
+          },
+          "line_items": {
+            "id": "field3",
+            "type": "array",
+            "value": [
+              {
+                "quantity": 1,
+                "unit_price": {
+                  "amount": 4.316,
+                  "iso_4217_currency_code": "USD"
+                },
+                "description": "CHEESE CHEDDAR SHARP PRIN SYS2822312"
+              },
+              {
+                "quantity": 15,
+                "unit_price": {
+                  "amount": 17.79,
+                  "iso_4217_currency_code": "USD"
+                },
+                "description": "CHEESE SWISS/AMER 120 SLI 14716"
+              }
+            ],
+            "schema": [
+              {
+                "id": "subfield1",
+                "type": "string",
+                "fieldName": "description",
+                "description": "the description of the item being sold"
+              },
+              {
+                "id": "subfield2",
+                "type": "currency",
+                "fieldName": "unit_price",
+                "description": "the unit price of the item being sold"
+              },
+              {
+                "id": "subfield3",
+                "type": "number",
+                "fieldName": "quantity",
+                "description": "the quantity of the item being sold"
+              }
+            ],
+            "confidence": 0.51,
+            "references": [
+							{
+								"id": "0",
+								"page": 1,
+								"fieldName": "line_items",
+								"boundingBoxes": [
+									{
+										"top": 47,
+										"left": 592,
+										"right": 961,
+										"bottom": 80
+									}
+								]
+							},
+							{
+								"id": "1",
+								"page": 1,
+								"fieldName": "line_items",
+								"boundingBoxes": [
+									{
+										"top": 220,
+										"left": 69,
+										"right": 970,
+										"bottom": 256
+									}
+								]
+							}
+						],
+            "arrayJSONSchema": "{\"description\": \"string\", \"unit_price\": {\"amount\":\"number\",\"iso_4217_currency_code\":\"string\"}, \"quantity\": \"number\"}"
+          },
+          "vendor_name": {
+            "id": "field1",
+            "type": "string",
+            "value": "Sysco",
+            "confidence": 0.948,
+            "references": [
+							{
+								"id": "field1",
+								"page": 1,
+								"fieldName": "vendor_name",
+								"boundingBoxes": [
+									{
+										"top": 31,
+										"left": 278,
+										"right": 361,
+										"bottom": 65
+									}
+								]
+							}
+						]
+          },
+          "route_number": {
+            "id": "field4",
             "type": "number",
-            "value": null,
-            "confidence": 0
+            "value": 2578,
+            "confidence": 1,
+            "references": [
+							{
+								"id": "field4",
+								"page": 1,
+								"fieldName": "route_number",
+								"boundingBoxes": [
+									{
+										"top": 85,
+										"left": 608,
+										"right": 636,
+										"bottom": 96
+									}
+								]
+							}
+						]
+          },
+          "delivery_date": {
+            "id": "field2",
+            "type": "date",
+            "value": "2020-07-14",
+            "confidence": 0.977,
+            "references": []
+          },
+          "invoice_total": {
+            "id": "field5",
+            "type": "currency",
+            "value": {
+              "amount": 324.9,
+              "iso_4217_currency_code": "USD"
+            },
+            "confidence": 0.827,
+            "references": [
+							{
+								"id": "field5",
+								"page": 1,
+								"fieldName": "invoice_total",
+								"boundingBoxes": [
+									{
+										"top": 664,
+										"left": 848,
+										"right": 893,
+										"bottom": 675
+									}
+								]
+							}
+						]
           }
         },
         "reviewedOutput": {
-          "invoice_number": {
-            "id": "example_id_1",
+          "is_invoice": {
+            "id": "field6",
+            "type": "boolean",
+            "value": true,
+            "confidence": 1,
+            "references": []
+          },
+          "line_items": {
+            "id": "field3",
+            "type": "array",
+            "value": [
+              {
+                "quantity": 1,
+                "unit_price": {
+                  "amount": 4.316,
+                  "iso_4217_currency_code": "USD"
+                },
+                "description": "CHEESE CHEDDAR SHARP PRIN SYS2822312"
+              },
+              {
+                "quantity": 15,
+                "unit_price": {
+                  "amount": 17.79,
+                  "iso_4217_currency_code": "USD"
+                },
+                "description": "CHEESE SWISS/AMER 120 SLI 14716"
+              }
+            ],
+            "schema": [
+              {
+                "id": "subfield1",
+                "type": "string",
+                "fieldName": "description",
+                "description": "the description of the item being sold"
+              },
+              {
+                "id": "subfield2",
+                "type": "currency",
+                "fieldName": "unit_price",
+                "description": "the unit price of the item being sold"
+              },
+              {
+                "id": "subfield3",
+                "type": "number",
+                "fieldName": "quantity",
+                "description": "the quantity of the item being sold"
+              }
+            ],
+            "confidence": 0.51,
+            "references": [
+							{
+								"id": "0",
+								"page": 1,
+								"fieldName": "line_items",
+								"boundingBoxes": [
+									{
+										"top": 47,
+										"left": 592,
+										"right": 961,
+										"bottom": 80
+									}
+								]
+							},
+							{
+								"id": "1",
+								"page": 1,
+								"fieldName": "line_items",
+								"boundingBoxes": [
+									{
+										"top": 220,
+										"left": 69,
+										"right": 970,
+										"bottom": 256
+									}
+								]
+							}
+						],
+            "arrayJSONSchema": "{\"description\": \"string\", \"unit_price\": {\"amount\":\"number\",\"iso_4217_currency_code\":\"string\"}, \"quantity\": \"number\"}"
+          },
+          "vendor_name": {
+            "id": "field1",
+            "type": "string",
+            "value": "Sysco",
+            "confidence": 0.948,
+            "references": [
+							{
+								"id": "field1",
+								"page": 1,
+								"fieldName": "vendor_name",
+								"boundingBoxes": [
+									{
+										"top": 31,
+										"left": 278,
+										"right": 361,
+										"bottom": 65
+									}
+								]
+							}
+						]
+          },
+          "route_number": {
+            "id": "field4",
             "type": "number",
-            "value": 155,
-            "confidence": 1
+            "value": 2578,
+            "confidence": 1,
+            "references": [
+							{
+								"id": "field4",
+								"page": 1,
+								"fieldName": "route_number",
+								"boundingBoxes": [
+									{
+										"top": 85,
+										"left": 608,
+										"right": 636,
+										"bottom": 96
+									}
+								]
+							}
+						]
+          },
+          "delivery_date": {
+            "id": "field2",
+            "type": "date",
+            "value": "2020-07-14",
+            "confidence": 0.977,
+            "references": []
+          },
+          "invoice_total": {
+            "id": "field5",
+            "type": "currency",
+            "value": {
+              "amount": 324.9,
+              "iso_4217_currency_code": "USD"
+            },
+            "confidence": 0.827,
+            "references": [
+							{
+								"id": "field5",
+								"page": 1,
+								"fieldName": "invoice_total",
+								"boundingBoxes": [
+									{
+										"top": 664,
+										"left": 848,
+										"right": 893,
+										"bottom": 675
+									}
+								]
+							}
+						]
           }
         },
         "output": {
-          "invoice_number": {
-            "id": "example_id_1",
+          "is_invoice": {
+            "id": "field6",
+            "type": "boolean",
+            "value": true,
+            "confidence": 1,
+            "references": []
+          },
+          "line_items": {
+            "id": "field3",
+            "type": "array",
+            "value": [
+              {
+                "quantity": 1,
+                "unit_price": {
+                  "amount": 4.316,
+                  "iso_4217_currency_code": "USD"
+                },
+                "description": "CHEESE CHEDDAR SHARP PRIN SYS2822312"
+              },
+              {
+                "quantity": 15,
+                "unit_price": {
+                  "amount": 17.79,
+                  "iso_4217_currency_code": "USD"
+                },
+                "description": "CHEESE SWISS/AMER 120 SLI 14716"
+              }
+            ],
+            "schema": [
+              {
+                "id": "subfield1",
+                "type": "string",
+                "fieldName": "description",
+                "description": "the description of the item being sold"
+              },
+              {
+                "id": "subfield2",
+                "type": "currency",
+                "fieldName": "unit_price",
+                "description": "the unit price of the item being sold"
+              },
+              {
+                "id": "subfield3",
+                "type": "number",
+                "fieldName": "quantity",
+                "description": "the quantity of the item being sold"
+              }
+            ],
+            "confidence": 0.51,
+            "references": [
+							{
+								"id": "0",
+								"page": 1,
+								"fieldName": "line_items",
+								"boundingBoxes": [
+									{
+										"top": 47,
+										"left": 592,
+										"right": 961,
+										"bottom": 80
+									}
+								]
+							},
+							{
+								"id": "1",
+								"page": 1,
+								"fieldName": "line_items",
+								"boundingBoxes": [
+									{
+										"top": 220,
+										"left": 69,
+										"right": 970,
+										"bottom": 256
+									}
+								]
+							}
+						],
+            "arrayJSONSchema": "{\"description\": \"string\", \"unit_price\": {\"amount\":\"number\",\"iso_4217_currency_code\":\"string\"}, \"quantity\": \"number\"}"
+          },
+          "vendor_name": {
+            "id": "field1",
+            "type": "string",
+            "value": "Sysco",
+            "confidence": 0.948,
+            "references": [
+							{
+								"id": "field1",
+								"page": 1,
+								"fieldName": "vendor_name",
+								"boundingBoxes": [
+									{
+										"top": 31,
+										"left": 278,
+										"right": 361,
+										"bottom": 65
+									}
+								]
+							}
+						]
+          },
+          "route_number": {
+            "id": "field4",
             "type": "number",
-            "value": 155,
-            "confidence": 1
+            "value": 2578,
+            "confidence": 1,
+            "references": [
+							{
+								"id": "field4",
+								"page": 1,
+								"fieldName": "route_number",
+								"boundingBoxes": [
+									{
+										"top": 85,
+										"left": 608,
+										"right": 636,
+										"bottom": 96
+									}
+								]
+							}
+						]
+          },
+          "delivery_date": {
+            "id": "field2",
+            "type": "date",
+            "value": "2020-07-14",
+            "confidence": 0.977,
+            "references": []
+          },
+          "invoice_total": {
+            "id": "field5",
+            "type": "currency",
+            "value": {
+              "amount": 324.9,
+              "iso_4217_currency_code": "USD"
+            },
+            "confidence": 0.827,
+            "references": [
+							{
+								"id": "field5",
+								"page": 1,
+								"fieldName": "invoice_total",
+								"boundingBoxes": [
+									{
+										"top": 664,
+										"left": 848,
+										"right": 893,
+										"bottom": 675
+									}
+								]
+							}
+						]
           }
         }
       }
     ],
-    "initialRunBy": "test@test.com",
-    "initialRunAt": "2023-01-01T09:41:00.000Z",
-    "reviewedBy": null,
-    "reviewedAt": null,
-    "startTime": "2023-01-01T09:41:00.000Z",
-    "endTime": "2023-01-01T09:43:00.000Z",
     "workflow": {
+      "object": "workflow",
       "id": "workflow_1234",
       "version": "1",
-      "name": "employees"
+      "name": "test_workflow"
     }
   }
 }
 ```
-
 </ResponseExample>
