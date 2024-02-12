@@ -1,0 +1,284 @@
+---
+title: "Output types"
+---
+
+When running workflows, the webhook payload output will conform to the shape described in the [webhook documentation](/api-reference/webhooks/webhooks#example-workflow-run-completed),
+however the sub list of `workflow_run.outputs` is dynamic based on the type of document processor.
+
+The output shapes for each document processor are described below.
+
+## Extract
+```json Example Extract Output
+{
+  "object": "document_processor_run",
+  "id": "dpr_1234",
+  "edited": true,
+  "type": "EXTRACT",
+  // see ExtractConfig type below
+  "config": {
+    "fieldsToExtract": [
+      {
+        "id": "field1",
+        "type": "boolean",
+        "fieldName": "is_invoice",
+        "description": "Is this an invoice?"
+      }
+    ]
+  },
+  // see ExtractOutput type below
+  "initialOutput": {
+    "is_invoice": {
+      "id": "field1",
+      "type": "boolean",
+      "value": true,
+      "confidence": 1,
+      "references": []
+    }
+  },
+  // see ExtractOutput type below
+  "reviewedOutput": {
+    "is_invoice": {
+      "id": "field1",
+      "type": "boolean",
+      "value": false,
+      "confidence": 1,
+      "references": []
+    }
+  },
+  // see ExtractOutput type below
+  "output": {
+    "is_invoice": {
+      "id": "field1",
+      "type": "boolean",
+      "value": false,
+      "confidence": 1,
+      "references": []
+    }
+  }
+}
+```
+```typescript Extract output and config subfield types
+/** 
+* The output subfield type when type=EXTRACT 
+* Applies to "initialOutput", "reviewedOutput", and "output" subfields of the document_processor_run object.
+*/
+type ExtractOutput = {
+  [key: string]: ExtractFieldResult;
+}
+
+type ExtractFieldResult = {
+  id: string;
+  value: string | number | Currency | boolean | ExtractValueArray | ExtractValueObject | null;
+  confidence: number;
+  page?: number;
+  type: "string" | "number" | "currency" | "boolean" | "date" | "array" | "object" | "null";
+  /**
+   * Only set when type=array or type=object to provide structure of sub fields.
+   * Useful for dynamically parsing nested data.
+   */
+  schema?: ExtractFieldSchemaValue[];
+  references?: ExtractFieldResultReference[];
+}
+
+type Currency = {
+  amount: number;
+  iso_4217_currency_code: string;
+};
+
+type ExtractValueArray = Array<ExtractValueObject>;
+
+type ExtractValueObject = {
+  [key: string]: string | number | Currency | boolean | null;
+};
+
+type ExtractFieldResultReference = {
+  /* The field id. When nested for arrays, this is the index of the row number */
+  id: string;
+  /* The field name */
+  fieldName: string;
+  /* The page number (starting at 1) that this bounding box is from */
+  page: number;
+  /**
+   * Array of bounding box references for this field.
+   * There can be multiple is the extraction result was drawn from multiple distinct sources on the page.
+   */
+  boundingBoxes: BoundingBox[];
+};
+
+/* See the Bounding boxes guide for information on how to use/interpret this data */
+type BoundingBox = {
+  /* The left most position of the bounding box */
+  left: number;
+  /* The top most position of the bounding box */
+  top: number;
+  /* The right most position of the bounding box */
+  right: number;
+  /* The bottom most position of the bounding box */
+  bottom: number;
+};
+
+/** 
+* The config subfield type when type=EXTRACT 
+* Applies to "config" subfield of the document_processor_run object.
+*/
+type ExtractConfig = {
+  fieldsToExtract: Array<ExtractFieldConfig>;
+};
+
+type ExtractFieldConfig = {
+  id: string;
+  fieldName: string;
+  description: string;
+  type: "string" | "number" | "currency" | "boolean" | "date" | "any[]" | "object" | "null";
+  schema?: ExtractFieldSchemaValue[];
+}
+
+type ExtractFieldSchemaValue = {
+  id: string;
+  fieldName: string;
+  description: string;
+  type: "string" | "number" | "currency" | "boolean" | "date" | "null";
+}
+```
+
+## Classify
+```json Example Classify Output
+{
+  "object": "document_processor_run",
+  "id": "dpr_1234",
+  "edited": true,
+  "type": "EXTRACT",
+  // see ClassifyConfig type below
+  "config": {
+    "classifications": [
+      {
+        "id": "classification1",
+        "type": "other",
+        "description": "Use the `other` document type when the provided document can not clearly be classified into one of the described classifications."
+      },
+      {
+        "id": "classification2",
+        "type": "invoice",
+        "description": "an invoice"
+      }
+    ]
+  },
+  // see ClassifyOutput type below
+  "initialOutput": {
+    "id": "classification2",
+    "type": "invoice",
+    "confidence": 0.95,
+    "observation": "The document contains information about invoice number, order number, invoice date, due date, total due, and payment details. It matches the description of an invoice."
+  },
+  // see ClassifyOutput type below
+  "output": {
+    "id": "classification2",
+    "type": "invoice",
+    "confidence": 0.95,
+    "observation": "The document contains information about invoice number, order number, invoice date, due date, total due, and payment details. It matches the description of an invoice."
+  }
+}
+```
+```typescript CLASSIFY  output and config subfield types
+/** 
+* The output subfield type when type=CLASSIFY 
+* Applies to "initialOutput" and "output" subfields of the document_processor_run object.
+*/
+type ClassifyOutput = {
+  id: string;
+  type: string;
+  confidence: number;
+  observation: string;
+};
+
+/** 
+* The config subfield type when type=CLASSIFY 
+* Applies to "config" subfield of the document_processor_run object.
+*/
+type ClassifyConfig = {
+  classifications: Classification[];
+}
+
+type Classification = {
+  id: string;
+  type: string;
+  description: string;
+};
+```
+
+## Instruct QA
+```json Example Instruct QA Output
+{
+  "object": "document_processor_run",
+  "id": "dpr_1234",
+  "edited": true,
+  "type": "INSTRUCT_QA",
+  // see InstructQAConfig type below
+  "config": {
+    "id": "instructqa1",
+    "query": "buyer",
+    "context": "- The buyer name is the name of the company or individual that is purchasing the goods or services.\n- The buyer name is often found at the top of the invoice, near the seller's name.",
+    "question": "Does this invoice contain a name?",
+    "documentType": "invoice"
+  },
+  // see InstructQAOutput type below
+  "initialOutput": {
+    "answer": "yes",
+    "confidence": 1,
+    "notes": [
+      "The invoice contains information about the sender (DEMO - Sliced Invoices) and the recipient (Test Business).",
+      "The invoice contains names of the sender and recipient."
+    ],
+    "references": [
+      {
+        "page": 1
+      }
+    ]
+  },
+  // see InstructQAOutput type below
+  "output": {
+    "answer": "yes",
+    "confidence": 1,
+    "notes": [
+      "The invoice contains information about the sender (DEMO - Sliced Invoices) and the recipient (Test Business).",
+      "The invoice contains names of the sender and recipient."
+    ],
+    "references": [
+      {
+        "page": 1
+      }
+    ]
+  }
+}
+```
+```typescript INSTRUCT_QA output and config subfield types
+/** 
+* The output subfield type when type=INSTRUCT_QA 
+* Applies to "initialOutput" and "output" subfields of the document_processor_run object.
+*/
+export type InstructQAOutput = {
+  answer: InstructQAAnswer;
+  confidence: number;
+  notes: string[];
+  references: PageReference[];
+};
+
+/**
+ * Note: Bounding box is not yet supported for INSTRUCT_QA, but will be in the future.
+ */
+type PageReference = {
+  page: number;
+};
+
+/** 
+* The config subfield type when type=INSTRUCT_QA 
+* Applies to "config" subfield of the document_processor_run object.
+*/
+type InstructQAConfig = {
+  id: string;
+  query: string;
+  context: string;
+  question: string;
+  documentType: string;
+}
+```

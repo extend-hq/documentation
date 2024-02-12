@@ -56,7 +56,7 @@
     },
     {
       "group": "Guides",
-      "pages": ["api-reference/guides/output_and_config_types", "api-reference/guides/bounding_boxes"]
+      "pages": ["api-reference/guides/output_types", "api-reference/guides/bounding_boxes"]
     },
     {
       "group": "Webhooks",

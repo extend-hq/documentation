@@ -155,19 +155,19 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
 
           <ResponseField name="config" type="object">
             The config of the document processor run. The shape of output depends on the document processor `type`.
-            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_and_config_types).
+            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
           </ResponseField>
 
           <ResponseField name="initialOutput" type="object">
             The initial raw output from the document processor. This is always set.
             The shape of output depends on the document processor `type`.
-            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_and_config_types).
+            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
           </ResponseField>
 
           <ResponseField name="reviewedOutput" type="object" optional>
             An optional field that shows the output after review, if applicable.
             The shape of output depends on the document processor `type`.
-            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_and_config_types).
+            Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
           </ResponseField>
 
           <ResponseField name="output" type="object">
