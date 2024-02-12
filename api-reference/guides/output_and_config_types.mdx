@@ -1,0 +1,136 @@
+---
+title: "Output and Config types"
+---
+
+When running workflows, the overall payload output will conform to the shape described in the [webhook documentation](/api-reference/webhooks/webhooks#example-workflow-run-completed),
+however the sub list of `workflow_run.outputs` is dynamic based on the type of document processor.
+
+The output and config shapes for each document processor are described in the types below.
+
+## Extract
+```typescript EXTRACT output and config
+/* The output type when type=EXTRACT */
+type ExtractOutput = {
+  [key: string]: ExtractFieldResult;
+}
+
+type ExtractFieldResult = {
+  id: string;
+  value: string | number | Currency | boolean | ExtractValueArray | ExtractValueObject | null;
+  confidence: number;
+  page?: number;
+  type: "string" | "number" | "currency" | "boolean" | "date" | "array" | "object" | "null";
+  /**
+   * Only set when type=array or type=object to provide structure of sub fields.
+   * Useful for dynamically parsing nested data.
+   */
+  schema?: ExtractFieldSchemaValue[];
+  references?: ExtractFieldResultReference[];
+}
+
+type Currency = {
+  amount: number;
+  iso_4217_currency_code: string;
+};
+
+type ExtractValueArray = Array<ExtractValueObject>;
+
+type ExtractValueObject = {
+  [key: string]: string | number | Currency | boolean | null;
+};
+
+type ExtractFieldResultReference = {
+  /* The field id. When nested for arrays, this is the index of the row number */
+  id: string;
+  /* The field name */
+  fieldName: string;
+  /* The page number (starting at 1) that this bounding box is from */
+  page: number;
+  /**
+   * Array of bounding box references for this field.
+   * There can be multiple is the extraction result was drawn from multiple distinct sources on the page.
+   */
+  boundingBoxes: BoundingBox[];
+};
+
+/* See the Bounding boxes guide for information on how to use/interpret this data */
+type BoundingBox = {
+  /* The left most position of the bounding box */
+  left: number;
+  /* The top most position of the bounding box */
+  top: number;
+  /* The right most position of the bounding box */
+  right: number;
+  /* The bottom most position of the bounding box */
+  bottom: number;
+};
+
+/* The config type when type=EXTRACT */
+type ExtractConfig = {
+  fieldsToExtract: Array<ExtractFieldConfig>;
+};
+
+type ExtractFieldConfig = {
+  id: string;
+  fieldName: string;
+  description: string;
+  type: "string" | "number" | "currency" | "boolean" | "date" | "any[]" | "object" | "null";
+  schema?: ExtractFieldSchemaValue[];
+}
+
+type ExtractFieldSchemaValue = {
+  id: string;
+  fieldName: string;
+  description: string;
+  type: "string" | "number" | "currency" | "boolean" | "date" | "null";
+}
+```
+
+## Classify
+```typescript CLASSIFY output and config
+/* The output type when type=CLASSIFY */
+type ClassifyOutput = {
+  id: string;
+  type: string;
+  confidence: number;
+  observation: string;
+};
+
+/* The config type when type=CLASSIFY */
+type ClassifyConfig = {
+  classifications: Classification[];
+}
+
+type Classification = {
+  id: string;
+  type: string;
+  description: string;
+};
+```
+
+## Instruct QA
+```typescript INSTRUCT_QA output and config
+/* The output type when type=INSTRUCT_QA */
+export type InstructQAOutput = {
+  answer: InstructQAAnswer;
+  confidence: number;
+  notes: string[];
+  references: PageReference[];
+};
+
+/**
+ * Note: Bounding box is not yet supported for INSTRUCT_QA, but will be in the future.
+ */
+type PageReference = {
+  page: number;
+};
+
+/* The config type when type=INSTRUCT_QA */
+type InstructQAConfig = {
+  id: string;
+  query: string;
+  context: string;
+  question: string;
+  documentType: string;
+}
+```
