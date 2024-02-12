@@ -8,31 +8,31 @@ description: ""
 To authenticate an incoming webhook event you can check the `extend-signature` header on the request and match it against the webhook secret
 available in your Extend dashboard settings. If the `extend-signature` header value does not match your secret, you should toss out the incoming event.
 
-## The webhook event
+## Setting up a webhook
+To set up a webhook, you can add a webhook url in the Extend dashboard settings under the "Developer" tab. Once you have done this, you will start receiving events for workflow runs.
 
-### Fields
-
+## Webhook event shape
 | Field     | Description                                                                                                                                                     |
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | eventId   | **string** - Unique identifier for the event                                                                                                                    |
 | eventType | **string** - Type of the event that occurred (workflow_run.completed)                                                                                           |
-| payload   | **object** - Contains the data related to the event. In this case, it includes the properties of a completed workflow run from the IPublicWorkflowRun interface |
+| payload   | **object** - Contains the WorkflowRun object. See the [GET WorkflowRun endpoint](/api-reference/endpoint/get_workflow_run) for the shape.                       |
 
 Here is what you can expect for a given incoming event:
 
-```json Event
+```json Example Event
 {
-  "eventId": "event_jfdkfjsek",
-  "eventType": "e.g. workflow.created, workflow_run.completed",
+  "eventId": "event_1234",
+  "eventType": "workflow_run.completed",
   "payload": {
     "object": "workflow_run",
-    "id": "wr_fhdsjkfd"
+    "id": "workflow_run_1234"
     // etc.
   }
 }
 ```
 
-## List of all event types
+## Event types
 
 The following table outlines the various event types you can receive via webhooks:
 
@@ -43,84 +43,4 @@ The following table outlines the various event types you can receive via webhook
 | workflow_run.needs_review | Triggered whenever a WorkflowRun needs review\* |
 | workflow.created          | Triggered whenever a new Workflow is created    |
 
-\*Only triggered when the workflow is configured to have a HumanReview step in the Extend workflow builder
-
-## Example: `workflow_run.completed`
-
-Once a workflow run is completed, if your workflow is configured to send a webhook, a `workflow_run.completed` event
-will be pushed to your system, assuming you have defined a webhook url in your dashboard. Please reach out if you require any help
-getting set up.
-
-For details on the shape of different run output types (e.g. Extraction, Classification, etc) see
-
-Example Output:
-
-```json Response
-{
-  "eventId": "event_1234",
-  "eventType": "workflow_run.completed",
-  "payload": {
-    "object": "workflow_run",
-    "id": "workflow_run_1234",
-    "status": "PROCESSED",
-    "metadata": {
-      "is_important": true,
-      "some_id": "id_fjdsfkld"
-      // any other metadata fields you attach when creating the run
-    },
-    "fileName": "example_file_name.pdf",
-    "fileUrl": "https://example.com/example_file_name.pdf",
-    "fileMetadata": {
-      "type": "PDF",
-      "details": {
-        "pageCount": 1
-      }
-    },
-    "outputs": [
-      {
-        "object": "document_processor_run",
-        "id": "dpr_ER67I84cIbOYtbReCTLZD",
-        "edited": true,
-        "type": "EXTRACT",
-        "initialOutput": {
-          "invoice_number": {
-            "id": "example_id_1",
-            "type": "number",
-            "value": null,
-            "confidence": 0
-          }
-        },
-        // Only set when a workflow run was explicitly reviewed by a human
-        "reviewedOutput": {
-          "invoice_number": {
-            "id": "example_id_1",
-            "type": "number",
-            "value": 155,
-            "confidence": 1
-          }
-        },
-        "output": {
-          "invoice_number": {
-            "id": "example_id_1",
-            "type": "number",
-            "value": 155,
-            "confidence": 1
-          }
-        }
-      }
-    ],
-    "initialRunBy": "test@test.com",
-    "initialRunAt": "2023-01-01T09:41:00.000Z",
-    "reviewedBy": null,
-    "reviewedAt": null,
-    "startTime": "2023-01-01T09:41:00.000Z",
-    "endTime": "2023-01-01T09:43:00.000Z",
-    "workflow": {
-      "id": "workflow_1234",
-      "name": "employees"
-    }
-  }
-}
-```
-
-To set up a webhook, you can add a webhook url in the Extend dashboard settings. Once you have done this, you will start receiving events for workflow runs.
+\* Only triggered when the workflow is configured to have a HumanReview step in the Extend workflow builder.
