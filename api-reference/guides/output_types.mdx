@@ -14,7 +14,8 @@ The output shapes for each document processor are described below.
   "id": "dpr_1234",
   "edited": true,
   "type": "EXTRACT",
-  "config": { // see ExtractConfig type below
+  // see ExtractConfig type below
+  "config": {
     "fieldsToExtract": [
       {
         "id": "field1",
@@ -24,7 +25,8 @@ The output shapes for each document processor are described below.
       }
     ]
   },
-  "initialOutput": { // see ExtractOutput type below
+  // see ExtractOutput type below
+  "initialOutput": {
     "is_invoice": {
       "id": "field1",
       "type": "boolean",
@@ -33,7 +35,8 @@ The output shapes for each document processor are described below.
       "references": []
     }
   },
-  "reviewedOutput": { // see ExtractOutput type below
+  // see ExtractOutput type below
+  "reviewedOutput": {
     "is_invoice": {
       "id": "field1",
       "type": "boolean",
@@ -42,7 +45,8 @@ The output shapes for each document processor are described below.
       "references": []
     }
   },
-  "output": { // see ExtractOutput type below
+  // see ExtractOutput type below
+  "output": {
     "is_invoice": {
       "id": "field1",
       "type": "boolean",
@@ -144,7 +148,8 @@ type ExtractFieldSchemaValue = {
   "id": "dpr_1234",
   "edited": true,
   "type": "EXTRACT",
-  "config": { // see ClassifyConfig type below
+  // see ClassifyConfig type below
+  "config": {
     "classifications": [
       {
         "id": "classification1",
@@ -158,13 +163,15 @@ type ExtractFieldSchemaValue = {
       }
     ]
   },
-  "initialOutput": { // see ClassifyOutput type below
+  // see ClassifyOutput type below
+  "initialOutput": {
     "id": "classification2",
     "type": "invoice",
     "confidence": 0.95,
     "observation": "The document contains information about invoice number, order number, invoice date, due date, total due, and payment details. It matches the description of an invoice."
   },
-  "output": { // see ClassifyOutput type below
+  // see ClassifyOutput type below
+  "output": {
     "id": "classification2",
     "type": "invoice",
     "confidence": 0.95,
@@ -206,14 +213,16 @@ type Classification = {
   "id": "dpr_1234",
   "edited": true,
   "type": "INSTRUCT_QA",
-  "config": { // see InstructQAConfig type below
+  // see InstructQAConfig type below
+  "config": {
     "id": "instructqa1",
     "query": "buyer",
     "context": "- The buyer name is the name of the company or individual that is purchasing the goods or services.\n- The buyer name is often found at the top of the invoice, near the seller's name.",
     "question": "Does this invoice contain a name?",
     "documentType": "invoice"
   },
-  "initialOutput": { // see InstructQAOutput type below
+  // see InstructQAOutput type below
+  "initialOutput": {
     "answer": "yes",
     "confidence": 1,
     "notes": [
@@ -226,7 +235,8 @@ type Classification = {
       }
     ]
   },
-  "output": { // see InstructQAOutput type below
+  // see InstructQAOutput type below
+  "output": {
     "answer": "yes",
     "confidence": 1,
     "notes": [
