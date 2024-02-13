@@ -18,14 +18,14 @@ Extend will sign each webhook request using a secret unique to the webhook. You 
 
 At a high level, the steps to verify a webhook request from Extend are
 1. Retrieve the timestamp of the request from `x-extend-request-timestamp`, the body of the request, and the signing secret associated with the webhook.
-2. Concatentate the timestamp and request body using the following format  
+2. Concatentate the timestamp and request body using the following format:
 `v0:${timestamp}:${requestBody}`
-3. Compute a HMAC 256 digest on the resulting string. using the signing secret as the key. The secret can be found in the webhooks table under the "Developer" tab
+3. Compute a HMAC 256 digest on the resulting string using the signing secret as the key. The secret can be found in the webhooks table under the "Developer" tab
 
 ![](/images/webhooks/webhook_secret.png)
 4. Compare this digest with the signature provided in `x-extend-request-signature`. If they are equal, then the request is verified to be from Extend.
 
-here is pseudocode in Javascript to perform the verification
+Here is pseudocode in Javascript to perform the verification:
 
 ```typescript
   import crypto from "crypto";
