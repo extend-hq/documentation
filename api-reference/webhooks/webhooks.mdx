@@ -3,13 +3,51 @@ title: "Webhooks"
 description: ""
 ---
 
-## Authenticating webhooks
-
-To authenticate an incoming webhook event you can check the `extend-signature` header on the request and match it against the webhook secret
-available in your Extend dashboard settings. If the `extend-signature` header value does not match your secret, you should toss out the incoming event.
-
 ## Setting up a webhook
-To set up a webhook, you can add a webhook url in the Extend dashboard settings under the "Developer" tab. Once you have done this, you will start receiving events for workflow runs.
+To set up a webhook, you can create one in the Extend dashboard settings under the "Developer" tab
+
+![](/images/webhooks/webhooks_add.png)
+
+Once created, you will start to receive webhook events to the url you specified during workflow runs.
+
+## Verifying webhook requests from Extend
+
+Extend will sign each webhook request using a secret unique to the webhook. You can use this signature along with the timestamp to verify that the request is coming from Extend as well as protect against replay attacks.
+
+### Steps to verify a webhook request from Extend
+
+At a high level, the steps to verify a webhook request from Extend are
+1. Retrieve the timestamp of the request from `x-extend-request-timestamp`, the body of the request, and the signing secret associated with the webhook.
+2. Concatentate the timestamp and request body using the following format:
+`v0:${timestamp}:${requestBody}`
+3. Compute a HMAC 256 digest on the resulting string using the signing secret as the key. The secret can be found in the webhooks table under the "Developer" tab
+
+![](/images/webhooks/webhooks_secret.png)
+4. Compare this digest with the signature provided in `x-extend-request-signature`. If they are equal, then the request is verified to be from Extend.
+
+Here is pseudocode in Javascript to perform the verification:
+
+```typescript
+  import crypto from "crypto";
+
+  // retrieve from x-extend-request-timestamp
+  const timestamp = 1707777128;
+
+  const requestBodyString = JSON.stringify(request.body);
+
+  // retrieve from the webhook details on the "Developers" tab
+  const signingSecret = "wss_C...l";
+
+  const message = `v0:${timestamp}:${requestBodyString}`;
+  const expectedSignature = crypto.createHmac("sha256", signingSecret).update(message).digest("hex");
+
+  // retrieve from x-extend-request-signature
+  const receivedSignature = "d3a8d5de6d463023b052ee1eb8e7f247dce6bf90b4a3e1117b4922afdc90029b";
+
+  if (expectedSignature === receivedSignature) {
+    // proceed
+  }
+```
 
 ## Webhook event shape
 | Field     | Description                                                                                                                                                     |
