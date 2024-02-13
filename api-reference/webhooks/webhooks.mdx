@@ -8,7 +8,7 @@ To set up a webhook, you can create one in the Extend dashboard settings under t
 
 ![](/images/webhooks/webhooks_table.png)
 
-Once created, you will start to receive webhook events to the url you specified.
+Once created, you will start to receive webhook events to the url you specified during workflow runs.
 
 ## Verifying webhook requests from Extend
 
@@ -29,7 +29,7 @@ here is pseudocode in Javascript to perform the verification
 
 ```typescript
   import crypto from "crypto";
-  
+
   // retrieve from x-extend-request-timestamp
   const timestamp = 1707777128 
 
