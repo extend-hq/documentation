@@ -4,9 +4,9 @@ description: ""
 ---
 
 ## Setting up a webhook
-To set up a webhook, you can create one in the Extend dashboard settings under the "Developer" tab.
+To set up a webhook, you can create one in the Extend dashboard settings under the "Developer" tab
 
-![](/images/webhooks/webhooks_table.png)
+![](/images/webhooks/webhooks_add.png)
 
 Once created, you will start to receive webhook events to the url you specified during workflow runs.
 
@@ -22,7 +22,7 @@ At a high level, the steps to verify a webhook request from Extend are
 `v0:${timestamp}:${requestBody}`
 3. Compute a HMAC 256 digest on the resulting string using the signing secret as the key. The secret can be found in the webhooks table under the "Developer" tab
 
-![](/images/webhooks/webhook_secret.png)
+![](/images/webhooks/webhooks_secret.png)
 4. Compare this digest with the signature provided in `x-extend-request-signature`. If they are equal, then the request is verified to be from Extend.
 
 Here is pseudocode in Javascript to perform the verification:
@@ -31,21 +31,22 @@ Here is pseudocode in Javascript to perform the verification:
   import crypto from "crypto";
 
   // retrieve from x-extend-request-timestamp
-  const timestamp = 1707777128 
+  const timestamp = 1707777128;
 
-  const requestBodyString = JSON.stringify(request.body)
+  const requestBodyString = JSON.stringify(request.body);
 
   // retrieve from the webhook details on the "Developers" tab
-  const signingSecret = "wss_C...l" 
+  const signingSecret = "wss_C...l";
 
   const message = `v0:${timestamp}:${requestBodyString}`;
   const expectedSignature = crypto.createHmac("sha256", signingSecret).update(message).digest("hex");
 
   // retrieve from x-extend-request-signature
-  const receivedSignature = "d3a8d5de6d463023b052ee1eb8e7f247dce6bf90b4a3e1117b4922afdc90029b"
+  const receivedSignature = "d3a8d5de6d463023b052ee1eb8e7f247dce6bf90b4a3e1117b4922afdc90029b";
 
-  if (expectedSignature === receivedSignature)
+  if (expectedSignature === receivedSignature) {
     // proceed
+  }
 ```
 
 ## Webhook event shape
