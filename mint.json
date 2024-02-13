@@ -38,11 +38,12 @@
       "group": "Workflows",
       "pages": [
         "product-reference/reviewing_workflow_run",
-        "product-reference/workflow_versioning"
+        "product-reference/workflow_versioning",
+        "product-reference/external_validation"
       ]
     },
     {
-      "group": "Review experience",
+      "group": "Review Experience",
       "pages": [
         "product-reference/bounding_boxes"
       ]
