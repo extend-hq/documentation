@@ -17,7 +17,7 @@ description: "Once a workflow has been run, take the workflowRunId to check the 
   A true or false value for whether the request was successful.
 </ResponseField>
 
-<ResponseField name="workflow_run" type="WorkflowRun">
+<ResponseField name="workflowRun" type="WorkflowRun">
   An object representing a WorkflowRun.
   <Expandable title="properties" defaultOpen>
     <ResponseField name="object" type="string">
@@ -231,7 +231,7 @@ curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:wor
 ```json Example Response
 {
   "success": true,
-  "workflow_run": {
+  "workflowRun": {
     "object": "workflow_run",
     "id": "workflow_run_1234",
     "status": "PROCESSED",
