@@ -1,0 +1,37 @@
+---
+title: "Events"
+description: ""
+---
+
+## The Event object
+| Field     | Description                                                                                                                                                     |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| eventId   | **string** - Unique identifier for the event                                                                                                                    |
+| eventType | **string** - Type of the event that occurred (workflow_run.completed)                                                                                           |
+| payload   | **object** - Contains the WorkflowRun object. See the [WorkflowRun object](/api-reference/objects/workflow_run) for the shape.                       |
+
+Here is what you can expect for a given incoming event:
+
+```json Example Event
+{
+  "eventId": "event_1234",
+  "eventType": "workflow_run.completed",
+  "payload": {
+    "object": "workflow_run",
+    "id": "workflow_run_1234"
+    // etc.
+  }
+}
+```
+
+## Event types
+
+The following table outlines the various event types you can receive via webhooks:
+
+| Event Type                | Description                                     |
+| ------------------------- | ----------------------------------------------- |
+| workflow_run.completed    | Triggered whenever a WorkflowRun is completed   |
+| workflow_run.failed       | Triggered whenever a WorkflowRun fails          |
+| workflow_run.needs_review | Triggered whenever a WorkflowRun needs review\* |
+
+\* Only triggered when the workflow is configured to have a HumanReview step in the Extend workflow builder.

@@ -52,7 +52,14 @@
       "group": "Endpoints",
       "pages": [
         "api-reference/endpoint/run_workflow",
-        "api-reference/endpoint/get_workflow_run"
+        "api-reference/endpoint/get_workflow_run",
+        "api-reference/endpoint/update_workflow_run"
+      ]
+    },
+    {
+      "group": "Objects",
+      "pages": [
+        "api-reference/objects/workflow_run"
       ]
     },
     {
@@ -61,11 +68,11 @@
     },
     {
       "group": "Webhooks",
-      "pages": ["api-reference/webhooks/webhooks"]
+      "pages": ["api-reference/webhooks/webhooks", "api-reference/webhooks/events"]
     },
     {
-      "group": "Slack",
-      "pages": ["api-reference/slack/slack"]
+      "group": "Integrations",
+      "pages": ["api-reference/integrations/slack"]
     }
   ],
   "backgroundImage": "/background.png",
