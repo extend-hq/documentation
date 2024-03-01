@@ -1,33 +1,61 @@
 ---
-title: "Get WorkflowRun"
-api: "GET https://api-prod.extend.app/v1/workflow_runs/:workflowRunId"
-description: "Once a workflow has been run, take the workflowRunId to check the status and output of a specific WorkflowRun."
+title: "Update WorkflowRun"
+api: "POST https://api-prod.extend.app/v1/workflow_runs/:id"
+description: "You can update the name and metadata of an in progress WorkflowRun at any time using this endpoint."
 ---
 
-### Path
+### Parameters
 
-<ParamField path="workflowRunId" type="string">
-  The ID of the WorkflowRun that was outputted after a Workflow was run through
-  the API.
+<ParamField path="id" type="string">
+  The ID of the WorkflowRun that was outputted after you created it using the /workflow_runs endpoint.
+</ParamField>
+
+### Body
+
+<ParamField body="name" type="string">
+  An optional name that can be assigned to a specific WorkflowRun.
+</ParamField>
+
+<ParamField body="metadata" type="any">
+  A metadata object that can be assigned to a specific WorkflowRun. If metadata already exists
+  on the WorkflowRun, this new metadata object will be merged with it, with the new metadata taking field precedence.
 </ParamField>
 
 ### Response
-
-<ResponseField name="success" type="boolean">
-  A true or false value for whether the request was successful.
-</ResponseField>
-
 <ResponseField name="workflowRun" type="WorkflowRun">
   An object representing a WorkflowRun.
   
   See the [WorkflowRun object](/api-reference/objects/workflow_run) for the shape of the data.
 </ResponseField>
 
+<ResponseField name="Workflow" type="object">
+  <Expandable title="properties">
+    <ResponseField name="id" type="string">
+      The Workflow ID that can be fetched from the Extend Platform.
+    </ResponseField>
+
+    <ResponseField name="name" type="string">
+      The name of the Workflow.
+    </ResponseField>
+
+    <ResponseField name="version" type="string">
+      The version of the Workflow.
+    </ResponseField>
+
+  </Expandable>
+</ResponseField>
+
 <RequestExample>
 ```bash Example Request
-curl --location --request GET 'https://api-prod.extend.app/v1/workflow_runs/:workflowRunId' \
+curl --location --request POST 'https://api-prod.extend.app/v1/workflow_runs/:id' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer <API_TOKEN>'
+--header 'Authorization: Bearer <API_TOKEN>' \
+--data '{
+    "name": "test_workflow",
+    "metadata": {
+      "internal_id": "id_1234"
+    }
+}'
 ```
 </RequestExample>
 
