@@ -30,6 +30,8 @@ Once finished, click “Confirm corrections” and you are done! The workflow ru
 
 ### Rejecting a Workflow Run
 
+If a workflow run is rejected, it will not trigger subsequent steps and the final processed data will not be sent to your downstream systems. However, developers can still consume rejected run data by listening for the `workflow_run.rejected` event which is listed in the [webhook events](/api-reference/webhooks/events#event-types).
+
 If you find that the document is not valid and should not be processed further, you can reject the workflow run. To do this, click the “Reject” button in the top right corner of the review page.
 
 ![](/images/reviewing_workflow_run/reject_workflow.png)
