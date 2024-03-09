@@ -39,3 +39,27 @@ If you find that the document is not valid and should not be processed further, 
 You can then add a note explaining why the document is being rejected. Once you’ve added a note, click “Confirm rejection” and the workflow run will be marked as rejected.
 
 ![](/images/reviewing_workflow_run/reject_workflow_confirmation.png)
+
+### Re-classifying a Workflow Run
+
+If a document was classified incorrectly, it can be reclassified during human review. To do this, select a new classification value from the dropdown and click “Save and re-classify”. Upon confirmation, the document will be re-classified and the workflow run will be restarted at the classification step using the corrected classification.
+
+**Please note:** Re-classifying a document will cause previous step runs stemming from the incorrect classification to be removed from the workflow run.
+
+Let's walk through an example using the workflow below.
+
+![](/images/reviewing_workflow_run/example_workflow.png)
+
+A document is sent to the workflow and is classified as an `invoice` in the `classification1` step before being sent to `humanReview1`. Although the document was correctly classified as an `invoice`, lets pretend it's actually a `receipt` and we want to fix that classification.
+
+![](/images/reviewing_workflow_run/correct_classification.png)
+![](/images/reviewing_workflow_run/corrected_classification.png)
+
+After re-classifying the document as a `receipt`, the workflow run will be restarted at the `classification1` step and the previous extraction step run `extraction1` stemming from the incorrect classification will be removed from the workflow run. The document will then be processed by the `extraction2` step and go into `humanReview1` step again where the updated classification and output from `extraction2` step can be viewed.
+
+![](/images/reviewing_workflow_run/reclassification_result_classification.png)
+![](/images/reviewing_workflow_run/reclassification_result_extraction.png)
+
+So to review, re-classifying a document will cause previous step runs stemming from the incorrect classification to be removed from the workflow run and the workflow run will be restarted at the classification step using the corrected classification. See the image below for a review of the re-classification example.
+
+![](/images/reviewing_workflow_run/example_review.png)
