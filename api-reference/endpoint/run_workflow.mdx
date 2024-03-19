@@ -43,6 +43,13 @@ description: "Once a workflow has been created on the Extend Platform, this endp
   be used. To run the "draft" version of a workflow, use "draft" as the version.
 </ParamField>
 
+<ParamField body="priority" type="number">
+  An optional value used to determine the relative order of WorkflowRuns when rate
+  limiting is in effect. Priority values must be an integer between 1 and 100 inclusive.
+  Lower values will be prioritized before higher values. The default priority value
+  is 50.
+</ParamField>
+
 <ParamField body="metadata" type="any">
   An optional object that can be passed in to identify the WorkflowRun. It will be returned in the response and webhooks.
 </ParamField>
@@ -115,6 +122,7 @@ curl --location --request POST 'https://api-prod.extend.app/v1/workflow_runs' \
       "fileUrl":"https://test.s3.amazonaws.com/example+file+name.pdf"
     }],
     "name": "test_workflow",
+    "priority": 50,
     "metadata": {
       "internal_id": "id_1234"
     }
