@@ -31,8 +31,17 @@
       "pages": ["api-reference/authentication"]
     },
     {
-      "group": "Document Processors",
-      "pages": ["product-reference/configuring_extraction_step", "product-reference/confidence_scores"]
+      "group": "Studio",
+      "pages": [
+        "product-reference/studio/overview",
+        "product-reference/studio/configuring_extraction",
+        "product-reference/studio/publishing", 
+        "product-reference/migrating_to_studio"
+      ]
+    },
+    {
+      "group": "Evaluation",
+      "pages": ["product-reference/evaluation/using_evaluation_sets", "product-reference/confidence_scores"]
     },
     {
       "group": "Workflows",

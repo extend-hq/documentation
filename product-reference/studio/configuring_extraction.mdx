@@ -1,0 +1,106 @@
+---
+title: "Configure an extraction processor"
+description: "How to configure an Extraction processor in the Extend Studio"
+---
+
+## Builder
+
+Once you have created an Extraction processor, you can navigate to the processor detail view and select the "Builder" tab.
+
+![](/images/studio/extractor_builder.png)
+
+If you have already configured extraction steps in the past in our legacy workflow extraction editor, this will look and feel similar._createMdxContent
+
+You can save changes without running or save and run using the "Save and run extractor" button. The results will then show up below.
+
+![](/images/studio/extractor_results.png)
+
+## Fields
+
+To configure a field, add a semantically acurate field name and write descriptions that explain how to identify and extract that field from the document.
+
+You must also configure the proper field type:
+
+![](/images/studio/field_configure.png)
+
+### Text
+
+Use the text data type when you want to extract a string of text from a document. For example, if you want to extract the name of a person from a document, you would use the text data type.
+
+### Number
+
+Use the number data type when you want to extract a number from a document. For example, if you want to extract the age of a person from a document, you would use the number data type.
+
+### Currency
+
+Use the currency data type when you want to extract a currency value from a document. For example, if you want to extract the price of a product from a document, you would use the currency data type.
+
+### Boolean
+
+Use the boolean data type when you want to extract a boolean value from a document. For example, if you want to extract whether a product is in stock from a document, you would use the boolean data type.
+
+### Date
+
+Use the date data type when you want to extract a date from a document. For example, if you want to extract the date of birth of a person from a document, you would use the date data type.
+
+### Signature
+
+Use the signature data type when you want to extract a signature from a document. For example, if you want to extract the signature of a person from a document, you would use the signature data type.
+Signature fields will automatically extract all relevant details of a document's signature block:
+- is_signed
+- printed_name
+- signatory_title
+- signature_date
+
+### Object
+
+Use the object data type when you want to extract a set of related fields from a document. For example, if you want to extract the address, name, and birth date of a person from a document you would use the object data type.
+
+### Array
+
+Use the array data type when you want to extract a list of related fields from a document. For example, if you want to extract a list of products that each have a name, price, and quantity from a document you would use the array data type.
+
+
+## Configuration table
+
+The field config table also will allow you to select the drag button to move the field up or down. Performance is best when related fields in the document
+are positioned in related order in the configuration table.
+
+You can also set a field `ID` which is a unique identifier for the field to use in your downstream system, so that you can make changes to the semantic field name without 
+updating your downstream system.
+
+![](/images/studio/field_control.png)
+
+## Configuring Custom Settings
+
+In addition to the fields, you can also configure custom settings for each field. These settings allow you to fine-tune the extraction process to better suit your specific needs. However, please note that these settings are experimental and may not work as expected in all cases.
+
+Before using these settings, we recommend consulting with the Extend team to understand their potential impact on the extraction process.
+
+
+# Using the runner tab
+
+While it often makes sense to run files from the Builder ui when getting set up, once you are ready to start testing your processor at scale, you should move over to the Run tab.
+
+From this tab you can:
+- Quickly run any number of files in a batch
+- Select the version of the processor you want to run (or default to draft of current saved changes)
+- Run an existing [Evaluation set](/product-reference/evaluation/using_evaluation_sets) for the processor
+
+![](/images/studio/runner.png)
+
+Once you run a batch of files, you will be redirected to a results page that looks like this:
+
+![](/images/studio/batch_result.png)
+
+From here you can:
+- See at a glance the coverage of fields extracted and average confidence
+- Drill down into individual files to see the extracted fields and confidence levels
+- (optionally) correct/edit the results of each output, then turn the entire batch into an Evaluation set
+
+Note: our recommendation is to not create Evaluation Sets until you have at least mostly finalized what fields you are extracting, even if you are still iterating on the field descriptions.
+
+# Publishing
+
+Once the change you are making has been iterated on enough, you are ready to Publish a new version.
+See the [Publishing](/product-reference/studio/publishing) page for more information on how to publish and use processors.
