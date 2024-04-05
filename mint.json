@@ -36,12 +36,15 @@
         "product-reference/studio/overview",
         "product-reference/studio/configuring_extraction",
         "product-reference/studio/publishing", 
-        "product-reference/migrating_to_studio"
+        "product-reference/studio/migrating_to_studio"
       ]
     },
     {
       "group": "Evaluation",
-      "pages": ["product-reference/evaluation/using_evaluation_sets", "product-reference/confidence_scores"]
+      "pages": [
+        "product-reference/evaluation/using_evaluation_sets", 
+        "product-reference/evaluation/confidence_scores"
+      ]
     },
     {
       "group": "Workflows",

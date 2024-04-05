@@ -1,6 +1,6 @@
 ---
-title: "Publishing"
-description: "How to publish and deploy processors"
+title: "Publishing processors"
+description: "How to publish and deploy processors in Studio"
 ---
 
 From the processor UI in Studio, you can publish new versions of your processor, which can then be selected and used in one more worklfows deployed on Extend.
@@ -11,12 +11,28 @@ When you save changes to a processor, these will update the draft version. You c
 before publishing a new version, and once you do, all the changes will be rolled into the new version and the draft will go back
 to having no "Unpublished changes".
 
-Once a version is pubished, it cannot be updated
-
 ## Minor version
+
+When you are making only a change in description (e.g. a field or classification prompt change), it is recommended that you publish a minor version. 
+A minor version change implies it will not affect the existing workflows that are using the processor and how data is sent to downstream consumers.
+
+To publish a minor version, click on the "Publish" button and select the "Minor" radio option:
+
+![](/images/studio/publish_minor.png)
 
 ## Major version
 
+When you are making a change in the configuration of the processor that would affect the shape of data sent to downstream consumers or how the processor would
+interact with a workflow, it is recommended that you publish a major version.
+
+To publish a major version, click on the "Publish" button and select the "Major" radio option:
+
+![](/images/studio/publish_major.png)
+
 ## Viewing published versions
 
-TODO
+Once a version is pubished, it cannot be updated and will only be viewable in a read-only mode.
+
+You can select a published version to view its details and see the configuration that was used to create it from the processor Overview tab:
+
+![](/images/studio/invoice_extractor_overview.png)
