@@ -1,0 +1,94 @@
+---
+title: "Migrating to studio"
+description: "How to migrate processors the legacy workflow config experience to the studio"
+---
+
+If you have existing deployed Workflows on Extend predating April 2024, you likely have been (with the help of the Extend team)
+configuring and iterating on Extraction and Classification steps from directly within a given workflow.
+
+This means that each workflow had their own configuration for each processor, and you had to navigate to each workflow to make changes and export/import
+workflow configs to keep them in sync if you make changes to a processor used in more than one place.
+
+Similarly, you would have had to rely on the workflow runner to test processor changes, which was likely slow and cumbersome.
+
+With the introduction of Studio, we have introduced a new way to manage processors that is more efficient and scalable. 
+This guide will help you migrate your existing processors to the new Studio experience.
+
+## Step 1: Export the legacy processor
+
+To start migrating a processor, first navigate to a workflow, and open the processor step you want to migrate. 
+Remember, all of the following are "processor" steps: Extraction steps, Classification steps, and Instructive Q&A steps.
+
+Here is the workflow example we will migrating from:
+
+![](/images/studio/migration_workflow.png)
+
+Click on the "Configure" option for the given processor step. We will start with the "extraction1" step in this example.
+
+![](/images/studio/legacy_exractor.png)
+
+Once in the step configuration view, you will see the large warning banner like the one in the image above.
+You can then click on the "Export" option. This will create and download a json file to your computer. We will be using the .json file in the next step.
+
+Also note, here is what you would see in the "Configure" view for a Classification step. The instructions are the same:
+
+![](/images/studio/legacy_classifier.png)
+
+## Step 2: Import the processor into Studio
+
+Navigate to the Studio tab in the Extend dashboard. Once open, you will see the options to create new processor.
+Click the "Create new" dropdown on the Custom Extractor module, and select "from JSON":
+
+![](/images/studio/import_cta.png)
+
+This action will open a modal where you can upload the .json file you downloaded in the previous step:
+
+![](/images/studio/create_from_import.png)
+
+After you have uploaded the file and selected your desired processor name, hit "Create".
+
+## Step 3: Check you work
+
+You should be redirected to a new processor detail page. Please ensure the config looks correct and that you have the correct name for the processor.
+
+If everything looks good, go ahead and first click "Save" to save a copy of the draft (or test run against a file if you'd like).
+
+Once saved/run, go ahead and lick "Publish" to create the first version of the processor:
+
+![](/images/studio/publish_after_import.png)
+
+## Step 4: Update the workflow to use the new processor
+
+Now let's navigate back to the workflow we started with. Open the Step menu on the left side so we can add a new extraction step:
+
+![](/images/studio/step_create.png)
+
+Drag an "Extraction" step into the workflow, you should have a new step, in our case it is `extraction2`, the default name for the second extraction step:
+
+![](/images/studio/new_extraction_step.png)
+
+Click "Configure" on this step. This will open the new experience for selecting processors to use in the workflow.
+
+There will be two dropdowns: one to select the processor (searchable by name) and one to select the version of the processor to use. Make sure to first select the processor, the second dropdown will then update to include its published version(s).
+
+![](/images/studio/dp_select.png)
+
+![](/images/studio/version_select.png)
+
+After selecting the processor and version, click "Update" to save.
+
+## Step 5: Clean up
+
+Now we should delete the legacy step:
+
+![](/images/studio/delete_legacy.png)
+
+After that, simply move the new step into its position, and connect the edges with its step neighbors. You can now test the draft version by running a workflow from the ui.
+
+If everything looks good, go ahead and click "Deploy" (or deploy when you are ready to make the changes live). Note: given the new processor is the same config as before, deploying should not change behavior of the workflow.
+
+## Conclusion
+
+You can now repeat this process for all processors you would like to migrate. Once you have migrated all processors, you can start to take advantage of the new Studio features like versioning, evaluation, and more.
+
+If you have any questions or need help with this process, please reach out to the Extend team. We are happy to help!

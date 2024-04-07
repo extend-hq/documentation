@@ -40,13 +40,6 @@
       ]
     },
     {
-      "group": "Evaluation",
-      "pages": [
-        "product-reference/evaluation/using_evaluation_sets", 
-        "product-reference/evaluation/confidence_scores"
-      ]
-    },
-    {
       "group": "Workflows",
       "pages": [
         "product-reference/reviewing_workflow_run",
@@ -57,6 +50,7 @@
     {
       "group": "Review Experience",
       "pages": [
+        "product-reference/confidence_scores",
         "product-reference/bounding_boxes"
       ]
     },
