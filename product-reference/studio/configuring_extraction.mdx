@@ -98,9 +98,11 @@ From here you can:
 - Drill down into individual files to see the extracted fields and confidence levels
 - (optionally) correct/edit the results of each output, then turn the entire batch into an Evaluation set
 
-Note: our recommendation is to not create Evaluation Sets until you have at least mostly finalized what fields you are extracting, even if you are still iterating on the field descriptions.
+*Note:* our recommendation is to not create Evaluation Sets until you have at least mostly finalized what fields you are extracting, even if you are still iterating on the field descriptions.
+The reason for this is that Evaluation sets will be used to compare current and expected outputs, so if you add or remove fields from the processor, the Evaluation set will no longer be valid.
+This is fine, and everything will run, but metrics like accuracy and coverage will drop as a result, and you will need to go and update the Evaluation set to reflect the new expected outputs.
+This can be a tedious process to do repeatedly, so it is best to wait until you are mostly done finalizing the set of fields you are extracting or set of classification types you are using.
 
 # Publishing
 
-Once the change you are making has been iterated on enough, you are ready to Publish a new version.
 See the [Publishing](/product-reference/studio/publishing) page for more information on how to publish and use processors.
