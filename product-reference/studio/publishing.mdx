@@ -5,6 +5,9 @@ description: "How to publish and deploy processors in Studio"
 
 From the processor UI in Studio, you can publish new versions of your processor, which can then be selected and used in one or more workflows deployed on Extend.
 
+All changes to a processor are saved on its draft version, which can be published as a new version at any time. You would want to publish when there is a chnge you want to make available to workflows that are using the processor.
+Publishing a new version will not affect the existing workflows that are using the processor, as they will continue to use the version they were deployed with. This allows you to safely make changes and publish/pin versions as much you'd like.
+
 ![](/images/studio/extractor_publish.png)
 
 When you save changes to a processor, these will update the draft version. You can make as many changes as you want
