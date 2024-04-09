@@ -51,6 +51,8 @@ Use the number data type when you want to extract a number from a document. For 
 
 Use the currency data type when you want to extract a currency value from a document. For example, if you want to extract the price of a product from a document, you would use the currency data type.
 
+This data type will return both the amount and the currency code. For example, if the price of a product is $10.00, the currency data type will return `{"amount": 10.00, "iso_4217_currency_code": "USD"}`.
+
 ### Boolean
 
 Use the boolean data type when you want to extract a boolean value from a document. For example, if you want to extract whether a product is in stock from a document, you would use the boolean data type.

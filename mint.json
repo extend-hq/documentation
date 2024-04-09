@@ -31,8 +31,13 @@
       "pages": ["api-reference/authentication"]
     },
     {
-      "group": "Document Processors",
-      "pages": ["product-reference/configuring_extraction_step", "product-reference/confidence_scores"]
+      "group": "Studio",
+      "pages": [
+        "product-reference/studio/overview",
+        "product-reference/studio/configuring_extraction",
+        "product-reference/studio/publishing", 
+        "product-reference/studio/migrating_to_studio"
+      ]
     },
     {
       "group": "Workflows",
@@ -45,6 +50,7 @@
     {
       "group": "Review Experience",
       "pages": [
+        "product-reference/confidence_scores",
         "product-reference/bounding_boxes"
       ]
     },

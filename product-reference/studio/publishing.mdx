@@ -1,0 +1,41 @@
+---
+title: "Publishing processors"
+description: "How to publish and deploy processors in Studio"
+---
+
+From the processor UI in Studio, you can publish new versions of your processor, which can then be selected and used in one or more workflows deployed on Extend.
+
+All changes to a processor are saved on its draft version, which can be published as a new version at any time. You would want to publish when there is a chnge you want to make available to workflows that are using the processor.
+Publishing a new version will not affect the existing workflows that are using the processor, as they will continue to use the version they were deployed with. This allows you to safely make changes and publish/pin versions as much you'd like.
+
+![](/images/studio/extractor_publish.png)
+
+When you save changes to a processor, these will update the draft version. You can make as many changes as you want
+to the draft before publishing a new version. Once you publish, all the draft changes will be rolled into the new version and the draft will go back
+to having no "Unpublished changes".
+
+## Minor version
+
+When you are making only a change in description (e.g. a field or classification prompt change), it is recommended that you publish a minor version. 
+A minor version change implies it will not affect the existing workflows that are using the processor and how data is sent to downstream consumers.
+
+To publish a minor version, click on the "Publish" button and select the "Minor" radio option:
+
+![](/images/studio/publish_minor.png)
+
+## Major version
+
+When you are making a change in the configuration of the processor that would affect the shape of data sent to downstream consumers or how the processor would
+interact with a workflow, it is recommended that you publish a major version.
+
+To publish a major version, click on the "Publish" button and select the "Major" radio option:
+
+![](/images/studio/publish_major.png)
+
+## Viewing published versions
+
+Once a version is pubished, it cannot be updated and will only be viewable in a read-only mode.
+
+You can select a published version to view its details and see the configuration that was used to create it from the processor Overview tab:
+
+![](/images/studio/invoice_extractor_overview.png)
