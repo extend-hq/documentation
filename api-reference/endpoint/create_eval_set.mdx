@@ -1,0 +1,36 @@
+---
+title: "Create Evaluation set"
+api: "POST https://api-prod.extend.app/v1/evaluation_sets"
+description: "Create a new evaluation set in Extend."
+---
+
+Evaluation sets are a collection of files and expected outputs that are used to evaluate the performance of a given processor in Extend. 
+This endpoint will create a new evaluation set in Extend, which items can be added to using the [Create Evaluation Set item](/api-reference/endpoint/add_to_eval_set) endpoint.
+
+*Note:* it is not necessary to create an evaluation set via API. You can also create an evaluation set via the Extend dashboard and take the ID from there:
+
+![](/images/evaluation_sets/detail_page_with_ID.png)
+
+### Body
+
+<ParamField body="name" type="string" required>
+  The name of the evaluation set.
+</ParamField>
+
+<ParamField body="description" type="string">
+  A description of the evaluation set.
+</ParamField>
+
+<ParamField body="processorId" type="string" required>
+  The ID of the processor to associate with this evaluation set. Evaluation sets can in theory be run against any processor, but it is required to associate the evaluation set with a primay processor.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value for whether the evaluation set was created successfully or not.
+</ResponseField>
+
+<ResponseField name="evaluationSet" type="EvaluationSet">
+  An EvaluationSet object representing the newly created evaluation set. See the [EvaluationSet object](/api-reference/objects/evaluation_set) for more details.
+</ResponseField>

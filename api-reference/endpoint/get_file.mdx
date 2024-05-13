@@ -1,0 +1,40 @@
+---
+title: "Get File"
+api: "GET https://api-prod.extend.app/v1/files/:id"
+description: "Fetch a file by its ID to obtain additional details and the raw file content."
+---
+
+### Path
+
+<ParamField path="id" type="string">
+  The ID of the File to fetch. This is the ID returned when creating a new File or the value on `fileId` of a [WorkflowRun object](/api-reference/objects/workflow_run).
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value for whether the file was fetched successfully or not.
+</ResponseField>
+
+<ResponseField name="file" type="File">
+  A File object representing the fetched file. See the [File object](/api-reference/objects/file) for more details.
+</ResponseField>
+
+<ResponseExample>
+```json Example Response
+{
+  "success": true,
+  "file": {
+    "object": "file",
+    "id": "file_1234",
+    "name": "example_file",
+    "type": "PDF",
+    "contents": {
+      "rawText": "This is the raw text content of the file..."
+    },
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  }
+}
+```
+</ResponseExample>
