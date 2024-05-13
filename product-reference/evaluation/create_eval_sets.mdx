@@ -1,0 +1,52 @@
+---
+title: "Creating evaluation sets"
+description: "How to create evaluation sets in Extend"
+---
+
+There are three primary ways to create evaluation sets in Extend:
+1. Take an existing batch run of documents and their outputs and convert them into an evaluation set.
+2. Create a new evaluation set from scratch with no documents or outputs, then add and validate documents one by one or over time from new batches.
+3. Create using the API.
+
+We will go through each of these methods in detail below.
+
+## Method 1: Convert a Batch Run to an Evaluation Set
+
+The most common way to create an evaluation set is by converting a batch run of reviewed outputs into a new evaluation set.
+
+1. After running a batch of documents through your processor, review the results on the batch run page. Then click the "Create Evaluation Set" button at the top of the page.
+
+*Note*: you do not need to review all documents in the batch to create an evaluation set, but it is recommended. You can however, always update the expected outputs later.
+
+![](/images/evaluations/create_from_batch.png)
+
+2. You will be prompted to name and describe your evaluation set. Enter a name, description, and then click "Create Evaluation Set". This will create a new evaluation set with the documents and outputs from the batch run.
+
+![](/images/evaluations/create_dialog.png)
+
+3. You will then be redirected to the evaluation set page where you can view and manage the documents and outputs in the set.
+
+![](/images/evaluations/eval_detail_page.png)
+
+## Method 2: Create a New Evaluation Set from Scratch
+
+1. From the home page of the Evaluation section in Extend, click the "Create Evaluation Set" button.
+
+![](/images/evaluations/created_page.png)
+
+2. You will be prompted to name and describe your evaluation set, as well as select a corresponding processor.
+
+*Note*: you can in the future run this evaluation set against any compatible processor, but you must select one to create the set, which is it's default processor.
+
+![](/images/evaluations/create_from_scratch.png)
+
+3. You can then add documents to the evaluation set by clicking the "Add file" button. You will upload a document and then be prompted to validate the output once it is done processing (which might take several seconds).
+
+![](/images/evaluations/add_file_dialog.png)
+
+
+You can also add multiple documents at once from the runner results. See the [run evaluation](/product-reference/evaluation/run_evaluations) page for more information.
+
+## Method 3: Create an Evaluation Set Using the API
+
+Simply follow the [API documentation](/api-reference/endpoint/create_eval_set) to create an evaluation set using the API.
