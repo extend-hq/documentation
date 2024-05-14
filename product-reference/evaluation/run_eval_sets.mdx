@@ -1,0 +1,38 @@
+---
+title: "Running evaluation sets"
+description: "How to run evaluation sets in Extend"
+---
+
+Running well maintained and up to date evaluation sets is one of the best ways to ensure that your AI document processors are performing as expected and to identify areas for improvement, while iterating.
+
+Follow this guide to learn more about how to run and maintain evaluation sets in Extend.
+
+1. Navigate to the runner page for the processor that has the evaluation set tied to it.
+
+![](/images/evaluations/eval_runner.png)
+
+2. Click the "Run" button on the evaluation set you want to run. This will open the run dialog.
+
+![](/images/evaluations/eval_run_dialog.png)
+
+3. The default options are the processor and version you selected in the run ui. You can however update the version, or the actual processor before running here.
+
+4. Click "Run Evaluation" to start the evaluation. You will be redirected to the evaluation run page where you can view the progress of the evaluation.
+
+![](/images/evaluations/eval_results.png)
+
+This is a very simple extraction processor for demo purposes, but you can see a metrics summary at the top of the page, and a list of documents that were run and their results below.
+
+Each processor type will have different metrics views. For instance a classification processor will show a per type accuracy distributin and a confusion matrix-like view.
+
+5. You can click ona given row to view the details of actual vs. expected outputs for that document.
+
+![](/images/evaluations/eval_diff.png)
+
+6. You can also download the results of the evaluation as a CSV file by clicking the Export button:
+
+![](/images/evaluations/csv_export.png)
+
+7. You can also update the eval item to take the results of the evaluation as the new expected outputs by clicking the "Update" button:
+
+![](/images/evaluations/update_eval_item.png)

@@ -40,6 +40,14 @@
       ]
     },
     {
+      "group": "Evaluation",
+      "pages": [
+        "product-reference/evaluation/overview",
+        "product-reference/evaluation/create_eval_sets",
+        "product-reference/evaluation/run_eval_sets"
+      ]
+    },
+    {
       "group": "Workflows",
       "pages": [
         "product-reference/reviewing_workflow_run",
