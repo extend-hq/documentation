@@ -1,0 +1,62 @@
+---
+title: "Create Evaluation Set Item"
+api: "POST https://api-prod.extend.app/v1/evaluation_set_items"
+description: "Create a new evaluation set item for a given evaluation set."
+---
+
+Evaluation set items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend. This endpoint will create a new evaluation set item in Extend, which will be used during an evaluation run.
+
+### Body
+
+<ParamField body="evaluationSetId" type="string" required>
+  The ID of the evaluation set to add the item to.
+</ParamField>
+
+<ParamField body="fileId" type="string" required>
+  The ID of the file to add to the evaluation set.
+</ParamField>
+
+<ParamField body="expectedOutput" type="object" required>
+  The expected output of the processor when run against the file. 
+  
+  This should be a JSON object conforming to the [output type schema](/api-reference/guides/output_types) of the processor.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value for whether the evaluation set item was created successfully or not.
+</ResponseField>
+
+<ResponseField name="evaluationSetItem" type="EvaluationSetItem">
+  An EvaluationSetItem object representing the newly created evaluation set item. See the [EvaluationSetItem object](/api-reference/objects/evaluation_set_item) for more details.
+</ResponseField>
+
+
+<ResponseExample>
+```json Example Response
+{
+  "success": true,
+  "evaluationSetItem": {
+    "object": "evaluation_set_item",
+    "id": "eval_item_1234",
+    "evaluationSetId": "eval_set_1234",
+    "fileId": "file_1234",
+    "expectedOutput": {
+      "field1": {
+        "id": "field_fsdf",
+        "type": "string",
+        "value": "example"
+      },
+      "field2": {
+        "id": "field_1234",
+        "type": "number",
+        "value": 1234
+      }
+    },
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  }
+}
+```
+</ResponseExample>

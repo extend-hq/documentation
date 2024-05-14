@@ -1,0 +1,55 @@
+---
+title: "The File object"
+---
+
+The File object represents a file in Extend. Files are created for each workflow run, and can also be created directly via API for use in evaluation sets.
+
+<Expandable title="properties" defaultOpen>
+  <ResponseField name="object" type="string">
+    The type of the object, in this case it will always be "file".
+  </ResponseField>
+
+  <ResponseField name="id" type="string">
+    The file ID.
+  </ResponseField>
+
+  <ResponseField name="name" type="string">
+    The name of the file.
+  </ResponseField>
+
+  <ResponseField name="type" type="string">
+    The Extend normalized type of the file. One of `IMG` `PDF` `TXT` `DOCX` `CSV`.
+  </ResponseField>
+
+  <ResponseField name="contents" type="object">
+    <Expandable title="properties" defaultOpen>
+      <ResponseField name="rawText" type="string">
+        The raw text content of the file.
+      </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="createdAt" type="string">
+    The date and time the file was created.
+  </ResponseField>
+  
+  <ResponseField name="updatedAt" type="string">
+    The date and time the file was last updated.
+  </ResponseField>
+</Expandable>
+
+<ResponseExample>
+```json Example File
+{
+  "object": "file",
+  "id": "file_1234",
+  "name": "example_file",
+  "type": "PDF",
+  "contents": {
+    "rawText": "This is the raw text content of the file..."
+  },
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-01T00:00:00Z"
+}
+```
+</ResponseExample>

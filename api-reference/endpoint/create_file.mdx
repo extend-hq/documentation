@@ -1,0 +1,48 @@
+---
+title: "Create File"
+api: "POST https://api-prod.extend.app/v1/files"
+description: "Create a new file in Extend for use in an evaluation set."
+---
+
+Creating a new File is a pre requesite for using that file with the evaluation sets API. 
+
+This endpoint will pre-process the contents of the file, and store it in the Extend platform for use in evaluation sets. If the file is not one of our supported types, the endpoint will throw an error. A small amount of latency (2-3 seconds) is expected for this endpoint as the file is processed and stored.
+
+### Body
+
+<ParamField body="name" type="string" required>
+  The name of the file.
+</ParamField>
+
+<ParamField body="url" type="string" required>
+  A pre signed URL for the file.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value for whether the file was processed successfully or not.
+</ResponseField>
+
+<ResponseField name="file" type="File">
+  A File object representing the newly created file. See the [File object](/api-reference/objects/file) for more details.
+</ResponseField>
+
+<ResponseExample>
+```json Example Response
+{
+  "success": true,
+  "file": {
+    "object": "file",
+    "id": "file_1234",
+    "name": "example_file",
+    "type": "PDF",
+    "contents": {
+      "rawText": "This is the raw text content of the file..."
+    },
+    "createdAt": "2024-01-01T00:00:00Z",
+    "updatedAt": "2024-01-01T00:00:00Z"
+  }
+}
+```
+</ResponseExample>

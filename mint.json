@@ -59,13 +59,22 @@
       "pages": [
         "api-reference/endpoint/run_workflow",
         "api-reference/endpoint/get_workflow_run",
-        "api-reference/endpoint/update_workflow_run"
+        "api-reference/endpoint/update_workflow_run",
+        "api-reference/endpoint/create_file",
+        "api-reference/endpoint/get_file",
+        "api-reference/endpoint/create_eval_set",
+        "api-reference/endpoint/create_eval_set_item",
+        "api-reference/endpoint/update_eval_set_item",
+        "api-reference/endpoint/bulk_create_eval_set_item"
       ]
     },
     {
       "group": "Objects",
       "pages": [
-        "api-reference/objects/workflow_run"
+        "api-reference/objects/workflow_run",
+        "api-reference/objects/file",
+        "api-reference/objects/evaluation_set",
+        "api-reference/objects/evaluation_set_item"
       ]
     },
     {

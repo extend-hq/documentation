@@ -1,0 +1,64 @@
+---
+title: "The EvaluationSetItem object"
+---
+
+The EvaluationSetItem object represents an item in an evaluation set in Extend. Items are the individual files and expected outputs that are used to evaluate the performance of a given processor in Extend.
+
+
+<Expandable title="properties" defaultOpen>
+  <ResponseField name="object" type="string">
+    The type of the object, in this case it will always be "evaluation_set_item".
+  </ResponseField>
+
+  <ResponseField name="id" type="string">
+    The evaluation set item ID.
+  </ResponseField>
+
+  <ResponseField name="evaluationSetId" type="string">
+    The ID of the evaluation set that this item belongs to.
+  </ResponseField>
+
+  <ResponseField name="fileId" type="string">
+    The ID of the file associated with this item.
+  </ResponseField>
+
+  <ResponseField name="expectedOutput" type="object">
+    The expected output of the processor when run against the file. 
+
+    This should be a JSON object conforming to the [output type schema](/api-reference/guides/output_types.mdx) of the processor.
+  </ResponseField>
+
+  <ResponseField name="createdAt" type="string">
+    The date and time the evaluation set item was created.
+  </ResponseField>
+  
+  <ResponseField name="updatedAt" type="string">
+    The date and time the evaluation set item was last updated.
+  </ResponseField>
+</Expandable>
+
+
+<ResponseExample>
+```json Example EvaluationSetItem
+{
+  "object": "evaluation_set_item",
+  "id": "eval_item_1234",
+  "evaluationSetId": "eval_set_1234",
+  "fileId": "file_1234",
+  "expectedOutput": {
+    "field1": {
+      "id": "field_fsdf",
+      "type": "string",
+      "value": "example"
+    },
+    "field2": {
+      "id": "field_1234",
+      "type": "number",
+      "value": 1234
+    }
+  },
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-01T00:00:00Z"
+}
+```
+</ResponseExample>

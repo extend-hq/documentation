@@ -30,6 +30,10 @@ It represents a single run of a workflow and contains all the information about 
     The metadata that was passed in when running the Workflow.
   </ResponseField>
 
+  <ResponseField name="fileId" type="string">
+    The ID of the File created as part of this WorkflowRun.
+  </ResponseField>
+
   <ResponseField name="fileName" type="string">
     The name of the File associated with this WorkflowRun.
   </ResponseField>
@@ -141,6 +145,10 @@ It represents a single run of a workflow and contains all the information about 
 
         <ResponseField name="edited" type="boolean">
           Whether the document processor run has been edited.
+        </ResponseField>
+
+        <ResponseField name="edits" type="object">
+          A hash of the edits (original + edited values + operator notes, if any) made to the document processor run. Values conform to the value types of the fields.
         </ResponseField>
 
         <ResponseField name="type" type="string">

@@ -1,0 +1,88 @@
+---
+title: "Bulk Create Evaluation Set Items"
+api: "POST https://api-prod.extend.app/v1/evaluation_set_items/bulk"
+description: "Create evaluation set items for a given evaluation set in bulk."
+---
+
+If you have a large number of files that you need to add to an evaluation set, you can use this endpoint to create multiple evaluation set items at once. This can be useful if you have a large dataset that you need to evaluate the performance of a processor against.
+
+*Note*: you still need to create each File first using the file API.
+
+### Body
+
+<ParamField body="evaluationSetId" type="string" required>
+  The ID of the evaluation set to add the items to.
+</ParamField>
+
+<ParamField body="items" type="array" required>
+  An array of objects representing the evaluation set items to create. Each object should have the following fields:
+  <Expandable title="properties" defaultOpen>
+    <ResponseField name="fileId" type="string">
+      The ID of the file to add to the evaluation set.
+    </ResponseField>
+
+    <ResponseField name="expectedOutput" type="object">
+      The expected output of the processor when run against the file. This should be a JSON object conforming to the [output type schema](/api-reference/guides/output_types) of the processor.
+    </ResponseField>
+  </Expandable>
+</ParamField>
+
+### Response
+
+<ParamField name="success" type="boolean">
+  A true or false value for whether the evaluation set items were created successfully or not.
+</ParamField>
+
+<ParamField name="evaluationSetItems" type="array">
+  An array of EvaluationSetItem objects representing the newly created evaluation set items. See the [EvaluationSetItem object](/api-reference/objects/evaluation_set_item) for more details.
+</ParamField>
+
+<ResponseExample>
+```json Example Response
+{
+  "success": true,
+  "evaluationSetItems": [
+    {
+      "object": "evaluation_set_item",
+      "id": "eval_item_1234",
+      "evaluationSetId": "eval_set_1234",
+      "fileId": "file_1234",
+      "expectedOutput": {
+        "field1": {
+          "id": "field_fsdf",
+          "type": "string",
+          "value": "Field output"
+        },
+        "field2": {
+          "id": "field_1234",
+          "type": "number",
+          "value": 1234
+        }
+      },
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "object": "evaluation_set_item",
+      "id": "eval_item_5678",
+      "evaluationSetId": "eval_set_5678",
+      "fileId": "file_5678",
+      "expectedOutput": {
+        "field1": {
+          "id": "field_addfds",
+          "type": "string",
+          "value": "Updated field output"
+        },
+        "field2": {
+          "id": "field_5678",
+          "type": "number",
+          "value": 5678
+        }
+      },
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z"
+    }
+  ]
+}
+```
+</ResponseExample>
