@@ -1,0 +1,114 @@
+---
+title: "Formulas"
+description: "How to write formulas that reference variables and perform calculations"
+---
+
+Formulas are special expressions that can reference fields from workflow steps and use functions to manipulate data and calculate values.
+They are used in Validation steps to define validation rules.
+
+## Examples
+
+| Formula | Description |
+| - | - |
+| `ISPRESENT(extraction1.address)` | Verify that an address has been extracted |
+| `extraction1.amount = extraction1.price * extraction1.quantity + extraction1.tax` | Verify that the total amount is calculated correctly |
+| `IF(classification1 = "invoice", extraction1.invoice_date, extraction2.due_date)` | If the document is an invoice, then get the invoice date, otherwise get the due date |
+
+## Variables
+
+A variable is simply a reference to a workflow data field. They can be outputs of document processor steps or fields retrieved from your system using External Data Validation steps.
+
+### Classification
+
+For Classification steps, the variable is the step name, e.g. `classification1`.
+The type of the variable will be `text` and its value will be the file's classification type.
+
+### Extraction
+
+For Extraction steps, the variable is the step name joined with the field name, e.g. `extraction1.address` or `extraction2.line_items.quantity` (for nested object or array fields).
+The type of the variable will match the type of the extraction field.
+For subfields of an array, the type will be an array of the subfield's type.
+The value may be `NULL` if the field could not be extracted.
+
+### External Data Validation
+
+For External Data Validation steps, the variable is the step name joined with the field path of the returned payload, `external1.path.to.field`.
+
+<Warning>
+  It is your responsibility to ensure that External Data Validation variables are populated and have the correct types.
+  For example, to use array variables you must return an object of arrays instead of an array of objects.
+</Warning>
+
+## Data types
+
+All formulas values, including input variables, formula constants, and function outputs belong to one of the following data types.
+
+| Type | Description |
+| - | - |
+| `boolean` | A `TRUE` or `FALSE` value |
+| `number` | A 64bit floating number |
+| `text` | A string of arbitrary length |
+| `date` | A date without a time of day or time zone |
+| `currency` | A monetary value containing a `number` amount and a ISO 4217 currency code |
+| `array<T>` | An array of the non-array type `T`. Mixed type arrays are not permitted. |
+
+### Collection types
+
+The `currency` and `array` types represent collections over one of the other primitive types and can be used wherever their underlying primitive type can be used.
+For example, the `currency` type's primitive type is `number`, so it can be used in numerical operations like addition or multiplication with other `number` or `currency` values.
+So can an array of numbers, but not an array of texts.
+
+Note that when an operation or a function uses both collection and primitive types, then the output will usually, but not always, belong to the collection type.
+For example, adding a `currency` and a `number` produces a `currency`, but comparing them will produce a `boolean` instead.
+
+### Nulls
+
+Values of any type can also be `NULL` which represents the absence of a value.
+Generally, null values will be treated as zero values of their type (e.g. `0` or `FALSE` or `""`) when used in an operation or function.
+Use the `ISPRESENT`, `ISBLANK`, or `IFNULL` functions to explicitly check for and handle nulls.
+
+## Operations
+
+The below table shows all the operations in their order of operations (from lowest to highest).
+An operation with a higher order of operation will take precedence over a lower one.
+
+| Operation | Type | Description |
+| - | - | - |
+| `a = b` | `boolean` | `a` is equal to `b` |
+| `a <> b` | `boolean` | `a` is not equal to `b` |
+| `a < b` | `boolean` | `a` is less than `b` |
+| `a <= b` | `boolean` | `a` is less or equal to `b` |
+| `a > b` | `boolean` | `a` is greater than `b` |
+| `a >= b` | `boolean` | `a` is greater than or equal to `b` |
+| `a + b` | `number` | `a` plus `b` |
+| `a - b` | `number` | `a` substract `b` |
+| `s & t` | `text` | `s` concatenate `t` |
+| `a * b` | `number` | `a` multipled by `b` |
+| `a / b` | `number` | `a` divided by `b` |
+| `a ^ b` | `number` | `a` raised to the power of `b` |
+| `-a` | `number` | Negative `a` |
+| `( ... )` | `T` | Parentheses |
+| `FUNC( ... )` | `T` | Function call |
+
+## Functions
+
+This is the list of all functions, their return types, and their behavior.
+Please reach out to us if there are functions not included here that would be helpful to you!
+
+| Formula | Type | Description |
+| - | - | - |
+| `ISPRESENT(arg: T)` | `boolean` | Returns whether or not the argument is not `NULL`. |
+| `ISBLANK(arg: T)` | `boolean` | Returns whether or not the argument is `NULL`. |
+| `IF(condition: boolean, ifTrue: T, ifFalse: T)` | `T` | Returns the value of `ifTrue` if `condition` is `TRUE`, returns the value of `ifFalse` otherwise. |
+| `IFNULL(arg: T, ifNull: T)` | `T` | Returns the value of `arg` if it is not `NULL`, returns the value of `ifNull` otherwise. |
+| `AND(arg: boolean, ...)` | `boolean` | Returns `TRUE` if all the arguments are `TRUE`, returns `FALSE` otherwise. |
+| `OR(arg: boolean, ...)` | `boolean` | Returns `TRUE` if any of the arguments are `TRUE`, returns `FALSE` otherwise. |
+| `NOT(arg: boolean)` | `boolean` | Returns `TRUE` if the argument is falsey (e.g. `FALSE`, `0`, `""`, `NULL`), returns `FALSE` otherwise. |
+| `DATE(arg: text)` | `date` | Converts the given text into a `date` value. |
+
+## Constants
+
+Formulas may include constant values such as numbers (e.g. `0`, `12.50`, `-100`), texts (e.g. `"hello!"`, `""`), or booleans (`TRUE` or `FALSE`) only.
+To declare a constant date, use the `DATE` function (e.g. `DATE("2024-01-01")`).
+
+To include double quotation marks in a text constant, escape it with a backslack `\"`, e.g. `"She said \"Hi!\""`.

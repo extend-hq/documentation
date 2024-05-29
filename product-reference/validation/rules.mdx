@@ -1,0 +1,68 @@
+---
+title: "Validation Step"
+description: "How to define validation rules for your workflows"
+---
+
+Validation steps let you define rules to validate the workflow's data and supports your most complex business logic.
+
+Rules are defined using formulas that transform and calculate data similar to most spreadsheet applications you are familiar with.
+Formulas can reference classification, extraction, and instruct QA step outputs, as well as data fetched from your systems using an [External Data Validation](/product-reference/external_validation.mdx) step.
+
+## Adding a new step
+
+Start by dragging a `Validation` step into your workflow.
+
+![](/images/validation/configure_drag.jpeg)
+
+A Validation step has a single input step which simply determines when to run the validation.
+Rules can reference data from all steps that come before it, so you do not need to directly connect a step to the Validation step to validate that step's outputs.
+
+A Validation step also has two output steps, one if all the rules pass and one otherwise.
+Only one of the two output steps will be executed for any single workflow run.
+An example workflow topology is to connect the Webhook Response step if all rules pass and a Human Review step if not.
+
+## Configuring rules
+
+Click on a Validation step's `Configure` button to configure the step's rules.
+The configuration page shows the variables that can be referenced in formulas on the left side and the defined validation rules on the right side.
+
+![](/images/validation/configure_page.jpeg)
+
+To add a new rule, click the `Add rule` button on the bottom of the right side of the page.
+To edit an existing rule instead, click the edit icon (pencil symbol) in the top right corner of the rule.
+A rule has the following fields:
+
+<ParamField path="name" type="string" required>
+  Name of the rule.
+  This name will be used as a reference when viewing the results in the Dashboard or in the webhook response.
+</ParamField>
+
+<ParamField path="description" type="string">
+  Optional description of the rule.
+</ParamField>
+
+<ParamField path="formula" type="string" required>
+  Formula expression that must evaluate to a `boolean` value.
+  See [Formula](/product-reference/validation/formula) for details about formula syntax and functions.
+</ParamField>
+
+Once you are satisfied with this rule, click the accept icon (checkmark symbol) to convert the rule back to viewing mode.
+If you want to undo your changes to an existing rule or remove a newly added rule, click the decline icon (cross symbol) instead.
+
+When you are finished adding or editing rules, save your changes by clicking the `Save` button on the top right corner of the page.
+
+<Warning>
+  Important: Do not forget to save your changes!
+  An edited, but unsaved rule will have no effect on your workflow.
+</Warning>
+
+## Viewing results
+
+### Dashboard
+
+Validation results can be viewed in the Dashboard once a workflow run is complete or is awaiting human review, along with other step results.
+
+### Webhook
+
+Validation results are included in webhook requests' `WorkflowRun` object under the `stepRuns` field.
+See the validation result schema [here](/api-reference/objects/workflow_run).
