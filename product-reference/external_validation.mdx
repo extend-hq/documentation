@@ -4,7 +4,7 @@ description: "How to leverage the External Data Validation step in a workflow."
 ---
 
 The External Data Validation step is a powerful tool that allows you to validate data within a workflow against your own system, provided
-that your system exposes an API for Extend to intract with.
+that your system exposes an API for Extend to interact with.
 
 As of now, there are two primary use cases for this step:
 1. **Confidence Validation**: Instead of relying purely on our AI based confidence scoring, you can match document data against your own system to determine if the data is realistic or not, and return a flag(s) accordingly.
@@ -54,5 +54,3 @@ Generally it's easier to configure the variable enabled input after zooming in t
 After a workflow run is completed, and if it was flagged for review (or not), humans can see the output of the external data validation step in the Review UI alongside extaction and other outputs:
 
 ![](/images/external_validation_step/review.png)
-
-

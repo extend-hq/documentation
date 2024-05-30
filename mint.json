@@ -15,27 +15,27 @@
     {
       "name": "API Reference",
       "url": "api-reference"
-    },
-    {
-      "name": "Product Reference",
-      "url": "product-reference"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction"]
+      "pages": [
+        "introduction"
+      ]
     },
     {
       "group": "API Documentation",
-      "pages": ["api-reference/authentication"]
+      "pages": [
+        "api-reference/authentication"
+      ]
     },
     {
       "group": "Studio",
       "pages": [
         "product-reference/studio/overview",
         "product-reference/studio/configuring_extraction",
-        "product-reference/studio/publishing", 
+        "product-reference/studio/publishing",
         "product-reference/studio/migrating_to_studio"
       ]
     },
@@ -63,6 +63,13 @@
       ]
     },
     {
+      "group": "Validation Rules",
+      "pages": [
+        "product-reference/validation/rules",
+        "product-reference/validation/formulas"
+      ]
+    },
+    {
       "group": "Endpoints",
       "pages": [
         "api-reference/endpoint/run_workflow",
@@ -87,15 +94,23 @@
     },
     {
       "group": "Guides",
-      "pages": ["api-reference/guides/output_types", "api-reference/guides/bounding_boxes"]
+      "pages": [
+        "api-reference/guides/output_types",
+        "api-reference/guides/bounding_boxes"
+      ]
     },
     {
       "group": "Webhooks",
-      "pages": ["api-reference/webhooks/webhooks", "api-reference/webhooks/events"]
+      "pages": [
+        "api-reference/webhooks/webhooks",
+        "api-reference/webhooks/events"
+      ]
     },
     {
       "group": "Integrations",
-      "pages": ["api-reference/integrations/slack"]
+      "pages": [
+        "api-reference/integrations/slack"
+      ]
     }
   ],
   "backgroundImage": "/background.png",
