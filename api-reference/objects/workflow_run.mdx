@@ -131,54 +131,53 @@ It represents a single run of a workflow and contains all the information about 
   </ResponseField>
 
   <ResponseField name="outputs" type="DocumentProcessorRun[]">
-    An array of DocumentProcessorRun objects. This will contain the initial output, reviewed output, and final output of the WorkflowRun.
-    <ResponseField name="DocumentProcessorRun" type="DocumentProcessorRun">
-      An object representing a DocumentProcessorRun.
-      <Expandable title="properties" defaultOpen>
-        <ResponseField name="object" type="string">
-          Type of the object, always 'document_processor_run'.
-        </ResponseField>
+    An array of DocumentProcessorRun objects corresponding to Extraction, Classification, and Instruct QA steps.
+    This will contain the initial output, reviewed output, and final output of the DocumentProcessorRun.
 
-        <ResponseField name="id" type="string">
-          The unique identifier for the document processor run.
-        </ResponseField>
+    <Expandable title="properties">
+      <ResponseField name="object" type="string">
+        Type of the object, always 'document_processor_run'.
+      </ResponseField>
 
-        <ResponseField name="edited" type="boolean">
-          Whether the document processor run has been edited.
-        </ResponseField>
+      <ResponseField name="id" type="string">
+        The unique identifier for the document processor run.
+      </ResponseField>
 
-        <ResponseField name="edits" type="object">
-          A hash of the edits (original + edited values + operator notes, if any) made to the document processor run. Values conform to the value types of the fields.
-        </ResponseField>
+      <ResponseField name="edited" type="boolean">
+        Whether the document processor run has been edited.
+      </ResponseField>
 
-        <ResponseField name="type" type="string">
-          The type of the document processor run. Either `EXTRACT`, `CLASSIFY`, or `INSTRUCT_QA`.
-        </ResponseField>
+      <ResponseField name="edits" type="object">
+        A hash of the edits (original + edited values + operator notes, if any) made to the document processor run. Values conform to the value types of the fields.
+      </ResponseField>
 
-        <ResponseField name="config" type="object">
-          The config of the document processor run. The shape of output depends on the document processor `type`.
-          Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
-        </ResponseField>
+      <ResponseField name="type" type="string">
+        The type of the document processor run. Either `EXTRACT`, `CLASSIFY`, or `INSTRUCT_QA`.
+      </ResponseField>
 
-        <ResponseField name="initialOutput" type="object">
-          The initial raw output from the document processor. This is always set.
-          The shape of output depends on the document processor `type`.
-          Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
-        </ResponseField>
+      <ResponseField name="config" type="object">
+        The config of the document processor run. The shape of output depends on the document processor `type`.
+        Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
+      </ResponseField>
 
-        <ResponseField name="reviewedOutput" type="object" optional>
-          An optional field that shows the output after review, if applicable.
-          The shape of output depends on the document processor `type`.
-          Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
-        </ResponseField>
+      <ResponseField name="initialOutput" type="object">
+        The initial raw output from the document processor. This is always set.
+        The shape of output depends on the document processor `type`.
+        Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
+      </ResponseField>
 
-        <ResponseField name="output" type="object">
-          The final output, either reviewed or initial. You can rely on this to be always set as the final ouput (initial or post review when reviewed).
-          The shape of output depends on the document processor `type`.
-          Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
-        </ResponseField>
-      </Expandable>
-    </ResponseField>
+      <ResponseField name="reviewedOutput" type="object" optional>
+        An optional field that shows the output after review, if applicable.
+        The shape of output depends on the document processor `type`.
+        Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
+      </ResponseField>
+
+      <ResponseField name="output" type="object">
+        The final output, either reviewed or initial. You can rely on this to be always set as the final ouput (initial or post review when reviewed).
+        The shape of output depends on the document processor `type`.
+        Details for each can be found in the [Output and Config types page](/api-reference/guides/output_types).
+      </ResponseField>
+    </Expandable>
   </ResponseField>
 
   <ResponseField name="workflow" type="Workflow">
@@ -189,7 +188,7 @@ It represents a single run of a workflow and contains all the information about 
       </ResponseField>
 
       <ResponseField name="id" type="string">
-        The Workflow ID that can be fetched from the Extend Platform.
+        The unique identifier of the Workflow.
       </ResponseField>
 
       <ResponseField name="name" type="string">
@@ -203,16 +202,19 @@ It represents a single run of a workflow and contains all the information about 
   </ResponseField>
 
   <ResponseField name="stepRuns" type="WorkflowStepRun[]">
-    A list of WorkflowStepRun objects. This will contain the details of each step run and its output in the WorkflowRun.
+    An array of WorkflowStepRun objects.
+    Each WorkflowStepRun represents a single run of a WorkflowStep and contains details about the step and the run's output.
 
-    **Note:** This field is only currently supported for the [ExternalDataValidation step](/product-reference/external_validation). All other outputs are included in the `outputs` field.
+    **Note:** This field currently supports [External Data Validation](/product-reference/external_validation) and Rule Validation step types.
+    Document processor run outputs are included in the `outputs` field.
+
     <Expandable title="properties">
       <ResponseField name="object" type="string">
         The type of response, in this case it will always be "workflow_step_run".
       </ResponseField>
 
       <ResponseField name="id" type="string">
-        The ID that can be fetched from the Extend Platform.
+        The unique identifier of the WorkflowStepRun.
       </ResponseField>
 
       <ResponseField name="status" type="enum">
@@ -221,16 +223,60 @@ It represents a single run of a workflow and contains all the information about 
         One of: `PENDING`, `PROCESSING`, `PROCESSED`, `FAILED`
       </ResponseField>
 
-      <ResponseField name="output" type="any">
-        The output of the WorkflowStepRun. 
+      <ResponseField name="output" type="object">
+        The output of the WorkflowStepRun.
         The shape of the output depends on the type of the WorkflowStep in the `step` field below.
 
-        **Note:** This field is only currently supported for the [ExternalDataValidation step](/product-reference/external_validation). 
-        The output is the data that was returned by the external endpoint you configured for this run.
+        `EXTERNAL_DATA_VALIDATION`
+
+        <Expandable title="properties">
+          The output will be the same object that was returned by the external endpoint configured for this step.
+        </Expandable>
+
+        `RULE_VALIDATION`
+
+        <Expandable title="properties">
+          {/* See the WorkflowStep.RuleValidationOutput TypeScript type. */}
+          <ResponseField name="valid" type="boolean">
+            Indicates whether the entire validation step passed. This field will only be `true` if every validation rule passed.
+          </ResponseField>
+
+          <ResponseField name="rules" type="object[]">
+            <Expandable title="properties" defaultOpen="true">
+              <ResponseField name="name" type="string">
+                The name of the validation rule.
+              </ResponseField>
+
+              <ResponseField name="valid" type="boolean">
+                Indicates whether this validation rule passed or not.
+                This field will be `true` only if the formula evaluates to `true`.
+                If the rule's formula is array valued, then this field will only be `true` if the formula evaluates to `true` for every item in the array.
+              </ResponseField>
+
+              <ResponseField name="validArray" type="string[]">
+                Only present if the validation rule's formula is array valued. This field contains the formula's evaluated result for every item in the array.
+              </ResponseField>
+
+              <ResponseField name="failureReason" type="enum">
+                If the validation rule is not valid, then this describes why the rule failed.
+
+                `RULE_FAILED`: The formula evaluated to `false` or `null`.
+
+                `PARSE_ERROR`: The formula could not be parsed.
+
+                `VALUE_ERROR`: An error occurred while evaluating the formula.
+              </ResponseField>
+
+              <ResponseField name="error" type="string">
+                If the `failureReason` is `PARSE_ERROR` or `VALUE_ERROR`, then this field contains the error's details.
+              </ResponseField>
+            </Expandable>
+          </ResponseField>
+        </Expandable>
       </ResponseField>
 
       <ResponseField name="step" type="WorkflowStep">
-        The Public Workflow Step object.
+        A WorkflowStep object.
 
         <Expandable title="properties">
           <ResponseField name="object" type="string">
@@ -238,15 +284,16 @@ It represents a single run of a workflow and contains all the information about 
           </ResponseField>
 
           <ResponseField name="id" type="string">
-            The unique ID of the WorkflowStep.
+            The unique identifier of the WorkflowStep.
           </ResponseField>
 
           <ResponseField name="name" type="string">
-            The name of the Workflow Step.
+            The name of the WorkflowStep.
           </ResponseField>
           
           <ResponseField name="type" type="enum">
-            The type of the Workflow Step.
+            The name of the WorkflowStep.
+            One of: `EXTERNAL_DATA_VALIDATION`, `RULE_VALIDATION`
           </ResponseField>
         </Expandable>
       </ResponseField>
@@ -806,7 +853,7 @@ It represents a single run of a workflow and contains all the information about 
       }
     }
   ],
-  "stepRuns": [ // Example of stepRuns output for ExternalDataValidation step
+  "stepRuns": [
     {
       "object": "workflow_step_run",
       "id": "step_run_5UUwMs8baKLE5yFS8-0yK",
@@ -820,6 +867,39 @@ It represents a single run of a workflow and contains all the information about 
         "id": "step_abolADNNmLcOlTtuxDvle",
         "name": "externalDataValidation1",
         "type": "EXTERNAL_DATA_VALIDATION"
+      }
+    },
+    {
+      "object": "workflow_step_run",
+      "id": "step_run_OjueNCarlQNpkYfnFkD-A",
+      "status": "PROCESSED",
+      "output": {
+        "valid": false,
+        "rules": [
+          {
+            "name": "invoice_number_present",
+            "valid": true
+          },
+          {
+            "name": "line_item_amount",
+            "valid": true,
+            "validArray": [
+              true,
+              true
+            ]
+          },
+          {
+            "name": "vendor_number_present",
+            "valid": false,
+            "failureReason": "RULE_FAILED"
+          }
+        ]
+      },
+      "step": {
+        "object": "workflow_step",
+        "id": "step_Q1POO8orTTWgX7CmLLvJZ",
+        "name": "validation1",
+        "type": "RULE_VALIDATION"
       }
     }
   ],
