@@ -168,14 +168,12 @@ type ExtractFieldSchemaValue = {
     "id": "classification2",
     "type": "invoice",
     "confidence": 0.95,
-    "observation": "The document contains information about invoice number, order number, invoice date, due date, total due, and payment details. It matches the description of an invoice."
   },
   // see ClassifyOutput type below
   "output": {
     "id": "classification2",
     "type": "invoice",
     "confidence": 0.95,
-    "observation": "The document contains information about invoice number, order number, invoice date, due date, total due, and payment details. It matches the description of an invoice."
   }
 }
 ```
@@ -188,7 +186,6 @@ type ClassifyOutput = {
   id: string;
   type: string;
   confidence: number;
-  observation: string;
 };
 
 /** 
