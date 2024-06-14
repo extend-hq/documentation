@@ -14,7 +14,7 @@ If you need to change the expected output for a given evaluation set item, you c
 
 ### Body
 
-<ParamField body="expectedOutput" type="object" required>
+<ParamField body="expectedOutput" default="{ hi: 'hi' }" type="object" required>
   The expected output of the processor when run against the file. 
   
   This should be a JSON object conforming to the [output type schema](/api-reference/guides/output_types) of the processor.

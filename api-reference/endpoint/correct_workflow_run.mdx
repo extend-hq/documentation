@@ -1,0 +1,57 @@
+---
+title: "Correct WorkflowRun Outputs"
+api: "POST https://api-prod.extend.app/v1/workflow_runs/:workflowRunId/outputs/:outputId"
+description: "Use this endpoint to submit corrected outputs for a WorkflowRun for future processor evaluation and tuning in Extend."
+---
+
+If you are using our Human-in-the-loop workflow review, then we already will be collecting your operator submitted corrections. However,
+if you are receiving data via the API without human review, there could be incorrect outputs that you would like to correct for future usage in evaluation and tuning within
+the Extend platform. This endpoint allows you to submit corrected outputs for a WorkflowRun, by providing the correct output for a given output ID.
+
+The output ID, would be found in a given entry within the `outputs` arrays of a [WorkflowRun payload](/api-reference/objects/workflow_run).
+The ID would look something like `dpr_gwkZZNRrPgkjcq0y-***`.
+
+When using this endpoint, you will need to provide both the run id and the ouput id as parameters, and the corrected `reviewedOutput` as the body of the request. See below for more details.
+
+### Parameters
+
+<ParamField path="workflowRunId" type="string">
+  The ID of the WorkflowRun that incldued this initial output.
+</ParamField>
+
+<ParamField path="outputId" type="string">
+  The ID of the output that these corrections are for.
+</ParamField>
+
+### Body
+
+<ParamField body="reviewedOutput" type="object" required>
+  The corrected output of the processor when run against the file. 
+  
+  This should be a JSON object conforming to the [output type schema](/api-reference/guides/output_types) of the given processor.
+
+  If this is an extraction result, you can include all fields, or just the ones that were corrected, our system will handle merges/dedupes. However, if you do include a field, we assume the value incldued in the final reviewed value.
+</ParamField>
+
+<RequestExample>
+```bash Example Request
+curl --location --request POST 'https://api-prod.extend.app/v1/workflow_runs/wr_123/outputs/dpr_123' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <API_TOKEN>' \
+--data '{
+    "reviewedOutput": { # Corrected output
+      "field1": {
+        "id": "field_fsdf",
+        "type": "string",
+        "value": "Updated field output"
+      },
+      "field2": {
+        "id": "field_1234",
+        "type": "number",
+        "value": 1234
+      }
+    }
+}'
+```
+</RequestExample>
+
