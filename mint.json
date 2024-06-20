@@ -70,13 +70,24 @@
       ]
     },
     {
-      "group": "Endpoints",
+      "group": "Workflow Endpoints",
       "pages": [
         "api-reference/endpoint/run_workflow",
         "api-reference/endpoint/get_workflow_run",
         "api-reference/endpoint/update_workflow_run",
+        "api-reference/endpoint/correct_workflow_run"
+      ]
+    },
+    {
+      "group": "File Endpoints",
+      "pages": [
         "api-reference/endpoint/create_file",
-        "api-reference/endpoint/get_file",
+        "api-reference/endpoint/get_file"
+      ]
+    },
+    {
+      "group": "Evaluation Set Endpoints",
+      "pages": [
         "api-reference/endpoint/create_eval_set",
         "api-reference/endpoint/create_eval_set_item",
         "api-reference/endpoint/update_eval_set_item",
