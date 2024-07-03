@@ -1,6 +1,6 @@
 ---
 title: "Get File"
-api: "GET https://api-prod.extend.app/v1/files/:id"
+api: "GET https://api-prod.extend.app/v1/files/:id?rawText=true"
 description: "Fetch a file by its ID to obtain additional details and the raw file content."
 ---
 
@@ -8,6 +8,14 @@ description: "Fetch a file by its ID to obtain additional details and the raw fi
 
 <ParamField path="id" type="string">
   The ID of the File to fetch. This is the ID returned when creating a new File or the value on `fileId` of a [WorkflowRun object](/api-reference/objects/workflow_run).
+</ParamField>
+
+### Query Parameters
+
+You can add additional parameters to the request to modify the file contents returned. Currently only rawText is supported.
+
+<ParamField path="rawText" type="boolean" optional>
+  If set to true, the raw text content of the file will be included in the response. This is useful for indexing text-based files like PDFs, Word Documents, etc.
 </ParamField>
 
 ### Response
