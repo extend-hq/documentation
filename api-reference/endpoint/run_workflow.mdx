@@ -31,15 +31,11 @@ description: "Once a workflow has been created on the Extend Platform, this endp
             The id of the processor that the output is associated with.
             **Currently, only Classify processors are supported.**
           </ResponseField>
-          <ResponseField name="output" type="ClassifyOutput" required>
-            The output that is being overridden.
-          </ResponseField>
-          <ResponseField name="ClassifyOutput" type="ClassifyOutput">
-            <Expandable title="properties" defaultOpen>
-              <ResponseField name="type" type="string" required>
-                The type of the classification to use.
-              </ResponseField>
-            </Expandable>
+          <ResponseField name="output" type="object" required>
+            The output that is being overridden. Output types can be found
+            [here](https://docs.extend.app/api-reference/guides/output_types).
+            **Please note that only the ClassifyOutput type is currently
+            supported.**
           </ResponseField>
         </Expandable>
       </ResponseField>
