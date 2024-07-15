@@ -1,0 +1,69 @@
+---
+title: "Overview"
+description: "What base processors are and how they are versioned."
+---
+
+## What are Base Processors?
+
+Base processors are the fundamental building blocks of our processing system. They control the underlying, base configuration for each processor, encompassing various critical components:
+
+- Foundation model(s) used
+- The OCR models applied in pre-processing
+- Other pre-processing methods used to clean and prepare data for the LLM
+- Post-processing rules
+- Internal validation schemes
+- Multimodal vs. non-multimodal processing
+- Base prompting strategies
+- And other core functionalities surrounding the execution of a given processor
+
+These base configurations are essential in determining the overall performance, accuracy, and capabilities of our processing system across different use cases.
+
+## Versioning System
+
+We employ a semantic versioning system for our base processors. This system allows us to communicate the nature and impact of changes clearly. Our version numbers follow the format: `MAJOR.MINOR.PATCH`
+
+### Major Version Updates (X.0.0)
+
+Major version updates are reserved for changes that can potentially affect accuracy, latency, or reliability across every use case. The expectation is that 
+a major version update would guaranteed impact all users of the processor, and any consumer should expect to see changes in their output when upgrading to a new major version.
+
+These include changes such as:
+
+- Updates to the underlying model and downstream version
+  - We generally avoid upgrading to new models at the base layer unless there's a significant, across-the-board benefit. Use case specific upgrades might still occur in an override fashion for your use case (which would be communicated separately).
+- Changes to the entire structure of our base prompting system
+- Fundamental changes to how a given processor works/or is configured
+- Modifications that affect how data interacts with consumers of the API
+- etc.
+
+### Minor Version Updates (0.X.0)
+
+Minor version updates are for changes that could cause potentially significant changes to specific use cases, but not necessarily all use cases. 
+
+Examples include:
+- Adding a new field type for extraction, e.g. the `signature` type or `enum` type
+- Introducing a new set of base prompt rule for specific data types to improve accuracy
+- Making backwards compatible, but still material changes to the underlying processor model
+- etc.
+
+### Patch Version Updates (0.0.X)
+
+Patch updates are for changes that are not expected to meaningfully impact functionality in any way outside of very few isolated cases. 
+
+These might include:
+- Addressing a bug in the processor that only affects a small subset of use cases
+- Fixing typos in prompts
+- Adjusting newlines or spacing in prompts
+- etc.
+
+## Importance of Versioning
+
+Understanding our versioning system is crucial for developers and users of our base processors. It allows you to:
+
+1. Anticipate the potential impact of updates on your specific use cases
+2. Make informed decisions about when to upgrade to newer versions
+3. Maintain consistency and reliability in your applications that depend on our base processors
+
+We strive to provide detailed changelogs for each version update, ensuring you have all the information needed to understand the changes and their potential impacts on your workflows.
+
+If you have any questions or need further clarification on our versioning system, please reach out to us on Slack.

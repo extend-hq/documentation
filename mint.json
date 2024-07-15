@@ -15,6 +15,10 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Changelog",
+      "url": "changelog"
     }
   ],
   "navigation": [
@@ -121,6 +125,26 @@
       "group": "Integrations",
       "pages": [
         "api-reference/integrations/slack"
+      ]
+    },
+    {
+      "group": "Changelog",
+      "pages": [
+        "changelog/overview"
+      ]
+    },
+    {
+      "group": "Extraction",
+      "pages": [
+        "changelog/extraction/extraction_performance",
+        "changelog/extraction/extraction_light"
+      ]
+    },
+    {
+      "group": "Classification",
+      "pages": [
+        "changelog/classification/classification_performance",
+        "changelog/classification/classification_light"
       ]
     }
   ],
