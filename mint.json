@@ -137,7 +137,8 @@
       "group": "Extraction",
       "pages": [
         "changelog/extraction/extraction_performance",
-        "changelog/extraction/extraction_light"
+        "changelog/extraction/extraction_light",
+        "changelog/extraction/extraction_nano"
       ]
     },
     {
