@@ -68,10 +68,10 @@ type ExtractOutput = {
 
 type ExtractFieldResult = {
   id: string;
-  value: string | number | Currency | Signature | boolean | ExtractValueArray | ExtractValueObject | null;
+  value: string | number | Currency | boolean | ExtractValueArray | ExtractValueObject | null;
   confidence: number;
   page?: number;
-  type: "string" | "number" | "currency" | "signature" | "boolean" | "date" | "array" | "object" | "null";
+  type: "string" | "number" | "currency" | "boolean" | "date" | "array" | "object" | "null";
   /**
    * Only set when type=array or type=object to provide structure of sub fields.
    * Useful for dynamically parsing nested data.
@@ -83,13 +83,6 @@ type ExtractFieldResult = {
 type Currency = {
   amount: number;
   iso_4217_currency_code: string;
-};
-
-type Signature = {
-  is_signed: boolean;
-  printed_name: string;
-  title_or_role: string;
-  signature_date: string;
 };
 
 type ExtractValueArray = Array<ExtractValueObject>;
@@ -136,7 +129,7 @@ type ExtractFieldConfig = {
   id: string;
   fieldName: string;
   description: string;
-  type: "string" | "number" | "currency" | "signature" | "boolean" | "date" | "any[]" | "object" | "null";
+  type: "string" | "number" | "currency" | "boolean" | "date" | "any[]" | "object" | "null";
   schema?: ExtractFieldSchemaValue[];
 }
 
