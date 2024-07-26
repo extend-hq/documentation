@@ -21,10 +21,43 @@ The File object represents a file in Extend. Files are created for each workflow
     The Extend normalized type of the file. One of `IMG` `PDF` `TXT` `DOCX` `CSV`.
   </ResponseField>
 
+  <ResponseField name="parentFileId" type="string" optional>
+    The ID of the parent file. Only included if this file is a derivative of another file, for instance if it was created via a Splitter in a workflow.
+  </ResponseField>
+
+  <ResponseField name="presignedUrl" type="string">
+    A presigned URL to download the file. Expires after 15 minutes.
+  </ResponseField>
+
   <ResponseField name="contents" type="object">
     <Expandable title="properties" defaultOpen>
       <ResponseField name="rawText" type="string">
         The raw text content of the file.
+      </ResponseField>
+    </Expandable>
+  </ResponseField>
+
+  <ResponseField name="metadata" type="object" optional>
+    <Expandable title="properties" defaultOpen>
+      <ResponseField name="parentSplit" type="object">
+        The split metadata details. Only included if this file is a derivative of another file, for instance if it was created via a Splitter in a workflow.
+        <Expandable title="properties" defaultOpen>
+          <ResponseField name="id" type="string">
+            The ID of the split.
+          </ResponseField>
+          <ResponseField name="type" type="string">
+            The type of the split.
+          </ResponseField>
+          <ResponseField name="identifier" type="string">
+            The identifier of the split.
+          </ResponseField>
+          <ResponseField name="startPage" type="number">
+            The start page of the split.
+          </ResponseField>
+          <ResponseField name="endPage" type="number">
+            The end page of the split.
+          </ResponseField>
+        </Expandable>
       </ResponseField>
     </Expandable>
   </ResponseField>
@@ -45,9 +78,20 @@ The File object represents a file in Extend. Files are created for each workflow
   "id": "file_1234",
   "name": "example_file",
   "type": "PDF",
+  "presignedUrl": "https://s3.example.com/file_1234.pdf",
+  "parentFileId": "file_5678", // Optional, only set if this file is a derivative of another file
   "contents": {
     "rawText": "This is the raw text content of the file..."
   },
+  "metadata": {
+    "parentSplit": { // Optional, only set if this file is a derivative of another file
+      "id": "324kjlfsd",
+      "type": "addendum",
+      "identifier": "addendum_1",
+      "startPage": 7,
+      "endPage": 9
+    }
+  }
   "createdAt": "2024-01-01T00:00:00Z",
   "updatedAt": "2024-01-01T00:00:00Z"
 }
