@@ -78,9 +78,20 @@ The File object represents a file in Extend. Files are created for each workflow
   "id": "file_1234",
   "name": "example_file",
   "type": "PDF",
+  "presignedUrl": "https://s3.example.com/file_1234.pdf",
+  "parentFileId": "file_5678", // Optional, only set if this file is a derivative of another file
   "contents": {
     "rawText": "This is the raw text content of the file..."
   },
+  "metadata": {
+    "parentSplit": { // Optional, only set if this file is a derivative of another file
+      "id": "324kjlfsd",
+      "type": "addendum",
+      "identifier": "addendum_1",
+      "startPage": 7,
+      "endPage": 9
+    }
+  }
   "createdAt": "2024-01-01T00:00:00Z",
   "updatedAt": "2024-01-01T00:00:00Z"
 }
