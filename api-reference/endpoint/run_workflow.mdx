@@ -19,7 +19,7 @@ description: "Once a workflow has been created on the Extend Platform, this endp
         The name of the file.
       </ResponseField>
       <ResponseField name="fileUrl" type="string" required>
-        A publicly accessible URL for the file.
+        A presigned URL for the file. Though we will download immediately, we recommend a 5 - 15 minute expiration time.
       </ResponseField>
       <ResponseField name="outputs" type="Output[]" optional>
         Predetermined outputs that can be used to override the outputs

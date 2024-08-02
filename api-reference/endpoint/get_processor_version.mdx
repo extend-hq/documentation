@@ -1,0 +1,62 @@
+---
+title: "Get Processor Version"
+api: "GET https://api-prod.extend.app/v1/processors/:ProcessorId/versions/:processorVersionId"
+description: "Retrieve a specific version of a processor in Extend."
+---
+
+This endpoint allows you to fetch a specific version of a given processor.
+
+### Path Parameters
+
+<ParamField path="documentProcessorId" type="string" required>
+  The ID of the processor.
+</ParamField>
+
+<ParamField path="documentProcessorVersionId" type="string" required>
+  The ID of the specific processor version to retrieve.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value indicating whether the request was successful or not.
+</ResponseField>
+
+<ResponseField name="version" type="DocumentProcessorVersion">
+  A ProcessorVersion object representing the requested version of the processor. See the [ProcessorVersion object](/api-reference/objects/processor_version) for more details on the structure.
+</ResponseField>
+
+### Error Responses
+
+<ResponseField name="success" type="boolean">
+  Will be `false` if the request failed.
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  A description of the error that occurred.
+</ResponseField>
+
+#### Possible Errors
+
+- **404 Not Found**: If the specified processor or version does not exist.
+
+<ResponseExample>
+```json Example Success Response
+{
+  "success": true,
+  "version": {
+    "object": "document_processor_version",
+    "id": "processor_version_5678",
+    "processorId": "processor_1234",
+    "processorType": "EXTRACT",
+    "description": "Updated extraction rules for invoice processing",
+    "version": "1.2.0",
+    "config": {
+      // Configuration details specific to this processor version
+    },
+    "createdAt": "2024-03-01T14:00:00Z",
+    "updatedAt": "2024-03-01T14:00:00Z"
+  }
+}
+```
+</ResponseExample>

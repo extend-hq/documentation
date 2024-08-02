@@ -1,0 +1,62 @@
+---
+title: "Create Processor"
+api: "POST https://api-prod.extend.app/v1/processors"
+description: "Create a new processor in Extend, optionally cloning from an existing processor."
+---
+
+This endpoint allows you to create a new processor or clone an existing one. Typically processors are created and configured in the [Extend Studio](/product-reference/studio/overview), but this endpoint can be used to create processors programmatically in order to sync ID's across systems.
+
+### Body
+
+<ParamField body="name" type="string" required>
+  The name of the new processor.
+</ParamField>
+
+<ParamField body="type" type="string" required>
+  The type of the processor. This is required when creating a new processor, but not when cloning.
+</ParamField>
+
+<ParamField body="cloneProcessorId" type="string">
+  The ID of an existing processor to clone. If provided, a new processor will be created that clones the config of this processor.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value indicating whether the processor was created successfully or not.
+</ResponseField>
+
+<ResponseField name="processor" type="DocumentProcessor">
+  A Processor object representing the newly created processor. See the [DocumentProcessor object](/api-reference/objects/processor) for more details.
+</ResponseField>
+
+### Error Responses
+
+<ResponseField name="success" type="boolean">
+  Will be `false` if the request failed.
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  A description of the error that occurred.
+</ResponseField>
+
+#### Possible Common Errors
+
+- **400 Bad Request**: If the request body fails schema validation.
+- **404 Not Found**: If the processor to clone (cloneProcessorId) is not found.
+
+<ResponseExample>
+```json Example Success Response
+{
+  "success": true,
+  "processor": {
+    "object": "document_processor",
+    "id": "processor_1234",
+    "name": "New Invoice Processor",
+    "type": "EXTRACT",
+    "createdAt": "2024-03-01T12:00:00Z",
+    "updatedAt": "2024-03-01T12:00:00Z"
+  }
+}
+```
+</ResponseExample>

@@ -30,10 +30,18 @@ The following table outlines the various event types you can receive via webhook
 
 | Event Type                      | Description                                     |
 | ------------------------------- | ----------------------------------------------- |
-| workflow_run.completed          | Triggered whenever a WorkflowRun is completed   |
-| workflow_run.failed             | Triggered whenever a WorkflowRun fails          |
-| workflow_run.needs_review       | Triggered whenever a WorkflowRun needs review\* |
-| workflow_run.rejected           | Triggered whenever a WorkflowRun is rejected from the Extend dashboard. [More info](/product-reference/reviewing_workflow_run#rejecting-a-workflow-run)    |
-| workflow_run.step_run.processed | Triggered whenever a WorkflowStep is finished processing, e.g. extraction steps, etc. This can be useful for consuming incremental extractions for workflows with multiple AI steps to create streaming-like experiences.       |
+| `workflow_run.completed`          | Triggered whenever a WorkflowRun is completed   |
+| `workflow_run.failed`             | Triggered whenever a WorkflowRun fails          |
+| `workflow_run.needs_review`       | Triggered whenever a WorkflowRun needs review\* |
+| `workflow_run.rejected`           | Triggered whenever a WorkflowRun is rejected from the Extend dashboard. [More info](/product-reference/reviewing_workflow_run#rejecting-a-workflow-run)    |
+| `workflow_run.step_run.processed` | Triggered whenever a WorkflowStep is finished processing, e.g. extraction steps, etc. This can be useful for consuming incremental extractions for workflows with multiple AI steps to create streaming-like experiences.       |
+| `workflow.created`                | Triggered when a new Workflow is created        |
+| `workflow.deployed`               | Triggered when a Workflow is deployed           |
+| `workflow.deleted`                | Triggered when a Workflow is deleted            |
+| `processor.created`               | Triggered when a new Processor is created       |
+| `processor.updated`               | Triggered when a Processor is updated           |
+| `processor.deleted`               | Triggered when a Processor is deleted           |
+| `processor.version.published`     | Triggered when a new ProcessorVersion of a Processor is published |
+
 
 \* Only triggered when the workflow is configured to have a HumanReview step in the Extend workflow builder.

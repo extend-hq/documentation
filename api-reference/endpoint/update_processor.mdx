@@ -1,0 +1,55 @@
+---
+title: "Update Processor"
+api: "POST https://api-prod.extend.app/v1/processors/:id"
+description: "Update an existing processor in Extend. Currently, this endpoint only allows updating the name of the processor."
+---
+
+This endpoint allows you to update the properties of an existing processor. At present, the only property that can be updated is the name of the processor.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The ID of the processor to update.
+</ParamField>
+
+### Body
+
+<ParamField body="name" type="string" required>
+  The new name for the processor.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value indicating whether the processor was updated successfully or not.
+</ResponseField>
+
+<ResponseField name="processor" type="DocumentProcessor">
+  A DocumentProcessor object representing the updated processor. See the [DocumentProcessor object](/api-reference/objects/processor) for more details.
+</ResponseField>
+
+### Error Responses
+
+<ResponseField name="success" type="boolean">
+  Will be `false` if the request failed.
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  A description of the error that occurred.
+</ResponseField>
+
+<ResponseExample>
+```json Example Success Response
+{
+  "success": true,
+  "processor": {
+    "object": "document_processor",
+    "id": "processor_1234",
+    "name": "Updated Invoice Processor",
+    "type": "EXTRACTION",
+    "createdAt": "2024-03-01T12:00:00Z",
+    "updatedAt": "2024-03-01T13:00:00Z"
+  }
+}
+```
+</ResponseExample>
