@@ -1,0 +1,91 @@
+---
+title: "Publish Processor Version"
+api: "POST https://api-prod.extend.app/v1/processors/:id/publish"
+description: "Publish a new version of an existing processor in Extend."
+---
+
+This endpoint allows you to publish a new version of an existing processor. Publishing a new version creates a snapshot of the processor's current configuration and makes it available for use in workflows.
+Publishing a new version does not automatically update existing workflows using this processor. You may need to manually update workflows to use the new version if desired.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The ID of the processor to publish a new version for.
+</ParamField>
+
+### Body
+
+<ParamField body="releaseType" type="string" required>
+  The type of release for this version. The two options are: "major" and "minor", which will increment the version number accordingly.
+</ParamField>
+
+<ParamField body="description" type="string">
+  A description of the changes in this version. This helps track the evolution of the processor over time.
+</ParamField>
+
+{/* NOTE: while we do support this - I actually do not want to publicize it until we get a request for it, as we would prefer customers use our UI - potentially in the future we will just remove support entirely */}
+{/* <ParamField body="config" type="object" optional>
+  Optionally supply a config object for this version of the processor. 
+  
+  If not supplied, the config that is currently in the `draft` ProcessorVersion in Extend will be used.
+
+  The structure of this object will depend on the type of processor and its specific requirements.
+</ParamField> */}
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value indicating whether the processor version was published successfully or not.
+</ResponseField>
+
+<ResponseField name="processorVersion" type="ProcessorVersion">
+  A ProcessorVersion object representing the newly published version of the processor. See the [ProcessorVersion object](/api-reference/objects/processor_version) for more details.
+</ResponseField>
+
+### Error Responses
+
+<ResponseField name="success" type="boolean">
+  Will be `false` if the request failed.
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  A description of the error that occurred.
+</ResponseField>
+
+#### Common Errors
+
+- **400 Bad Request**: If the request body fails schema validation or if there's an issue with the provided configuration, particularly when it comes to the `config` which depends on the processor type.
+
+<ResponseExample>
+```json Example Success Response
+{
+  "success": true,
+  "processorVersion": {
+    "object": "document_processor_version",
+    "id": "processor_version_5678",
+    "processorId": "processor_1234",
+    "processorType": "EXTRACTION",
+    "description": "Updated extraction rules for invoice processing",
+    "version": "1.2.0",
+    "config": {
+      "fieldsToExtract": [
+        {
+          "id": "invoice_number",
+          "fieldName": "invoice_number",
+          "type": "string",
+          "description": "The invoice number",
+        },
+        {
+          "id": "invoice_date",
+          "fieldName": "invoice_date",
+          "type": "date",
+          "description": "The date of the invoice",
+        }
+      ]
+    },
+    "createdAt": "2024-03-01T14:00:00Z",
+    "updatedAt": "2024-03-01T14:00:00Z"
+  }
+}
+```
+</ResponseExample>

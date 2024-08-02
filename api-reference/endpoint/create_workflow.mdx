@@ -1,0 +1,50 @@
+---
+title: "Create Workflow"
+api: "POST https://api-prod.extend.app/v1/workflows"
+description: "Create a new workflow in Extend."
+---
+
+Workflows in Extend model an end to end data processing flow.
+
+This endpoint will create a new workflow in Extend, which can then be configured and deployed. 
+Typically, workflows are created from our dashboard, however this endpoint can be used to create workflows programmatically in order to sync ID's across systems. Configuration of the flow still needs to be done in the dashboard.
+
+### Body
+
+<ParamField body="name" type="string" required>
+  The name of the workflow.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value indicating whether the workflow was created successfully or not.
+</ResponseField>
+
+<ResponseField name="workflow" type="Workflow">
+  A Workflow object representing the newly created workflow. See the [Workflow object](/api-reference/objects/workflow) for more details.
+</ResponseField>
+
+### Error Responses
+
+<ResponseField name="success" type="boolean">
+  Will be `false` if the request failed.
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  A description of the error that occurred.
+</ResponseField>
+
+<ResponseExample>
+```json Example Success Response
+{
+  "success": true,
+  "workflow": {
+    "object": "workflow",
+    "id": "workflow_1234",
+    "version": "draft",
+    "name": "New Workflow"
+  }
+}
+```
+</ResponseExample>

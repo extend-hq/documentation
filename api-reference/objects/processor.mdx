@@ -1,0 +1,44 @@
+---
+title: "The Processor object"
+---
+
+The Processor object represents a document processor in Extend. AI document processors are specialized components designed to process unstructured data: exraction, classification, splitting, etc. These are typically created in the [Extend Studio](/product-reference/studio/overview) and then orchestrated via a Workflow.
+
+<Expandable title="properties" defaultOpen>
+  <ResponseField name="object" type="string">
+    The type of the object, in this case it will always be "document_processor".
+  </ResponseField>
+
+  <ResponseField name="id" type="string">
+    The document processor ID.
+  </ResponseField>
+
+  <ResponseField name="name" type="string">
+    The name of the document processor.
+  </ResponseField>
+
+  <ResponseField name="type" type="string">
+    The type of the document processor. This field specifies the category or functionality of the processor. See [Object Types](/api-reference/guides/output_types) more context.
+  </ResponseField>
+
+  <ResponseField name="createdAt" type="string">
+    The date and time when the document processor was created, in ISO 8601 format.
+  </ResponseField>
+
+  <ResponseField name="updatedAt" type="string">
+    The date and time when the document processor was last updated, in ISO 8601 format.
+  </ResponseField>
+</Expandable>
+
+<ResponseExample>
+```json Example Processor
+{
+  "object": "document_processor",
+  "id": "processor_1234",
+  "name": "Invoice Extractor",
+  "type": "EXTRACT",
+  "createdAt": "2024-01-01T00:00:00Z",
+  "updatedAt": "2024-01-01T12:30:00Z"
+}
+```
+</ResponseExample>

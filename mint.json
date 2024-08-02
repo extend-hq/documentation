@@ -17,7 +17,7 @@
       "url": "api-reference"
     },
     {
-      "name": "Changelog",
+      "name": "Processor Changelog",
       "url": "changelog"
     }
   ],
@@ -79,7 +79,18 @@
         "api-reference/endpoint/run_workflow",
         "api-reference/endpoint/get_workflow_run",
         "api-reference/endpoint/update_workflow_run",
-        "api-reference/endpoint/correct_workflow_run"
+        "api-reference/endpoint/correct_workflow_run",
+        "api-reference/endpoint/create_workflow"
+      ]
+    },
+    {
+      "group": "Processor Endpoints",
+      "pages": [
+        "api-reference/endpoint/create_processor",
+        "api-reference/endpoint/update_processor",
+        "api-reference/endpoint/publish_processor_version",
+        "api-reference/endpoint/get_processor_version",
+        "api-reference/endpoint/get_processor_versions"
       ]
     },
     {
@@ -102,6 +113,9 @@
       "group": "Objects",
       "pages": [
         "api-reference/objects/workflow_run",
+        "api-reference/objects/workflow",
+        "api-reference/objects/processor",
+        "api-reference/objects/processor_version",
         "api-reference/objects/file",
         "api-reference/objects/evaluation_set",
         "api-reference/objects/evaluation_set_item"
@@ -128,7 +142,7 @@
       ]
     },
     {
-      "group": "Changelog",
+      "group": "",
       "pages": [
         "changelog/overview"
       ]

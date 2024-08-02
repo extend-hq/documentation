@@ -1,0 +1,76 @@
+---
+title: "The ProcessorVersion object"
+---
+
+The ProcessorVersion object represents a specific version of a document processor in Extend. It contains detailed information about a particular iteration of a processor, including its processor configuration and version string.
+
+The versions are semantic versions supporting only major/minor, and if no published versions exist, there is always a `draft` version.
+
+<Expandable title="properties" defaultOpen>
+  <ResponseField name="object" type="string">
+    The type of the object, in this case it will always be "document_processor_version".
+  </ResponseField>
+
+  <ResponseField name="id" type="string">
+    The unique identifier for this version of the document processor.
+  </ResponseField>
+
+  <ResponseField name="processorId" type="string">
+    The ID of the parent document processor.
+  </ResponseField>
+
+  <ResponseField name="processorType" type="string">
+    The type of the document processor. This field specifies the category or functionality of the processor. Either `EXTRACT`, `CLASSIFY`, `SPLITTER`, or `INSTRUCT_QA`.
+  </ResponseField>
+
+  <ResponseField name="description" type="string" optional>
+    An optional description of this version of the document processor.
+  </ResponseField>
+
+  <ResponseField name="version" type="string">
+    The version number or identifier for this specific version of the document processor. The draft version will have version="draft".
+  </ResponseField>
+
+  <ResponseField name="config" type="object">
+    The configuration settings for this version of the document processor. The structure of this object will vary depending on the processor type.
+  </ResponseField>
+
+  <ResponseField name="createdAt" type="string">
+    The date and time when this version of the document processor was created, in ISO 8601 format.
+  </ResponseField>
+
+  <ResponseField name="updatedAt" type="string">
+    The date and time when this version of the document processor was last updated, in ISO 8601 format.
+  </ResponseField>
+</Expandable>
+
+<ResponseExample>
+```json Example ProcessorVersion
+{
+  "object": "document_processor_version",
+  "id": "processor_version_5678",
+  "processorId": "processor_1234",
+  "processorType": "EXTRACT",
+  "description": "Updated extraction rules for invoice processing",
+  "version": "1.2.0",
+  "config": { // Changes based on processor type
+    "fieldsToExtract": [
+      {
+        "id": "invoice_number",
+        "fieldName": "invoice_number",
+        "type": "string",
+        "description": "The invoice number",
+      },
+      {
+        "id": "invoice_date",
+        "fieldName": "invoice_date",
+        "type": "date",
+        "description": "The date of the invoice",
+      }
+    ]
+  },
+  "createdAt": "2024-02-15T10:30:00Z",
+  "updatedAt": "2024-02-15T10:30:00Z"
+}
+```
+</ResponseExample>

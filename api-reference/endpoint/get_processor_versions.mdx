@@ -1,0 +1,76 @@
+---
+title: "List Processor Versions"
+api: "GET https://api-prod.extend.app/v1/processors/:id/versions"
+description: "Retrieve all versions of a specific processor in Extend."
+---
+
+This endpoint allows you to fetch all versions of a given processor, including the current `draft` version.
+
+- Versions are typically returned in descending order of creation (newest first), but this should be confirmed in the actual implementation.
+- The `draft` version is the latest unpublished version of the processor, which can be published to create a new version. It might not have any changes from the last published version.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The ID of the processor to retrieve versions for.
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  A true or false value indicating whether the request was successful or not.
+</ResponseField>
+
+<ResponseField name="versions" type="array">
+  An array of ProcessorVersion objects representing all versions of the specified processor. See the [ProcessorVersion object](/api-reference/objects/processor_version) for more details on the structure of each version.
+</ResponseField>
+
+### Error Responses
+
+<ResponseField name="success" type="boolean">
+  Will be `false` if the request failed.
+</ResponseField>
+
+<ResponseField name="error" type="string">
+  A description of the error that occurred.
+</ResponseField>
+
+#### Possible Errors
+
+- **404 Not Found**: If the specified processor does not exist.
+
+<ResponseExample>
+```json Example Success Response
+{
+  "success": true,
+  "versions": [
+    {
+      "object": "document_processor_version",
+      "id": "processor_version_5678",
+      "processorId": "processor_1234",
+      "processorType": "EXTRACT",
+      "description": "Updated extraction rules for invoice processing",
+      "version": "1.2",
+      "config": {
+        // Configuration details specific to this processor version
+      },
+      "createdAt": "2024-03-01T14:00:00Z",
+      "updatedAt": "2024-03-01T14:00:00Z"
+    },
+    {
+      "object": "document_processor_version",
+      "id": "processor_version_5677",
+      "processorId": "processor_1234",
+      "processorType": "EXTRACT",
+      "description": "Initial version",
+      "version": "0.1",
+      "config": {
+        // Configuration details specific to this processor version
+      },
+      "createdAt": "2024-02-15T10:00:00Z",
+      "updatedAt": "2024-02-15T10:00:00Z"
+    }
+  ]
+}
+```
+</ResponseExample>
