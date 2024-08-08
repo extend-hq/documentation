@@ -38,10 +38,10 @@ The File object represents a file in Extend. Files are created for each workflow
   </ResponseField>
 
   <ResponseField name="metadata" type="object" optional>
-    <ResponseField name="pageCount" type="number" optional>
-      The number of pages in the file. This is only set for PDF/DOCX files.
-    </ResponseField>
     <Expandable title="properties" defaultOpen>
+      <ResponseField name="pageCount" type="number" optional>
+        The number of pages in the file. This is only set for PDF/DOCX files.
+      </ResponseField>
       <ResponseField name="parentSplit" type="object">
         The split metadata details. Only included if this file is a derivative of another file, for instance if it was created via a Splitter in a workflow.
         <Expandable title="properties" defaultOpen>
